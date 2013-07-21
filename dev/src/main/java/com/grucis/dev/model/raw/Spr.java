@@ -4,7 +4,8 @@ public final class Spr extends RawModel {
   private int direction;
   private int action;
   private int duration;
-  private int frames;
+  private int length;
+  private SprFrame[] frames;
 
   public int getDirection() {
     return direction;
@@ -30,11 +31,40 @@ public final class Spr extends RawModel {
     this.duration = duration;
   }
 
-  public int getFrames() {
+  public int getLength() {
+    return length;
+  }
+
+  public void setLength(int length) {
+    this.length = length;
+  }
+
+  public SprFrame[] getFrames() {
     return frames;
   }
 
-  public void setFrames(int frames) {
+  public void setFrames(SprFrame[] frames) {
     this.frames = frames;
+  }
+
+  public static class SprFrame {
+    private int image;
+    private String reference;
+
+    public int getImage() {
+      return image;
+    }
+
+    public void setImage(int image) {
+      this.image = image;
+    }
+
+    public String getReference() {
+      return reference;
+    }
+
+    public void setReference(String reference) {
+      this.reference = reference;
+    }
   }
 }
