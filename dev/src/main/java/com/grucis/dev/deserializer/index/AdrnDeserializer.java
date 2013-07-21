@@ -1,4 +1,4 @@
-package com.grucis.dev.deserializer;
+package com.grucis.dev.deserializer.index;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -7,9 +7,9 @@ import java.util.Collection;
 import com.grucis.dev.model.raw.Adrn;
 import com.grucis.dev.utils.bitwise.BitwiseUtils;
 
-public final class AdrnDeserializer extends Deserializer<Adrn> {
+public final class AdrnDeserializer extends IndexModelDeserializer<Adrn> {
   public AdrnDeserializer(InputStream in) {
-    super(in, DataType.ADRN);
+    super(in, IndexType.ADRN);
   }
 
   @Override

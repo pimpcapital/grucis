@@ -3,8 +3,8 @@ package com.grucis.dev.model.raw;
 public final class Spr extends RawModel {
   private int direction;
   private int action;
-  private int time;
-  private int frameNumber;
+  private int duration;
+  private int frames;
 
   public int getDirection() {
     return direction;
@@ -22,19 +22,19 @@ public final class Spr extends RawModel {
     this.action = action;
   }
 
-  public int getTime() {
-    return time;
+  public int getDuration() {
+    return duration;
   }
 
-  public void setTime(int time) {
-    this.time = time;
+  public void setDuration(int duration) {
+    this.duration = duration;
   }
 
-  public int getFrameNumber() {
-    return frameNumber;
+  public int getFrames() {
+    return frames;
   }
 
-  public void setFrameNumber(int frameNumber) {
-    this.frameNumber = frameNumber;
+  public void setFrames(int frames) {
+    this.frames = frames;
   }
 }

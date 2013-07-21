@@ -1,4 +1,4 @@
-package com.grucis.dev.deserializer;
+package com.grucis.dev.deserializer.index;
 
 import java.io.InputStream;
 import java.util.Collection;
@@ -7,14 +7,14 @@ import com.grucis.dev.model.raw.RawModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class Deserializer<RM extends RawModel> {
+public abstract class IndexModelDeserializer<RM extends RawModel> {
 
-  private static final Logger LOG = LoggerFactory.getLogger(Deserializer.class);
+  private static final Logger LOG = LoggerFactory.getLogger(IndexModelDeserializer.class);
 
   private InputStream in;
-  private DataType type;
+  private IndexType type;
 
-  protected Deserializer(InputStream in, DataType type) {
+  protected IndexModelDeserializer(InputStream in, IndexType type) {
     this.in = in;
     this.type = type;
   }
