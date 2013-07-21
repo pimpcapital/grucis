@@ -20,14 +20,14 @@ public final class AdrnDeserializer extends IndexModelDeserializer<Adrn> {
     while(readPos < readMax) {
       Adrn adrn = new Adrn();
 
-      byte[] imageIdBytes = new byte[4];
-      in.read(imageIdBytes, readPos, 4);
-      adrn.setImageId(BitwiseUtils.int32(imageIdBytes));
+      byte[] idBytes = new byte[4];
+      in.read(idBytes, readPos, 4);
+      adrn.setId(BitwiseUtils.int32(idBytes));
       readPos += 4;
 
-      byte[] addressInReadBytes = new byte[4];
-      in.read(addressInReadBytes, readPos, 4);
-      adrn.setAddressInReal(BitwiseUtils.uint32(addressInReadBytes));
+      byte[] addressBytes = new byte[4];
+      in.read(addressBytes, readPos, 4);
+      adrn.setAddress(BitwiseUtils.uint32(addressBytes));
       readPos += 4;
 
       byte[] blockSizeBytes = new byte[4];

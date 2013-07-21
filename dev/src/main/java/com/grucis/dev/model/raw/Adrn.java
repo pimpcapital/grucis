@@ -1,8 +1,8 @@
 package com.grucis.dev.model.raw;
 
 public final class Adrn extends RawModel{
-  private int imageId;
-  private int addressInReal;
+  private int id;
+  private int address;
   private int blockSize;
   private int xOffset;
   private int yOffset;
@@ -14,20 +14,20 @@ public final class Adrn extends RawModel{
   private String reference;
   private int mapElementId;
 
-  public int getImageId() {
-    return imageId;
+  public int getId() {
+    return id;
   }
 
-  public void setImageId(int imageId) {
-    this.imageId = imageId;
+  public void setId(int id) {
+    this.id = id;
   }
 
-  public int getAddressInReal() {
-    return addressInReal;
+  public int getAddress() {
+    return address;
   }
 
-  public void setAddressInReal(int addressInReal) {
-    this.addressInReal = addressInReal;
+  public void setAddress(int address) {
+    this.address = address;
   }
 
   public int getBlockSize() {

@@ -1,17 +1,17 @@
 package com.grucis.dev.model.raw;
 
 public final class SprAdrn extends RawModel {
-  private int animatrionId;
+  private int id;
   private int address;
-  private int actionNumber;
-  private int unknown;
+  private int actions;
+  private int sound;
 
-  public int getAnimatrionId() {
-    return animatrionId;
+  public int getId() {
+    return id;
   }
 
-  public void setAnimatrionId(int animatrionId) {
-    this.animatrionId = animatrionId;
+  public void setId(int id) {
+    this.id = id;
   }
 
   public int getAddress() {
@@ -22,19 +22,19 @@ public final class SprAdrn extends RawModel {
     this.address = address;
   }
 
-  public int getActionNumber() {
-    return actionNumber;
+  public int getActions() {
+    return actions;
   }
 
-  public void setActionNumber(int actionNumber) {
-    this.actionNumber = actionNumber;
+  public void setActions(int actions) {
+    this.actions = actions;
   }
 
-  public int getUnknown() {
-    return unknown;
+  public int getSound() {
+    return sound;
   }
 
-  public void setUnknown(int unknown) {
-    this.unknown = unknown;
+  public void setSound(int sound) {
+    this.sound = sound;
   }
 }

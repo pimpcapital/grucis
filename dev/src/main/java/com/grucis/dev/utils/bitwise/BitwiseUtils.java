@@ -10,6 +10,10 @@ public class BitwiseUtils {
     return UInt32.valueOfLittleEndian(data).intValue();
   }
 
+  public static int uint16(byte[] data) {
+    return UInt16.valueOfLittleEndian(data).intValue();
+  }
+
   public static int uint8(byte data) {
     return new UInt8(data).intValue();
   }
