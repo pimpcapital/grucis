@@ -11,7 +11,7 @@ public final class Adrn extends RawModel{
   private int east;
   private int south;
   private int sign;
-  private String unknown;
+  private String reference;
   private int mapElementId;
 
   public int getImageId() {
@@ -94,12 +94,12 @@ public final class Adrn extends RawModel{
     this.sign = sign;
   }
 
-  public String getUnknown() {
-    return unknown;
+  public String getReference() {
+    return reference;
   }
 
-  public void setUnknown(String unknown) {
-    this.unknown = unknown;
+  public void setReference(String reference) {
+    this.reference = reference;
   }
 
   public int getMapElementId() {
