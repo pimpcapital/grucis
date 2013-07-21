@@ -30,9 +30,9 @@ public final class AdrnDeserializer extends IndexModelDeserializer<Adrn> {
       adrn.setAddress(BitwiseUtils.uint32(addressBytes));
       readPos += 4;
 
-      byte[] blockSizeBytes = new byte[4];
-      in.read(blockSizeBytes, readPos, 4);
-      adrn.setBlockSize(BitwiseUtils.uint32(blockSizeBytes));
+      byte[] sizeBytes = new byte[4];
+      in.read(sizeBytes, readPos, 4);
+      adrn.setSize(BitwiseUtils.uint32(sizeBytes));
       readPos += 4;
 
       byte[] xOffsetBytes = new byte[4];
@@ -70,9 +70,9 @@ public final class AdrnDeserializer extends IndexModelDeserializer<Adrn> {
       adrn.setReference(new String(referenceBytes));
       readPos += 45;
 
-      byte[] mapElementIdBytes = new byte[4];
-      in.read(mapElementIdBytes, readPos, 4);
-      adrn.setMapElementId(BitwiseUtils.int32(mapElementIdBytes));
+      byte[] mapBytes = new byte[4];
+      in.read(mapBytes, readPos, 4);
+      adrn.setMap(BitwiseUtils.int32(mapBytes));
       readPos += 4;
 
       ret.add(adrn);

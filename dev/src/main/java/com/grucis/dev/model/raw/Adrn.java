@@ -3,7 +3,7 @@ package com.grucis.dev.model.raw;
 public final class Adrn extends RawModel{
   private int id;
   private int address;
-  private int blockSize;
+  private int size;
   private int xOffset;
   private int yOffset;
   private int width;
@@ -12,7 +12,7 @@ public final class Adrn extends RawModel{
   private int south;
   private int sign;
   private String reference;
-  private int mapElementId;
+  private int map;
 
   public int getId() {
     return id;
@@ -30,12 +30,12 @@ public final class Adrn extends RawModel{
     this.address = address;
   }
 
-  public int getBlockSize() {
-    return blockSize;
+  public int getSize() {
+    return size;
   }
 
-  public void setBlockSize(int blockSize) {
-    this.blockSize = blockSize;
+  public void setSize(int size) {
+    this.size = size;
   }
 
   public int getxOffset() {
@@ -102,11 +102,11 @@ public final class Adrn extends RawModel{
     this.reference = reference;
   }
 
-  public int getMapElementId() {
-    return mapElementId;
+  public int getMap() {
+    return map;
   }
 
-  public void setMapElementId(int mapElementId) {
-    this.mapElementId = mapElementId;
+  public void setMap(int map) {
+    this.map = map;
   }
 }

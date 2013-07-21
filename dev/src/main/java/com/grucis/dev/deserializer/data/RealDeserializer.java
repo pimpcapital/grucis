@@ -12,6 +12,8 @@ public final class RealDeserializer extends DataModelDeserializer<Real, Adrn> {
 
   @Override
   protected Real deserialize(InputStream in, Adrn index) throws Exception {
+    int readPos = index.getAddress();
+    int readMax = index.getSize() + readPos;
     return null;
   }
 }
