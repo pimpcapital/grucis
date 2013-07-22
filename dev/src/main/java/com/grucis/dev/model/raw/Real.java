@@ -2,12 +2,12 @@ package com.grucis.dev.model.raw;
 
 public final class Real extends RawModel {
   private String magic;
-  private int compress;
-  private int unknown;
+  private int major;
+  private int minor;
   private int width;
   private int height;
   private int size;
-  private int compressedData;
+  private byte[] data;
 
   public String getMagic() {
     return magic;
@@ -17,20 +17,20 @@ public final class Real extends RawModel {
     this.magic = magic;
   }
 
-  public int getCompress() {
-    return compress;
+  public int getMajor() {
+    return major;
   }
 
-  public void setCompress(int compress) {
-    this.compress = compress;
+  public void setMajor(int major) {
+    this.major = major;
   }
 
-  public int getUnknown() {
-    return unknown;
+  public int getMinor() {
+    return minor;
   }
 
-  public void setUnknown(int unknown) {
-    this.unknown = unknown;
+  public void setMinor(int minor) {
+    this.minor = minor;
   }
 
   public int getWidth() {
@@ -57,11 +57,11 @@ public final class Real extends RawModel {
     this.size = size;
   }
 
-  public int getCompressedData() {
-    return compressedData;
+  public byte[] getData() {
+    return data;
   }
 
-  public void setCompressedData(int compressedData) {
-    this.compressedData = compressedData;
+  public void setData(byte[] data) {
+    this.data = data;
   }
 }
