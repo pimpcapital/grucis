@@ -1,6 +1,5 @@
 package com.grucis.dev.mapper;
 
-import com.grucis.dev.deserializer.data.SprDeserializer;
 import com.grucis.dev.model.raw.Adrn;
 import com.grucis.dev.model.raw.Spr;
 import com.grucis.dev.model.raw.SprAdrn;
@@ -22,8 +21,7 @@ public final class SpriteAnimationMapper extends ModelMapper<SprAdrn, SpriteAnim
   public SpriteAnimation map(SprAdrn raw) {
     SpriteAnimation ret = new SpriteAnimation();
 
-    SprDeserializer sd  = new SprDeserializer(rawModelService.getSprInputStream());
-    Spr spr = sd.getRawModel(raw);
+    Spr spr = rawModelService.getSpr(raw);
 
     ret.setDuration(spr.getDuration());
     int length = spr.getLength();

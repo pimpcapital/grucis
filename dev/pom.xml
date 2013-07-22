@@ -9,25 +9,13 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>dev</groupId>
   <artifactId>dev</artifactId>
 
   <dependencies>
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-      <version>${slf4j.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-context</artifactId>
-      <version>${spring.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-core</artifactId>
-      <version>${spring.version}</version>
+      <groupId>com.grucis</groupId>
+      <artifactId>core</artifactId>
+      <version>${project.version}</version>
     </dependency>
   </dependencies>
 

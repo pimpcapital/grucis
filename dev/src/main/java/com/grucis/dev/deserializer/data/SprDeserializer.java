@@ -2,19 +2,28 @@ package com.grucis.dev.deserializer.data;
 
 import java.io.InputStream;
 
+import com.grucis.dev.io.ResourceAllocator;
 import com.grucis.dev.model.raw.Spr;
 import com.grucis.dev.model.raw.SprAdrn;
 import com.grucis.dev.utils.bitwise.BitwiseUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public final class SprDeserializer extends DataModelDeserializer<Spr, SprAdrn> {
-  public SprDeserializer(InputStream in) {
-    super(in, DataType.SPR);
+
+  @Autowired
+  private ResourceAllocator resourceAllocator;
+
+  public SprDeserializer() {
+    super(DataType.SPR);
   }
 
   @Override
-  protected Spr deserialize(InputStream in, SprAdrn index) throws Exception {
+  protected Spr deserialize(SprAdrn index) throws Exception {
     int readPos = index.getAddress();
     Spr ret = new Spr();
+    InputStream in = resourceAllocator.getSpr();
 
     byte[] directionBytes = new byte[2];
     in.read(directionBytes, readPos, 2);

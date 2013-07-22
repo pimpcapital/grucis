@@ -2,24 +2,32 @@ package com.grucis.dev.deserializer.data;
 
 import java.io.InputStream;
 
+import com.grucis.dev.io.ResourceAllocator;
 import com.grucis.dev.model.raw.Adrn;
 import com.grucis.dev.model.raw.Real;
 import com.grucis.dev.utils.bitwise.BitwiseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public final class RealDeserializer extends DataModelDeserializer<Real, Adrn> {
 
   private static final Logger LOG = LoggerFactory.getLogger(RealDeserializer.class);
 
-  public RealDeserializer(InputStream in) {
-    super(in, DataType.REAL);
+  @Autowired
+  private ResourceAllocator resourceAllocator;
+
+  public RealDeserializer() {
+    super(DataType.REAL);
   }
 
   @Override
-  protected Real deserialize(InputStream in, Adrn index) throws Exception {
+  protected Real deserialize(Adrn index) throws Exception {
     int readPos = index.getAddress();
     Real ret = new Real();
+    InputStream in = resourceAllocator.getReal();
 
     byte[] magicBytes = new byte[2];
     in.read(magicBytes, readPos, 2);

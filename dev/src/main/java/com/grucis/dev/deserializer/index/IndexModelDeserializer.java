@@ -11,19 +11,17 @@ public abstract class IndexModelDeserializer<RM extends RawModel> {
 
   private static final Logger LOG = LoggerFactory.getLogger(IndexModelDeserializer.class);
 
-  private InputStream in;
   private IndexType type;
 
   protected IndexModelDeserializer(InputStream in, IndexType type) {
-    this.in = in;
     this.type = type;
   }
 
-  protected abstract Collection<RM> deserialize(InputStream in) throws Exception;
+  protected abstract Collection<RM> deserialize() throws Exception;
 
   public final Collection<RM> getRawModels() {
     try {
-      return deserialize(in);
+      return deserialize();
     } catch(Exception e) {
       LOG.error("Cannot deserialize " + type + " data into raw models", e);
       return null;

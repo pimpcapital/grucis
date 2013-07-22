@@ -4,17 +4,27 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.grucis.dev.io.ResourceAllocator;
 import com.grucis.dev.model.raw.Adrn;
 import com.grucis.dev.utils.bitwise.BitwiseUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public final class AdrnDeserializer extends IndexModelDeserializer<Adrn> {
+
+  @Autowired
+  private ResourceAllocator resourceAllocator;
+
   public AdrnDeserializer(InputStream in) {
     super(in, IndexType.ADRN);
   }
 
   @Override
-  protected Collection<Adrn> deserialize(InputStream in) throws Exception {
+  protected Collection<Adrn> deserialize() throws Exception {
     Collection<Adrn> ret = new ArrayList<Adrn>();
+    InputStream in = resourceAllocator.getAdrn();
+
     int readPos = 0;
     int readMax = in.available();
     while(readPos < readMax) {

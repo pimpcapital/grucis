@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import javax.annotation.PostConstruct;
 
-import com.grucis.dev.deserializer.data.RealDeserializer;
 import com.grucis.dev.model.raw.Adrn;
 import com.grucis.dev.model.raw.Real;
 import com.grucis.dev.model.wrapped.OffsetImage;
@@ -154,8 +153,7 @@ public final class OffsetImageMapper extends ModelMapper<Adrn, OffsetImage> {
     ret.setxOffset(raw.getxOffset());
     ret.setyOffset(raw.getyOffset());
 
-    RealDeserializer rd = new RealDeserializer(rawModelService.getRealInputStream());
-    Real real = rd.getRawModel(raw);
+    Real real = rawModelService.getReal(raw);
     byte[] bitmap = extractBitmap(real);
     BufferedImage image = generateImage(bitmap, raw.getWidth(), raw.getHeight());
     ret.setImage(image);
