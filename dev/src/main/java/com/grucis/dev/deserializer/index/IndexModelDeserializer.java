@@ -1,6 +1,5 @@
 package com.grucis.dev.deserializer.index;
 
-import java.io.InputStream;
 import java.util.Collection;
 
 import com.grucis.dev.model.raw.RawModel;
@@ -13,7 +12,7 @@ public abstract class IndexModelDeserializer<RM extends RawModel> {
 
   private IndexType type;
 
-  protected IndexModelDeserializer(InputStream in, IndexType type) {
+  protected IndexModelDeserializer(IndexType type) {
     this.type = type;
   }
 

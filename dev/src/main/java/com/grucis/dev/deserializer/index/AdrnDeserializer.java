@@ -16,8 +16,8 @@ public final class AdrnDeserializer extends IndexModelDeserializer<Adrn> {
   @Autowired
   private ResourceAllocator resourceAllocator;
 
-  public AdrnDeserializer(InputStream in) {
-    super(in, IndexType.ADRN);
+  public AdrnDeserializer() {
+    super(IndexType.ADRN);
   }
 
   @Override
@@ -25,65 +25,56 @@ public final class AdrnDeserializer extends IndexModelDeserializer<Adrn> {
     Collection<Adrn> ret = new ArrayList<Adrn>();
     InputStream in = resourceAllocator.getAdrn();
 
-    int readPos = 0;
-    int readMax = in.available();
-    while(readPos < readMax) {
+    while(in.available() > 0) {
       Adrn adrn = new Adrn();
 
       byte[] idBytes = new byte[4];
-      in.read(idBytes, readPos, 4);
+      in.read(idBytes);
       adrn.setId(BitwiseUtils.int32(idBytes));
-      readPos += 4;
 
       byte[] addressBytes = new byte[4];
-      in.read(addressBytes, readPos, 4);
+      in.read(addressBytes);
       adrn.setAddress(BitwiseUtils.uint32(addressBytes));
-      readPos += 4;
 
       byte[] sizeBytes = new byte[4];
-      in.read(sizeBytes, readPos, 4);
+      in.read(sizeBytes);
       adrn.setSize(BitwiseUtils.uint32(sizeBytes));
-      readPos += 4;
 
       byte[] xOffsetBytes = new byte[4];
-      in.read(xOffsetBytes, readPos, 4);
+      in.read(xOffsetBytes);
       adrn.setxOffset(BitwiseUtils.int32(xOffsetBytes));
-      readPos += 4;
 
       byte[] yOffsetBytes = new byte[4];
-      in.read(yOffsetBytes, readPos, 4);
+      in.read(yOffsetBytes);
       adrn.setyOffset(BitwiseUtils.int32(yOffsetBytes));
-      readPos += 4;
 
       byte[] widthBytes = new byte[4];
-      in.read(widthBytes, readPos, 4);
+      in.read(widthBytes);
       adrn.setWidth(BitwiseUtils.int32(widthBytes));
-      readPos += 4;
 
       byte[] heightBytes = new byte[4];
-      in.read(heightBytes, readPos, 4);
+      in.read(heightBytes);
       adrn.setHeight(BitwiseUtils.int32(heightBytes));
-      readPos += 4;
 
       byte[] eastByte = new byte[1];
-      in.read(eastByte, readPos, 1);
+      in.read(eastByte);
       adrn.setEast(BitwiseUtils.uint8(eastByte[0]));
-      readPos++;
 
       byte[] southByte = new byte[1];
-      in.read(southByte, readPos, 1);
+      in.read(southByte);
       adrn.setSouth(BitwiseUtils.uint8(southByte[0]));
-      readPos++;
+
+      byte[] pathByte = new byte[1];
+      in.read(pathByte);
+      adrn.setPath(BitwiseUtils.uint8(pathByte[0]));
 
       byte[] referenceBytes = new byte[45];
-      in.read(referenceBytes, readPos, 45);
+      in.read(referenceBytes);
       adrn.setReference(new String(referenceBytes));
-      readPos += 45;
 
       byte[] mapBytes = new byte[4];
-      in.read(mapBytes, readPos, 4);
+      in.read(mapBytes);
       adrn.setMap(BitwiseUtils.int32(mapBytes));
-      readPos += 4;
 
       ret.add(adrn);
     }

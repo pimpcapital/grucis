@@ -1,4 +1,6 @@
 package com.grucis.dev.model.wrapped;
 
-public abstract class WrappedModel {
+import com.grucis.dev.model.Model;
+
+public abstract class WrappedModel extends Model {
 }

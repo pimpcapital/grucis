@@ -10,7 +10,7 @@ public final class Adrn extends RawModel{
   private int height;
   private int east;
   private int south;
-  private int sign;
+  private int path;
   private String reference;
   private int map;
 
@@ -86,12 +86,12 @@ public final class Adrn extends RawModel{
     this.south = south;
   }
 
-  public int getSign() {
-    return sign;
+  public int getPath() {
+    return path;
   }
 
-  public void setSign(int sign) {
-    this.sign = sign;
+  public void setPath(int path) {
+    this.path = path;
   }
 
   public String getReference() {

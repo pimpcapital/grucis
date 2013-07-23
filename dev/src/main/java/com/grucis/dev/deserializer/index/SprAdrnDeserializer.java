@@ -16,8 +16,8 @@ public final class SprAdrnDeserializer extends IndexModelDeserializer<SprAdrn> {
   @Autowired
   private ResourceAllocator resourceAllocator;
 
-  public SprAdrnDeserializer(InputStream in) {
-    super(in, IndexType.SPR_ADRN);
+  public SprAdrnDeserializer() {
+    super(IndexType.SPR_ADRN);
   }
 
   @Override
@@ -25,30 +25,24 @@ public final class SprAdrnDeserializer extends IndexModelDeserializer<SprAdrn> {
     Collection<SprAdrn> ret = new ArrayList<SprAdrn>();
     InputStream in = resourceAllocator.getSprAdrn();
 
-    int readPos = 0;
-    int readMax = in.available();
-    while(readPos < readMax) {
+    while(in.available() > 0) {
       SprAdrn sprAdrn = new SprAdrn();
 
       byte[] idBytes = new byte[4];
-      in.read(idBytes, readPos, 4);
+      in.read(idBytes);
       sprAdrn.setId(BitwiseUtils.uint32(idBytes));
-      readPos += 4;
 
       byte[] addressBytes = new byte[4];
-      in.read(addressBytes, readPos, 4);
+      in.read(addressBytes);
       sprAdrn.setAddress(BitwiseUtils.uint32(addressBytes));
-      readPos += 4;
 
       byte[] actionsBytes = new byte[2];
-      in.read(actionsBytes, readPos, 2);
+      in.read(actionsBytes);
       sprAdrn.setAddress(BitwiseUtils.uint16(actionsBytes));
-      readPos += 2;
 
       byte[] soundBytes = new byte[2];
-      in.read(soundBytes, readPos, 2);
+      in.read(soundBytes);
       sprAdrn.setSound(BitwiseUtils.uint16(soundBytes));
-      readPos += 2;
 
       ret.add(sprAdrn);
     }

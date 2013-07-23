@@ -1,4 +1,6 @@
 package com.grucis.dev.model.raw;
 
-public abstract class RawModel {
+import com.grucis.dev.model.Model;
+
+public abstract class RawModel extends Model {
 }

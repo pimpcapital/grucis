@@ -9,7 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @PropertySource("classpath:/resources.properties")
-public final class ResourcesConfig {
+public class ResourcesConfig {
 
   @Value("${data}")
   private String dataPath;

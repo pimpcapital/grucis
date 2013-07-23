@@ -1,15 +1,14 @@
 Ext.define('GDE.view.Viewport', {
   extend: 'Ext.container.Viewport',
-  layout: 'border',
+  layout: {type: 'vbox', align: 'stretch'},
   items: [
     {
       xtype: 'panel',
-      region: 'north',
       html: 'Grucis Dev Environment',
       minHeight: '50'
     }, {
       xtype: 'tabpanel',
-      region: 'center',
+      flex: 1,
       items: [
         {xtype: 'bitmap'}
       ]

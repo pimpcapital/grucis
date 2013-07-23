@@ -1,8 +1,13 @@
 Ext.application({
   appFolder: 'gde',
   controllers: [],
-  stores: [],
-  models: [],
+  models: [
+    'Adrn',
+    'SprAdrn'
+  ],
+  stores: [
+    'AdrnStore'
+  ],
   views: [
     'BitmapGallery'
   ],

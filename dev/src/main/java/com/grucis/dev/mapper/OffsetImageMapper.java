@@ -24,7 +24,7 @@ public final class OffsetImageMapper extends ModelMapper<Adrn, OffsetImage> {
 
   @PostConstruct
   public void init() throws Exception {
-    InputStream paletteInput = getClass().getResourceAsStream("palette.dat");
+    InputStream paletteInput = getClass().getResourceAsStream("/palette.dat");
     byte[] paletteBytes = new byte[1024];
     paletteInput.read(paletteBytes);
 

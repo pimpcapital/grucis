@@ -1,5 +1,6 @@
 package com.grucis.dev.service;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.annotation.PostConstruct;
@@ -61,8 +62,16 @@ public final class RawModelService {
     return mapElementMap.get(id);
   }
 
+  public Collection<Adrn> getAllAdrns() {
+    return adrnMap.values();
+  }
+
   public SprAdrn getSprAdrn(int id) {
     return sprAdrnMap.get(id);
+  }
+
+  public Collection<SprAdrn> getAllSprAdrns() {
+    return sprAdrnMap.values();
   }
 
 }

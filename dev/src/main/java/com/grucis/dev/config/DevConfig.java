@@ -8,5 +8,5 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @Import(ResourcesConfig.class)
 @ComponentScan(basePackageClasses = DevModuleMarker.class)
-public final class DevConfig {
+public class DevConfig {
 }

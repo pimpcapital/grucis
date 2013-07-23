@@ -14,7 +14,25 @@
     <param-value>
       com.grucis.core.config.CoreConfig
       com.grucis.dev.config.DevConfig
+      com.grucis.web.config.WebConfig
     </param-value>
   </context-param>
+
+  <!-- RESTEASY CONFIGURATION -->
+  <listener>
+    <listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap
+    </listener-class>
+  </listener>
+  <listener>
+    <listener-class>org.jboss.resteasy.plugins.spring.SpringContextLoaderListener</listener-class>
+  </listener>
+  <servlet>
+    <servlet-name>resteasy-servlet</servlet-name>
+    <servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>resteasy-servlet</servlet-name>
+    <url-pattern>/api/*</url-pattern>
+  </servlet-mapping>
 
 </web-app>
