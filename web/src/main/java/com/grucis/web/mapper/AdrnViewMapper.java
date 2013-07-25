@@ -14,6 +14,8 @@ public final class AdrnViewMapper extends ViewMapper<Adrn, AdrnView> {
     ret.setMap(model.getMap());
     ret.setWidth(model.getWidth());
     ret.setHeight(model.getHeight());
+    ret.setxOffset(model.getxOffset());
+    ret.setyOffset(model.getyOffset());
 
     return ret;
   }

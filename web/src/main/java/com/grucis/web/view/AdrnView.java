@@ -5,6 +5,8 @@ public final class AdrnView extends View {
   private int map;
   private int width;
   private int height;
+  private int xOffset;
+  private int yOffset;
 
   public int getId() {
     return id;
@@ -36,5 +38,21 @@ public final class AdrnView extends View {
 
   public void setHeight(int height) {
     this.height = height;
+  }
+
+  public int getxOffset() {
+    return xOffset;
+  }
+
+  public void setxOffset(int xOffset) {
+    this.xOffset = xOffset;
+  }
+
+  public int getyOffset() {
+    return yOffset;
+  }
+
+  public void setyOffset(int yOffset) {
+    this.yOffset = yOffset;
   }
 }
