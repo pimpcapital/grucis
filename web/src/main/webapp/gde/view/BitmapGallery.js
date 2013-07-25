@@ -12,14 +12,18 @@ Ext.define('GDE.view.BitmapGallery', {
     {
       xtype: 'grid',
       store: 'AdrnStore',
+      minWidth: 320,
       flex: 1,
       sortableColumns: false,
       columns: [
         {text: 'ID', dataIndex: 'id', flex: 1},
         {text: 'Map Index', dataIndex: 'map', flex: 1},
-        {text: 'Width', dataIndex: 'width', minWidth: 120},
-        {text: 'Height',  dataIndex: 'height', minWidth: 120}
+        {text: 'Width', dataIndex: 'width', width: 80},
+        {text: 'Height',  dataIndex: 'height', width: 80}
       ]
+    }, {
+      xtype: 'offsetimage',
+      flex: 5
     }
   ]
 });
