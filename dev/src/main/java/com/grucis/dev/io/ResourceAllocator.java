@@ -25,7 +25,6 @@ public final class ResourceAllocator {
 
   private InputStream getDataFile(final String prefix) {
     File adrn = dataFolder.listFiles(new FilenameFilter() {
-      @Override
       public boolean accept(File dir, String name) {
         return StringUtils.startsWithIgnoreCase(name, prefix + "_");
       }
@@ -33,7 +32,7 @@ public final class ResourceAllocator {
     try {
       return new FileInputStream(adrn);
     } catch(FileNotFoundException e) {
-      LOG.error("Data file " + prefix + " cannot be found", e);
+      LOG.error("Cannot find data file for {} under {}", prefix, dataFolder.getAbsolutePath());
       return null;
     }
   }

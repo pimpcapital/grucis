@@ -30,20 +30,37 @@ public final class RawModelService {
   private Map<Integer, Adrn> adrnMap;
   private Map<Integer, SprAdrn> sprAdrnMap;
 
-
-  @PostConstruct
-  public void init() {
+  private void prepareAdrns() {
     mapElementMap = new TreeMap<Integer, Adrn>();
     adrnMap = new TreeMap<Integer, Adrn>();
     for(Adrn adrn : adrnDeserializer.getRawModels()) {
       mapElementMap.put(adrn.getMap(), adrn);
       adrnMap.put(adrn.getId(), adrn);
     }
+  }
 
-    sprAdrnMap = new TreeMap<Integer, SprAdrn>();
-    for(SprAdrn sprAdrn : sprAdrnDeserializer.getRawModels()) {
-      sprAdrnMap.put(sprAdrn.getId(), sprAdrn);
+  private Map<Integer, Adrn> getMapElementMap() {
+    if(mapElementMap == null) {
+      prepareAdrns();
     }
+    return mapElementMap;
+  }
+
+  private Map<Integer, Adrn> getAdrnMap() {
+    if(adrnMap == null) {
+      prepareAdrns();
+    }
+    return adrnMap;
+  }
+
+  private Map<Integer, SprAdrn> getSprAdrnMap() {
+    if(sprAdrnMap == null) {
+      sprAdrnMap = new TreeMap<Integer, SprAdrn>();
+      for(SprAdrn sprAdrn : sprAdrnDeserializer.getRawModels()) {
+        sprAdrnMap.put(sprAdrn.getId(), sprAdrn);
+      }
+    }
+    return sprAdrnMap;
   }
 
   public Real getReal(Adrn index) {
@@ -55,23 +72,23 @@ public final class RawModelService {
   }
 
   public Adrn getAdrn(int id) {
-    return adrnMap.get(id);
+    return getAdrnMap().get(id);
   }
 
   public Adrn getAdrnByMapElementId(int id) {
-    return mapElementMap.get(id);
+    return getMapElementMap().get(id);
   }
 
   public Collection<Adrn> getAllAdrns() {
-    return adrnMap.values();
+    return getAdrnMap().values();
   }
 
   public SprAdrn getSprAdrn(int id) {
-    return sprAdrnMap.get(id);
+    return getSprAdrnMap().get(id);
   }
 
   public Collection<SprAdrn> getAllSprAdrns() {
-    return sprAdrnMap.values();
+    return getSprAdrnMap().values();
   }
 
 }

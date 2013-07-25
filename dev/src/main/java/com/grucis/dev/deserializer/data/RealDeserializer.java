@@ -25,9 +25,14 @@ public final class RealDeserializer extends DataModelDeserializer<Real, Adrn> {
 
   @Override
   protected Real deserialize(Adrn index) throws Exception {
+    InputStream in = resourceAllocator.getReal();
+    if(in == null) {
+      LOG.warn("REAL input stream is not available");
+      return null;
+    }
+
     int readPos = index.getAddress();
     Real ret = new Real();
-    InputStream in = resourceAllocator.getReal();
 
     byte[] magicBytes = new byte[2];
     in.read(magicBytes, readPos, 2);

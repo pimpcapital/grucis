@@ -1,12 +1,13 @@
 package com.grucis.web.controller;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import java.util.List;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 import com.grucis.dev.service.RawModelService;
 import com.grucis.web.mapper.AdrnViewMapper;
+import com.grucis.web.view.AdrnView;
+import com.grucis.web.view.BufferedViewCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -21,7 +22,11 @@ public final class BitmapGalleryController {
 
   @GET
   @Path("/adrns")
-  public Response getAdrns() {
-    return Response.ok(adrnViewMapper.map(rawModelService.getAllAdrns())).build();
+  public Response getAdrns(@QueryParam("start") int start, @QueryParam("limit") int limit) {
+    List<AdrnView> views = adrnViewMapper.map(rawModelService.getAllAdrns());
+    int to = start + limit;
+    int total = views.size();
+    if(to > total) to = total;
+    return Response.ok(new BufferedViewCollection<AdrnView>(total, views.subList(start, to))).build();
   }
 }

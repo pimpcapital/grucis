@@ -8,6 +8,10 @@ Ext.define('GDE.model.Adrn', {
   ],
   proxy: {
     type: 'rest',
-    url: '/api/bitmap/adrns'
+    url: '/api/bitmap/adrns',
+    reader: {
+      root: 'views',
+      totalProperty: 'total'
+    }
   }
 });

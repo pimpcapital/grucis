@@ -6,11 +6,15 @@ import com.grucis.dev.io.ResourceAllocator;
 import com.grucis.dev.model.raw.Spr;
 import com.grucis.dev.model.raw.SprAdrn;
 import com.grucis.dev.utils.bitwise.BitwiseUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public final class SprDeserializer extends DataModelDeserializer<Spr, SprAdrn> {
+
+  private static final Logger LOG = LoggerFactory.getLogger(SprDeserializer.class);
 
   @Autowired
   private ResourceAllocator resourceAllocator;
@@ -21,9 +25,14 @@ public final class SprDeserializer extends DataModelDeserializer<Spr, SprAdrn> {
 
   @Override
   protected Spr deserialize(SprAdrn index) throws Exception {
+    InputStream in = resourceAllocator.getSpr();
+    if(in == null) {
+      LOG.warn("SPR input stream is not available");
+      return null;
+    }
+
     int readPos = index.getAddress();
     Spr ret = new Spr();
-    InputStream in = resourceAllocator.getSpr();
 
     byte[] directionBytes = new byte[2];
     in.read(directionBytes, readPos, 2);
