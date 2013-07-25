@@ -9,7 +9,8 @@ Ext.application({
     'AdrnStore'
   ],
   views: [
-    'BitmapGallery'
+    'BitmapGallery',
+    'OffsetImageCanvas'
   ],
   name: 'GDE',
   autoCreateViewport: true
