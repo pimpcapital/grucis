@@ -1,6 +1,6 @@
-package com.grucis.dev.model.wrapped;
+package com.grucis.dev.model.output;
 
-public final class SpriteAnimation extends WrappedModel {
+public final class SpriteAnimation extends OutputModel {
   private int duration;
   private int length;
   private OffsetImage[] frames;

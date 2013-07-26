@@ -1,8 +1,8 @@
-package com.grucis.dev.model.wrapped;
+package com.grucis.dev.model.output;
 
 import java.awt.image.BufferedImage;
 
-public final class OffsetImage extends WrappedModel {
+public final class OffsetImage extends OutputModel {
 
   private int xOffset;
   private int yOffset;

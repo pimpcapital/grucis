@@ -5,9 +5,9 @@ import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import javax.annotation.PostConstruct;
 
+import com.grucis.dev.model.output.OffsetImage;
 import com.grucis.dev.model.raw.Adrn;
 import com.grucis.dev.model.raw.Real;
-import com.grucis.dev.model.wrapped.OffsetImage;
 import com.grucis.dev.service.RawModelService;
 import com.grucis.dev.utils.bitwise.BitwiseUtils;
 import com.grucis.dev.utils.bitwise.UInt8;

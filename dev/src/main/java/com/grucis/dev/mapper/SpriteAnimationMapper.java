@@ -1,10 +1,10 @@
 package com.grucis.dev.mapper;
 
+import com.grucis.dev.model.output.OffsetImage;
+import com.grucis.dev.model.output.SpriteAnimation;
 import com.grucis.dev.model.raw.Adrn;
 import com.grucis.dev.model.raw.Spr;
 import com.grucis.dev.model.raw.SprAdrn;
-import com.grucis.dev.model.wrapped.OffsetImage;
-import com.grucis.dev.model.wrapped.SpriteAnimation;
 import com.grucis.dev.service.RawModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
