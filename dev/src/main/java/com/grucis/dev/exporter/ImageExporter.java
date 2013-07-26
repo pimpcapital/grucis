@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public final class ImageExporter extends Exporter<OffsetImage> {
   @Override
-  public byte[] toByteArray(OutputModel model) {
+  public byte[] getBinaryData(OutputModel model) {
     return new byte[0];
   }
 }
