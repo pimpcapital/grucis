@@ -22,39 +22,51 @@ public final class ResourceAllocator {
   @Qualifier("map")
   private File mapFolder;
 
-
-  private InputStream getDataFile(final String prefix) {
+  private File findDataFile(final String prefix) {
     if(!dataFolder.isDirectory()) {
       LOG.error("Cannot find data directory {}", dataFolder.getAbsolutePath());
       return null;
     }
-    File adrn = dataFolder.listFiles(new FilenameFilter() {
+    return dataFolder.listFiles(new FilenameFilter() {
       public boolean accept(File dir, String name) {
         return StringUtils.startsWithIgnoreCase(name, prefix + "_");
       }
     })[0];
+  }
+
+
+  private InputStream getDataInputStream(String prefix) {
     try {
-      return new FileInputStream(adrn);
+      return new FileInputStream(findDataFile(prefix));
     } catch(FileNotFoundException e) {
-      LOG.error("Cannot find data file for {} under {}", prefix, dataFolder.getAbsolutePath());
+      LOG.error("Cannot get input stream on data file {} under {}", prefix, dataFolder.getAbsolutePath());
+      return null;
+    }
+  }
+
+  private RandomAccessFile getDataRandomAccessFile(String prefix) {
+    try {
+      return new RandomAccessFile(findDataFile(prefix), "r");
+    } catch(FileNotFoundException e) {
+      LOG.error("Cannot get random access on data file {} under {}", prefix, dataFolder.getAbsolutePath());
       return null;
     }
   }
 
   public InputStream getAdrn() {
-    return getDataFile("ADRN");
+    return getDataInputStream("ADRN");
   }
 
-  public InputStream getReal() {
-    return getDataFile("REAL");
+  public RandomAccessFile getReal() {
+    return getDataRandomAccessFile("REAL");
   }
 
   public InputStream getSprAdrn() {
-    return getDataFile("SPRADRN");
+    return getDataInputStream("SPRADRN");
   }
 
-  public InputStream getSpr() {
-    return getDataFile("SPR");
+  public RandomAccessFile getSpr() {
+    return getDataRandomAccessFile("SPR");
   }
 
 

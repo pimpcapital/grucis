@@ -1,6 +1,7 @@
 package com.grucis.dev.deserializer.data;
 
 import java.io.InputStream;
+import java.io.RandomAccessFile;
 
 import com.grucis.dev.io.ResourceAllocator;
 import com.grucis.dev.model.raw.Spr;
@@ -25,49 +26,43 @@ public final class SprDeserializer extends DataModelDeserializer<Spr, SprAdrn> {
 
   @Override
   protected Spr deserialize(SprAdrn index) throws Exception {
-    InputStream in = resourceAllocator.getSpr();
-    if(in == null) {
-      LOG.error("SPR input stream is not available");
+    RandomAccessFile access = resourceAllocator.getSpr();
+    if(access == null) {
+      LOG.error("SPR random access is not available");
       return null;
     }
 
-    int readPos = index.getAddress();
+    access.seek(index.getAddress());
     Spr ret = new Spr();
 
     byte[] directionBytes = new byte[2];
-    in.read(directionBytes, readPos, 2);
+    access.read(directionBytes);
     ret.setDirection(BitwiseUtils.uint16(directionBytes));
-    readPos += 2;
 
     byte[] actionBytes = new byte[2];
-    in.read(actionBytes, readPos, 2);
+    access.read(actionBytes);
     ret.setAction(BitwiseUtils.uint16(directionBytes));
-    readPos += 2;
 
     byte[] durationBytes = new byte[4];
-    in.read(durationBytes, readPos, 4);
+    access.read(durationBytes);
     ret.setDuration(BitwiseUtils.uint32(durationBytes));
-    readPos += 4;
 
     byte[] lengthBytes = new byte[4];
-    in.read(lengthBytes, readPos, 4);
+    access.read(lengthBytes);
     int length = BitwiseUtils.uint32(lengthBytes);
     ret.setLength(length);
-    readPos += 4;
 
     Spr.SprFrame[] frames = new Spr.SprFrame[length];
     for(int i = 0; i < length; i++) {
       Spr.SprFrame frame = new Spr.SprFrame();
 
       byte[] imageBytes = new byte[4];
-      in.read(imageBytes, readPos, 4);
+      access.read(imageBytes);
       frame.setImage(BitwiseUtils.uint32(imageBytes));
-      readPos += 4;
 
       byte[] referenceBytes = new byte[6];
-      in.read(referenceBytes, readPos, 6);
+      access.read(referenceBytes);
       frame.setReference(new String(referenceBytes));
-      readPos += 6;
 
       frames[i] = frame;
     }

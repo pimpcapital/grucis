@@ -1,6 +1,7 @@
 package com.grucis.dev.deserializer.data;
 
 import java.io.InputStream;
+import java.io.RandomAccessFile;
 
 import com.grucis.dev.io.ResourceAllocator;
 import com.grucis.dev.model.raw.Adrn;
@@ -25,63 +26,55 @@ public final class RealDeserializer extends DataModelDeserializer<Real, Adrn> {
 
   @Override
   protected Real deserialize(Adrn index) throws Exception {
-    InputStream in = resourceAllocator.getReal();
-    if(in == null) {
-      LOG.error("REAL input stream is not available");
+    RandomAccessFile access = resourceAllocator.getReal();
+    if(access == null) {
+      LOG.error("REAL random access is not available");
       return null;
     }
 
-    int readPos = index.getAddress();
+    access.seek(index.getAddress());
     Real ret = new Real();
 
     byte[] magicBytes = new byte[2];
-    in.read(magicBytes, readPos, 2);
+    access.read(magicBytes);
     ret.setMagic(new String(magicBytes));
-    readPos += 2;
 
-    byte[] majorByte = new byte[1];
-    in.read(majorByte, readPos, 1);
-    ret.setMajor(BitwiseUtils.uint8(majorByte[0]));
-    readPos++;
+    byte majorByte = access.readByte();
+    ret.setMajor(BitwiseUtils.uint8(majorByte));
 
-    byte[] minorByte = new byte[1];
-    in.read(minorByte, readPos, 1);
-    ret.setMinor(BitwiseUtils.uint8(minorByte[0]));
-    readPos++;
+    byte minorByte = access.readByte();
+    ret.setMinor(BitwiseUtils.uint8(minorByte));
 
     byte[] widthBytes = new byte[4];
-    in.read(widthBytes, readPos, 4);
+    access.read(widthBytes);
     int width = BitwiseUtils.int32(widthBytes);
     if(width != index.getWidth()) {
       LOG.warn("Image {} width {} does not match with index width {}", index.getId(), width, index.getWidth());
       width = index.getWidth();
     }
     ret.setWidth(width);
-    readPos += 4;
 
     byte[] heightBytes = new byte[4];
-    in.read(heightBytes, readPos, 4);
+    access.read(heightBytes);
     int height = BitwiseUtils.int32(heightBytes);
     if(height != index.getHeight()) {
       LOG.warn("Image {} height {} does not match with index height {}", index.getId(), height, index.getHeight());
       height = index.getHeight();
     }
     ret.setHeight(height);
-    readPos += 4;
 
     byte[] sizeBytes = new byte[4];
-    in.read(sizeBytes, readPos, 4);
+    access.read(sizeBytes);
     int size = BitwiseUtils.int32(sizeBytes);
     if(size != index.getSize()) {
       LOG.warn("Image {} data block size {} does not match with index data block size {}", index.getId(), size, index.getSize());
       size = index.getSize();
     }
     ret.setSize(size);
-    readPos += 4;
 
     int copy = size - 16;
     byte[] dataBytes = new byte[copy];
-    in.read(dataBytes, readPos, copy);
+    access.read(dataBytes);
     ret.setData(dataBytes);
 
     return ret;
