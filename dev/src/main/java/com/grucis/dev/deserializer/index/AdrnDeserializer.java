@@ -84,7 +84,7 @@ public final class AdrnDeserializer extends IndexModelDeserializer<Adrn> {
         ret.add(adrn);
       }
     } else {
-      LOG.warn("ADRN input stream is not available");
+      LOG.error("ADRN input stream is not available");
     }
 
     return ret;

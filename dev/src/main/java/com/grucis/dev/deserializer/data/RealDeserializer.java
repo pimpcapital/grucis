@@ -27,7 +27,7 @@ public final class RealDeserializer extends DataModelDeserializer<Real, Adrn> {
   protected Real deserialize(Adrn index) throws Exception {
     InputStream in = resourceAllocator.getReal();
     if(in == null) {
-      LOG.warn("REAL input stream is not available");
+      LOG.error("REAL input stream is not available");
       return null;
     }
 

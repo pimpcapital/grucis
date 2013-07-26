@@ -27,7 +27,7 @@ public final class SprDeserializer extends DataModelDeserializer<Spr, SprAdrn> {
   protected Spr deserialize(SprAdrn index) throws Exception {
     InputStream in = resourceAllocator.getSpr();
     if(in == null) {
-      LOG.warn("SPR input stream is not available");
+      LOG.error("SPR input stream is not available");
       return null;
     }
 

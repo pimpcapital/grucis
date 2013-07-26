@@ -22,8 +22,6 @@ Ext.define('Ext.ux.EaselPanel', {
     };
 
     me.on('resize', function(me, width, height, oldWidth, oldHeight) {
-      me.stage.canvas.width = width;
-      me.stage.canvas.height = height;
       me.resize(width, height, oldWidth, oldHeight);
     });
   }

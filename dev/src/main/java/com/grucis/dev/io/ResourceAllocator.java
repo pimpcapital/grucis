@@ -24,6 +24,10 @@ public final class ResourceAllocator {
 
 
   private InputStream getDataFile(final String prefix) {
+    if(!dataFolder.isDirectory()) {
+      LOG.error("Cannot find data directory {}", dataFolder.getAbsolutePath());
+      return null;
+    }
     File adrn = dataFolder.listFiles(new FilenameFilter() {
       public boolean accept(File dir, String name) {
         return StringUtils.startsWithIgnoreCase(name, prefix + "_");

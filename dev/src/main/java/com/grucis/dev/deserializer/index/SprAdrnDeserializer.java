@@ -52,7 +52,7 @@ public final class SprAdrnDeserializer extends IndexModelDeserializer<SprAdrn> {
         ret.add(sprAdrn);
       }
     } else {
-      LOG.warn("SPR_ADRN input stream is not available");
+      LOG.error("SPR_ADRN input stream is not available");
     }
 
     return ret;
