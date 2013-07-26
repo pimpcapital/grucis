@@ -41,7 +41,7 @@ public final class BitmapGalleryController {
   @Produces("image/png")
   public byte[] getImage(@PathParam("id") int id) throws IOException {
     ByteArrayOutputStream out = new ByteArrayOutputStream();
-    ImageIO.write(outputModelService.getImage(id), "png", out);
+    ImageIO.write(outputModelService.getImage(id).getImage(), "png", out);
     return out.toByteArray();
   }
 }

@@ -77,6 +77,8 @@ public final class RealDeserializer extends DataModelDeserializer<Real, Adrn> {
     access.read(dataBytes);
     ret.setData(dataBytes);
 
+    access.close();
+
     return ret;
   }
 }

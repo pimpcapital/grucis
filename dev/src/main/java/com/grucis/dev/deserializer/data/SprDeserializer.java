@@ -68,6 +68,8 @@ public final class SprDeserializer extends DataModelDeserializer<Spr, SprAdrn> {
     }
     ret.setFrames(frames);
 
+    access.close();
+
     return ret;
   }
 }

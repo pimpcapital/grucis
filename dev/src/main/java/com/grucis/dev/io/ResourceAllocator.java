@@ -39,7 +39,7 @@ public final class ResourceAllocator {
     try {
       return new FileInputStream(findDataFile(prefix));
     } catch(FileNotFoundException e) {
-      LOG.error("Cannot get input stream on data file {} under {}", prefix, dataFolder.getAbsolutePath());
+      LOG.error("Cannot get input stream on missing data file {} under {}", prefix, dataFolder.getAbsolutePath());
       return null;
     }
   }
@@ -48,7 +48,7 @@ public final class ResourceAllocator {
     try {
       return new RandomAccessFile(findDataFile(prefix), "r");
     } catch(FileNotFoundException e) {
-      LOG.error("Cannot get random access on data file {} under {}", prefix, dataFolder.getAbsolutePath());
+      LOG.error("Cannot get random access on missing data file {} under {}", prefix, dataFolder.getAbsolutePath());
       return null;
     }
   }
