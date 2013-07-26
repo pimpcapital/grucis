@@ -1,15 +1,20 @@
 Ext.define('GDE.view.OffsetImageCanvas', {
   extend: 'Ext.ux.EaselPanel',
   alias: 'widget.offsetimage',
-
-  initComponent: function() {
+  initComponent: function () {
     var me = this;
-    me.callParent(arguments);
+    Ext.apply(me, {
+      drawPlan: [
+        function () {
+          Ext.ux.EaselPanelUtils.drawScales(me.stage, {
+            rgb: '#c8c8c8'
+          });
+        }
+      ],
+      loadImage: function(adrn) {
 
-    me.draw = function() {
-      Ext.ux.EaselPanelUtils.drawScales(me.stage, {
-        rgb: '#c8c8c8'
-      });
-    };
+      }
+    });
+    me.callParent(arguments);
   }
 });

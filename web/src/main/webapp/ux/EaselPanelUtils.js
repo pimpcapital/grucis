@@ -59,7 +59,7 @@ Ext.define('Ext.ux.EaselPanelUtils', {
         g.lineTo(x + options.majorTickLength, t);
         var text = new createjs.Text(origin - t, options.font, options.rgb);
         text.x = x - (text.getMeasuredWidth() / 2) - options.majorTickLength;
-        text.y = t - text.getMeasuredHeight() / 2 - 1;
+        text.y = t - text.getMeasuredHeight() / 2;
         stage.addChild(text);
       });
       stage.addChild(new createjs.Shape(g));

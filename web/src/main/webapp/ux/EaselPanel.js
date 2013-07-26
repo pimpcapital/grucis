@@ -1,6 +1,7 @@
 Ext.define('Ext.ux.EaselPanel', {
   extend: 'Ext.ux.CanvasPanel',
   alias: 'widget.easel',
+  drawPlan: [],
   initComponent: function() {
     var me = this;
     me.callParent(arguments);
@@ -9,10 +10,9 @@ Ext.define('Ext.ux.EaselPanel', {
     });
 
     me.draw = function() {
-      var text = new createjs.Text('Hello World', '50px Arial', '#black');
-      text.x = (me.stage.canvas.width - text.getMeasuredWidth()) / 2;
-      text.y = (me.stage.canvas.height - text.getMeasuredHeight()) / 2;
-      me.stage.addChild(text);
+      Ext.Array.each(me.drawPlan, function(fn) {
+        return fn();
+      })
     };
 
     me.resize = function(width, height, oldWidth, oldHeight) {
