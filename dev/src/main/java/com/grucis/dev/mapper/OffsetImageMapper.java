@@ -29,11 +29,13 @@ public final class OffsetImageMapper extends ModelMapper<Adrn, OffsetImage> {
     paletteInput.read(paletteBytes);
 
     palette = new int[256];
+    int pos = 0;
     for(int i = 0; i < 256; i++) {
-      int pos = i * 4;
-      palette[i] = new Color(BitwiseUtils.uint8(paletteBytes[pos++]),
-                              BitwiseUtils.uint8(paletteBytes[pos++]),
-                              BitwiseUtils.uint8(paletteBytes[pos])).getRGB();
+      int b = BitwiseUtils.uint8(paletteBytes[pos++]);
+      int g = BitwiseUtils.uint8(paletteBytes[pos++]);
+      int r = BitwiseUtils.uint8(paletteBytes[pos++]);
+      pos++;
+      palette[i] = new Color(r, g, b).getRGB();
     }
   }
 
