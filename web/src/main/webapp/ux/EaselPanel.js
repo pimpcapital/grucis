@@ -15,10 +15,15 @@ Ext.define('Ext.ux.EaselPanel', {
       })
     };
 
-    me.resize = function(width, height, oldWidth, oldHeight) {
+    me.redraw = function() {
       me.stage.removeAllChildren();
+      me.stage.clear();
       me.draw();
       me.stage.update();
+    };
+
+    me.resize = function(width, height, oldWidth, oldHeight) {
+      me.redraw();
     };
 
     me.on('resize', function(me, width, height, oldWidth, oldHeight) {

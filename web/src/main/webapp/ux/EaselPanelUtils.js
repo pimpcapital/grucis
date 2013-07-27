@@ -65,6 +65,13 @@ Ext.define('Ext.ux.EaselPanelUtils', {
       stage.addChild(new createjs.Shape(g));
     },
 
+    getOrigin: function(stage) {
+      return {
+        x: Math.floor(stage.canvas.width / 2),
+        y: Math.floor(stage.canvas.height / 2)
+      };
+    },
+
     drawScales: function(stage, options) {
       options = options || {};
       Ext.applyIf(options, {
@@ -75,15 +82,16 @@ Ext.define('Ext.ux.EaselPanelUtils', {
         majorTickLength: 15,
         rgb: createjs.Graphics.getRGB(0,0,0)
       });
-      var middle = Math.floor(stage.canvas.height / 2);
-      var center = Math.floor(stage.canvas.width / 2);
-      var origin = new createjs.Text('O', 'italic 16px Arial', options.rgb);
-      origin.x = center - 15;
-      origin.y = middle + 2;
-      stage.addChild(origin);
-      this.createHorizontalScale(stage, 0, middle, stage.canvas.width, center, options);
-      this.createVerticalScale(stage, center, 0, stage.canvas.height, middle, options);
-
+      var origin = this.getOrigin(stage);
+      var originText = new createjs.Text('O', 'italic 16px Arial', options.rgb);
+      originText.x = origin.x - 15;
+      originText.y = origin.y + 2;
+      stage.addChild(originText);
+      this.createHorizontalScale(stage, 0, origin.y, stage.canvas.width, origin.x, options);
+      this.createVerticalScale(stage, origin.x, 0, stage.canvas.height, origin.y, options);
     }
+
+
+
   }
 });
