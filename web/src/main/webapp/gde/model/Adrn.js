@@ -4,6 +4,8 @@ Ext.define('GDE.model.Adrn', {
     {name: 'id', type: 'int'},
     {name: 'width', type: 'int'},
     {name: 'height', type: 'int'},
+    {name: 'xOffset', type: 'int'},
+    {name: 'yOffset', type: 'int'},
     {name: 'map', type: 'int'}
   ],
   proxy: {

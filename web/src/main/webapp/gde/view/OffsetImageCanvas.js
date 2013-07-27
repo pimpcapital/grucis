@@ -2,6 +2,7 @@ Ext.define('GDE.view.OffsetImageCanvas', {
   extend: 'Ext.ux.EaselPanel',
   alias: 'widget.offsetimage',
   bitmaps: [],
+  adrns: {},
   initComponent: function () {
     var me = this;
     Ext.apply(me, {
@@ -21,8 +22,9 @@ Ext.define('GDE.view.OffsetImageCanvas', {
 
       placeImage: function(bitmap) {
         var origin = Ext.ux.EaselPanelUtils.getOrigin(me.stage);
-        bitmap.x = origin.x;
-        bitmap.y = origin.y;
+        var adrn = me.adrns[bitmap.name];
+        bitmap.x = origin.x + adrn.get('xOffset');
+        bitmap.y = origin.y + adrn.get('yOffset');
         me.stage.addChild(bitmap);
         me.stage.update();
       },
@@ -36,11 +38,13 @@ Ext.define('GDE.view.OffsetImageCanvas', {
             me.stage.removeChild(bitmap);
           });
           me.bitmaps = [];
+          me.adrns = {};
         }
         queue.addEventListener('fileload', function(payload) {
           var bitmap = new createjs.Bitmap(payload.result);
           bitmap.name = name;
           me.bitmaps.push(bitmap);
+          me.adrns[name] = adrn;
           me.placeImage(bitmap);
         });
         queue.loadFile(url);
