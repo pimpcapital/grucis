@@ -32,7 +32,7 @@ Ext.define('GDE.view.OffsetImageCanvas', {
       loadImage: function (adrn, keepPrevious) {
         var name = adrn.get('id') + '.png';
         var url = 'api/bitmap/image/' + name;
-        var queue = new createjs.LoadQueue(true);
+        var queue = new createjs.LoadQueue(false);
         if(!keepPrevious) {
           Ext.Array.each(me.bitmaps, function(bitmap) {
             me.stage.removeChild(bitmap);
