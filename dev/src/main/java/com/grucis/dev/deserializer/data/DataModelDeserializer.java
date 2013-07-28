@@ -4,7 +4,7 @@ import com.grucis.dev.model.raw.RawModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class DataModelDeserializer<RM extends RawModel, IM extends RawModel> {
+public abstract class DataModelDeserializer<RM extends RawModel> {
 
   private static final Logger LOG = LoggerFactory.getLogger(DataModelDeserializer.class);
 
@@ -14,17 +14,17 @@ public abstract class DataModelDeserializer<RM extends RawModel, IM extends RawM
     this.type = type;
   }
 
-  protected abstract RM deserialize(IM index) throws Exception;
+  protected abstract RM deserialize(int address) throws Exception;
 
-  public final RM getRawModel(IM index) {
+  public final RM getRawModel(int address) {
     try {
-      return deserialize(index);
+      return deserialize(address);
     } catch(Exception e) {
       LOG.error("Cannot deserialize " + type + " data into raw models", e);
       return null;
     }
   }
 
-
+  public abstract int getDataSize(RM model);
 
 }

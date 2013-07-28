@@ -1,9 +1,6 @@
 package com.grucis.dev.service;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.TreeMap;
-import javax.annotation.PostConstruct;
+import java.util.*;
 
 import com.grucis.dev.deserializer.data.RealDeserializer;
 import com.grucis.dev.deserializer.data.SprDeserializer;
@@ -64,11 +61,18 @@ public final class RawModelService {
   }
 
   public Real getReal(Adrn index) {
-    return realDeserializer.getRawModel(index);
+    return realDeserializer.getRawModel(index.getAddress());
   }
 
-  public Spr getSpr(SprAdrn index) {
-    return sprDeserializer.getRawModel(index);
+  public List<Spr> getSprs(SprAdrn index) {
+    List<Spr> ret = new ArrayList<Spr>();
+    int address = index.getAddress();
+    for(int i = 0; i < index.getActions(); i++) {
+      Spr spr = sprDeserializer.getRawModel(address);
+      address += sprDeserializer.getDataSize(spr);
+      ret.add(spr);
+    }
+    return ret;
   }
 
   public Adrn getAdrn(int id) {

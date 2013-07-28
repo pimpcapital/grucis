@@ -1,10 +1,8 @@
 package com.grucis.dev.deserializer.data;
 
-import java.io.InputStream;
 import java.io.RandomAccessFile;
 
 import com.grucis.dev.io.ResourceAllocator;
-import com.grucis.dev.model.raw.Adrn;
 import com.grucis.dev.model.raw.Real;
 import com.grucis.dev.utils.bitwise.BitwiseUtils;
 import org.slf4j.Logger;
@@ -13,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class RealDeserializer extends DataModelDeserializer<Real, Adrn> {
+public final class RealDeserializer extends DataModelDeserializer<Real> {
 
   private static final Logger LOG = LoggerFactory.getLogger(RealDeserializer.class);
 
@@ -25,14 +23,14 @@ public final class RealDeserializer extends DataModelDeserializer<Real, Adrn> {
   }
 
   @Override
-  protected Real deserialize(Adrn index) throws Exception {
+  protected Real deserialize(int address) throws Exception {
     RandomAccessFile access = resourceAllocator.getReal();
     if(access == null) {
       LOG.error("REAL random access is not available");
       return null;
     }
 
-    access.seek(index.getAddress());
+    access.seek(address);
     Real ret = new Real();
 
     byte[] magicBytes = new byte[2];
@@ -48,28 +46,16 @@ public final class RealDeserializer extends DataModelDeserializer<Real, Adrn> {
     byte[] widthBytes = new byte[4];
     access.read(widthBytes);
     int width = BitwiseUtils.int32(widthBytes);
-    if(width != index.getWidth()) {
-      LOG.warn("Image {} width {} does not match with index width {}", index.getId(), width, index.getWidth());
-      width = index.getWidth();
-    }
     ret.setWidth(width);
 
     byte[] heightBytes = new byte[4];
     access.read(heightBytes);
     int height = BitwiseUtils.int32(heightBytes);
-    if(height != index.getHeight()) {
-      LOG.warn("Image {} height {} does not match with index height {}", index.getId(), height, index.getHeight());
-      height = index.getHeight();
-    }
     ret.setHeight(height);
 
     byte[] sizeBytes = new byte[4];
     access.read(sizeBytes);
     int size = BitwiseUtils.int32(sizeBytes);
-    if(size != index.getSize()) {
-      LOG.warn("Image {} data block size {} does not match with index data block size {}", index.getId(), size, index.getSize());
-      size = index.getSize();
-    }
     ret.setSize(size);
 
     int copy = size - 16;
@@ -80,5 +66,10 @@ public final class RealDeserializer extends DataModelDeserializer<Real, Adrn> {
     access.close();
 
     return ret;
+  }
+
+  @Override
+  public int getDataSize(Real model) {
+    return model.getSize();
   }
 }

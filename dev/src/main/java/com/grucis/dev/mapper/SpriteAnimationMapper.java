@@ -1,7 +1,10 @@
 package com.grucis.dev.mapper;
 
-import com.grucis.dev.model.output.OffsetImage;
-import com.grucis.dev.model.output.SpriteAnimation;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.grucis.dev.model.output.*;
 import com.grucis.dev.model.raw.Adrn;
 import com.grucis.dev.model.raw.Spr;
 import com.grucis.dev.model.raw.SprAdrn;
@@ -10,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class SpriteAnimationMapper extends ModelMapper<SprAdrn, SpriteAnimation> {
+public final class SpriteAnimationMapper extends ModelMapper<SprAdrn, SpriteAnimationMap> {
 
   @Autowired
   private RawModelService rawModelService;
@@ -18,21 +21,34 @@ public final class SpriteAnimationMapper extends ModelMapper<SprAdrn, SpriteAnim
   private OffsetImageMapper offsetImageMapper;
 
   @Override
-  public SpriteAnimation map(SprAdrn raw) {
-    SpriteAnimation ret = new SpriteAnimation();
+  public SpriteAnimationMap map(SprAdrn raw) {
+    SpriteAnimationMap ret = new SpriteAnimationMap();
 
-    Spr spr = rawModelService.getSpr(raw);
+    List<Spr> sprs = rawModelService.getSprs(raw);
+    Map<Direction, Map<Action, SpriteAnimationMap.SpriteAnimation>> animationMap = new LinkedHashMap<Direction, Map<Action, SpriteAnimationMap.SpriteAnimation>>();
+    for(Spr spr : sprs) {
+      SpriteAnimationMap.SpriteAnimation animation = new SpriteAnimationMap.SpriteAnimation();
+      int length = spr.getLength();
+      animation.setLength(length);
+      animation.setDuration(spr.getDuration());
+      Spr.SprFrame[] frames = spr.getFrames();
+      OffsetImage[] images = new OffsetImage[length];
+      for(int i = 0; i < length; i++) {
+        Adrn adrn = rawModelService.getAdrn(frames[i].getImage());
+        images[i] = offsetImageMapper.map(adrn);
+      }
+      animation.setFrames(images);
 
-    ret.setDuration(spr.getDuration());
-    int length = spr.getLength();
-    ret.setLength(length);
-    Spr.SprFrame[] frames = spr.getFrames();
-    OffsetImage[] images = new OffsetImage[length];
-    for(int i = 0; i < length; i++) {
-      Adrn adrn = rawModelService.getAdrn(frames[i].getImage());
-      images[i] = offsetImageMapper.map(adrn);
+      Direction direction = Direction.values()[spr.getDirection()];
+      Action action = Action.values()[spr.getAction()];
+      Map<Action, SpriteAnimationMap.SpriteAnimation> actionSpriteAnimationMap = animationMap.get(direction);
+      if(actionSpriteAnimationMap == null) {
+        actionSpriteAnimationMap = new LinkedHashMap<Action, SpriteAnimationMap.SpriteAnimation>();
+        animationMap.put(direction, actionSpriteAnimationMap);
+      }
+      actionSpriteAnimationMap.put(action, animation);
     }
-    ret.setFrames(images);
+    ret.setAnimationMap(animationMap);
 
     return ret;
   }

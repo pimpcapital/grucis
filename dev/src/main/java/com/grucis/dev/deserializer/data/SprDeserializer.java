@@ -1,11 +1,9 @@
 package com.grucis.dev.deserializer.data;
 
-import java.io.InputStream;
 import java.io.RandomAccessFile;
 
 import com.grucis.dev.io.ResourceAllocator;
 import com.grucis.dev.model.raw.Spr;
-import com.grucis.dev.model.raw.SprAdrn;
 import com.grucis.dev.utils.bitwise.BitwiseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,9 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class SprDeserializer extends DataModelDeserializer<Spr, SprAdrn> {
+public final class SprDeserializer extends DataModelDeserializer<Spr> {
 
   private static final Logger LOG = LoggerFactory.getLogger(SprDeserializer.class);
+
+  public static final int HEADER_SIZE = 12;
+  public static final int FRAME_SIZE = 10;
 
   @Autowired
   private ResourceAllocator resourceAllocator;
@@ -25,14 +26,14 @@ public final class SprDeserializer extends DataModelDeserializer<Spr, SprAdrn> {
   }
 
   @Override
-  protected Spr deserialize(SprAdrn index) throws Exception {
+  protected Spr deserialize(int address) throws Exception {
     RandomAccessFile access = resourceAllocator.getSpr();
     if(access == null) {
       LOG.error("SPR random access is not available");
       return null;
     }
 
-    access.seek(index.getAddress());
+    access.seek(address);
     Spr ret = new Spr();
 
     byte[] directionBytes = new byte[2];
@@ -71,5 +72,10 @@ public final class SprDeserializer extends DataModelDeserializer<Spr, SprAdrn> {
     access.close();
 
     return ret;
+  }
+
+  @Override
+  public int getDataSize(Spr model) {
+    return HEADER_SIZE + FRAME_SIZE * model.getLength();
   }
 }
