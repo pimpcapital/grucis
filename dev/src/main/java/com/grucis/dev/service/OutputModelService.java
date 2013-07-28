@@ -1,7 +1,7 @@
 package com.grucis.dev.service;
 
-import com.grucis.dev.mapper.OffsetImageMapper;
-import com.grucis.dev.mapper.SpriteAnimationMapper;
+import com.grucis.dev.mapper.output.OffsetImageMapper;
+import com.grucis.dev.mapper.output.SpriteAnimationMapper;
 import com.grucis.dev.model.output.OffsetImage;
 import com.grucis.dev.model.output.SpriteAnimationMap;
 import com.grucis.dev.model.raw.Adrn;

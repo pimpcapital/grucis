@@ -1,8 +1,7 @@
 package com.grucis.dev.mapper;
 
-import com.grucis.dev.model.output.OutputModel;
-import com.grucis.dev.model.raw.RawModel;
+import com.grucis.dev.model.Model;
 
-public abstract class ModelMapper<RM extends RawModel, OM extends OutputModel> {
-  public abstract OM map(RM raw);
+public abstract class ModelMapper<SM extends Model, TM extends Model> {
+  public abstract TM map(SM source);
 }

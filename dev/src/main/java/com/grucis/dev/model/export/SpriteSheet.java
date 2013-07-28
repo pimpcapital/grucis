@@ -26,6 +26,14 @@ public final class SpriteSheet extends ExportModel {
     this.placements = placements;
   }
 
+  public Map<String, AnimationReference> getAnimations() {
+    return animations;
+  }
+
+  public void setAnimations(Map<String, AnimationReference> animations) {
+    this.animations = animations;
+  }
+
   public static final class PlacementReference {
     private int x;
     private int y;

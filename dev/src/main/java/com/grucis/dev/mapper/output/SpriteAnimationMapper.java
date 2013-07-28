@@ -1,4 +1,4 @@
-package com.grucis.dev.mapper;
+package com.grucis.dev.mapper.output;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class SpriteAnimationMapper extends ModelMapper<SprAdrn, SpriteAnimationMap> {
+public final class SpriteAnimationMapper extends OutputModelMapper<SprAdrn, SpriteAnimationMap> {
 
   @Autowired
   private RawModelService rawModelService;
@@ -21,10 +21,10 @@ public final class SpriteAnimationMapper extends ModelMapper<SprAdrn, SpriteAnim
   private OffsetImageMapper offsetImageMapper;
 
   @Override
-  public SpriteAnimationMap map(SprAdrn raw) {
+  public SpriteAnimationMap map(SprAdrn source) {
     SpriteAnimationMap ret = new SpriteAnimationMap();
 
-    List<Spr> sprs = rawModelService.getSprs(raw);
+    List<Spr> sprs = rawModelService.getSprs(source);
     Map<Direction, Map<Action, SpriteAnimationMap.SpriteAnimation>> animationMap = new LinkedHashMap<Direction, Map<Action, SpriteAnimationMap.SpriteAnimation>>();
     for(Spr spr : sprs) {
       SpriteAnimationMap.SpriteAnimation animation = new SpriteAnimationMap.SpriteAnimation();

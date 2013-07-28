@@ -1,4 +1,4 @@
-package com.grucis.dev.mapper;
+package com.grucis.dev.mapper.output;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class OffsetImageMapper extends ModelMapper<Adrn, OffsetImage> {
+public final class OffsetImageMapper extends OutputModelMapper<Adrn, OffsetImage> {
 
   @Autowired
   private RawModelService rawModelService;
@@ -149,15 +149,15 @@ public final class OffsetImageMapper extends ModelMapper<Adrn, OffsetImage> {
   }
 
   @Override
-  public OffsetImage map(Adrn raw) {
+  public OffsetImage map(Adrn source) {
     OffsetImage ret = new OffsetImage();
 
-    ret.setxOffset(raw.getxOffset());
-    ret.setyOffset(raw.getyOffset());
+    ret.setxOffset(source.getxOffset());
+    ret.setyOffset(source.getyOffset());
 
-    Real real = rawModelService.getReal(raw);
+    Real real = rawModelService.getReal(source);
     byte[] bitmap = extractBitmap(real);
-    BufferedImage image = generateImage(bitmap, raw.getWidth(), raw.getHeight());
+    BufferedImage image = generateImage(bitmap, source.getWidth(), source.getHeight());
     ret.setImage(image);
 
     return ret;
