@@ -20,8 +20,9 @@ Ext.define('GDE.view.SpriteAnimationCanvas', {
       drawPlan: [
         function () {
           var origin = Ext.ux.EaselPanelUtils.getOrigin(me.stage);
-          Ext.ux.EaselPanelUtils.drawIsometricTile(me.stage, origin.x, origin.y, {
+          Ext.ux.EaselPanelUtils.drawIsometricGrid(me.stage, origin, {
             stroke: '#c8c8c8',
+            radius: Math.min(8, (me.stage.canvas.width - 64) / 128, (me.stage.canvas.height - 48) / 96),
             width: 64,
             height: 48
           });

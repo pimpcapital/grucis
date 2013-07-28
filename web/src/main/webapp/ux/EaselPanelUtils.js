@@ -105,6 +105,39 @@ Ext.define('Ext.ux.EaselPanelUtils', {
         .lineTo(x, top)
         .closePath();
       stage.addChild(new createjs.Shape(g));
+    },
+
+    drawIsometricGrid: function(stage, origin, options) {
+      var me = this;
+      var xStep = options.width / 2;
+      var yStep = options.height / 2;
+      me.drawIsometricTile(stage, origin.x, origin.y, options);
+      for(var i = 0; i <= options.radius; i++) {
+        var x = origin.x - i * options.width;
+        var y = origin.y;
+        var j;
+        for(j = 0; j < i * 2; j++) {
+          me.drawIsometricTile(stage, x, y, options);
+          x += xStep;
+          y += yStep;
+        }
+        for(j = 0; j < i * 2; j++) {
+          me.drawIsometricTile(stage, x, y, options);
+          x += xStep;
+          y -= yStep;
+        }
+        for(j = 0; j < i * 2; j++) {
+          me.drawIsometricTile(stage, x, y, options);
+          x -= xStep;
+          y -= yStep;
+        }
+        for(j = 0; j < i * 2; j++) {
+          me.drawIsometricTile(stage, x, y, options);
+          x -= xStep;
+          y += yStep;
+        }
+      }
+
     }
   }
 });
