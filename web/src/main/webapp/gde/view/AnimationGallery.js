@@ -25,7 +25,7 @@ Ext.define('GDE.view.AnimationGallery', {
             }
           }
         }, {
-          xtype: 'offsetimage',
+          xtype: 'sprite',
           flex: 5
         }
       ]

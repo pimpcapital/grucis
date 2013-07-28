@@ -19,20 +19,20 @@ Ext.define('Ext.ux.EaselPanelUtils', {
 
     createHorizontalScale: function(stage, x, y, length, origin, options) {
       var g = new createjs.Graphics();
-      g.setStrokeStyle(options.thickness);
-      g.beginStroke(options.rgb);
-      g.moveTo(x, y);
-      g.lineTo(x + length, y);
+      g.setStrokeStyle(options.thickness)
+        .beginStroke(options.rgb)
+        .moveTo(x, y)
+        .lineTo(x + length, y);
       var minorTicks = this.getTicks(x, x + length, origin, options.minorTickInterval);
       var majorTicks = this.getTicks(x, x + length, origin, options.majorTickInterval);
       minorTicks = Ext.Array.difference(minorTicks, majorTicks);
       Ext.Array.each(minorTicks, function(t) {
-        g.moveTo(t, y);
-        g.lineTo(t, y - options.minorTickLength);
+        g.moveTo(t, y)
+          .lineTo(t, y - options.minorTickLength);
       });
       Ext.Array.each(majorTicks, function(t) {
-        g.moveTo(t, y);
-        g.lineTo(t, y - options.majorTickLength);
+        g.moveTo(t, y)
+          .lineTo(t, y - options.majorTickLength);
         var text = new createjs.Text(t - origin, options.font, options.rgb);
         text.x = t - (text.getMeasuredWidth() / 2);
         text.y = y + options.majorTickLength / 2;
@@ -43,20 +43,20 @@ Ext.define('Ext.ux.EaselPanelUtils', {
 
     createVerticalScale: function(stage, x, y, length, origin, options) {
       var g = new createjs.Graphics();
-      g.setStrokeStyle(options.thickness);
-      g.beginStroke(options.rgb);
-      g.moveTo(x, y);
-      g.lineTo(x, y + length);
+      g.setStrokeStyle(options.thickness)
+        .beginStroke(options.rgb)
+        .moveTo(x, y)
+        .lineTo(x, y + length);
       var minorTicks = this.getTicks(y, y + length, origin, options.minorTickInterval);
       var majorTicks = this.getTicks(y, y + length, origin, options.majorTickInterval);
       minorTicks = Ext.Array.difference(minorTicks, majorTicks);
       Ext.Array.each(minorTicks, function(t) {
-        g.moveTo(x, t);
-        g.lineTo(x + options.minorTickLength, t);
+        g.moveTo(x, t)
+          .lineTo(x + options.minorTickLength, t);
       });
       Ext.Array.each(majorTicks, function(t) {
-        g.moveTo(x, t);
-        g.lineTo(x + options.majorTickLength, t);
+        g.moveTo(x, t)
+          .lineTo(x + options.majorTickLength, t);
         var text = new createjs.Text(origin - t, options.font, options.rgb);
         text.x = x - (text.getMeasuredWidth() / 2) - options.majorTickLength;
         text.y = t - text.getMeasuredHeight() / 2;
@@ -89,9 +89,22 @@ Ext.define('Ext.ux.EaselPanelUtils', {
       stage.addChild(originText);
       this.createHorizontalScale(stage, 0, origin.y, stage.canvas.width, origin.x, options);
       this.createVerticalScale(stage, origin.x, 0, stage.canvas.height, origin.y, options);
+    },
+
+    drawIsometricTile: function(stage, x, y, options) {
+      var g = new createjs.Graphics();
+      var left = x - options.width / 2;
+      var right = x + options.width / 2;
+      var top = y - options.height / 2;
+      var bottom = y + options.height / 2;
+      g.beginFill(options.fill)
+        .beginStroke(options.stroke)
+        .moveTo(left, y)
+        .lineTo(x, bottom)
+        .lineTo(right, y)
+        .lineTo(x, top)
+        .closePath();
+      stage.addChild(new createjs.Shape(g));
     }
-
-
-
   }
 });

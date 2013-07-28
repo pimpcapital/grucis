@@ -9,9 +9,15 @@ Ext.define('GDE.view.Viewport', {
     }, {
       xtype: 'tabpanel',
       flex: 1,
+      activeTab: Ext.History.getToken(),
+      listeners: {
+        tabchange: function(tabpanel, newTab) {
+          Ext.History.add(newTab.getId(), true)
+        }
+      },
       items: [
-        {xtype: 'bitmap'},
-        {xtype: 'animation'}
+        {xtype: 'bitmap', id: 'bitmap'},
+        {xtype: 'animation', id: 'animation'}
       ]
     }
   ]

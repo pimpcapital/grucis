@@ -12,9 +12,15 @@ Ext.application({
   views: [
     'AnimationGallery',
     'BitmapGallery',
-    'OffsetImageCanvas'
+    'OffsetImageCanvas',
+    'SpriteAnimationCanvas'
   ],
   name: 'GDE',
-  autoCreateViewport: true
+  autoCreateViewport: true,
+  launch: function() {
+    Ext.state.Manager.setProvider(new Ext.state.CookieProvider({
+      expires: new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 7))
+    }));
+  }
 
 });
