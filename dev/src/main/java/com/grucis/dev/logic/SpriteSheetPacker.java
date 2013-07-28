@@ -9,7 +9,7 @@ import com.grucis.dev.utils.math.IntegerUtils;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class ImagePacker {
+public final class SpriteSheetPacker {
 
   public Map<BufferedImage, Rectangle> packImageRectangles(List<BufferedImage> images, int padding, boolean requirePow2, boolean requireSquare, int outputWidth, int outputHeight) {
     Collections.sort(images, new Comparator<BufferedImage>() {

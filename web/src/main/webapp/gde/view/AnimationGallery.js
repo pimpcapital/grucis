@@ -22,9 +22,6 @@ Ext.define('GDE.view.AnimationGallery', {
               grid.getStore().load({});
             },
             selectionchange: function(sm, selected) {
-              if(selected.length == 1) {
-                me.down('offsetimage').loadImage(selected[0]);
-              }
             }
           }
         }, {

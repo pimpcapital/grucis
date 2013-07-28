@@ -2,11 +2,13 @@ package com.grucis.dev.model.export;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
+import java.util.Map;
 
 public final class SpriteSheet extends ExportModel {
 
   private BufferedImage image;
-  private List<ImageReference> references;
+  private List<PlacementReference> placements;
+  private Map<String, AnimationReference> animations;
 
   public BufferedImage getImage() {
     return image;
@@ -16,15 +18,15 @@ public final class SpriteSheet extends ExportModel {
     this.image = image;
   }
 
-  public List<ImageReference> getReferences() {
-    return references;
+  public List<PlacementReference> getPlacements() {
+    return placements;
   }
 
-  public void setReferences(List<ImageReference> references) {
-    this.references = references;
+  public void setPlacements(List<PlacementReference> placements) {
+    this.placements = placements;
   }
 
-  public static final class ImageReference {
+  public static final class PlacementReference {
     private int x;
     private int y;
     private int width;
@@ -78,6 +80,36 @@ public final class SpriteSheet extends ExportModel {
 
     public void setRegY(int regY) {
       this.regY = regY;
+    }
+  }
+
+  public static class AnimationReference {
+    private List<Integer> frames;
+    private String next;
+    private int frequency;
+
+    public List<Integer> getFrames() {
+      return frames;
+    }
+
+    public void setFrames(List<Integer> frames) {
+      this.frames = frames;
+    }
+
+    public String getNext() {
+      return next;
+    }
+
+    public void setNext(String next) {
+      this.next = next;
+    }
+
+    public int getFrequency() {
+      return frequency;
+    }
+
+    public void setFrequency(int frequency) {
+      this.frequency = frequency;
     }
   }
 }

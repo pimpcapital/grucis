@@ -43,7 +43,7 @@ public final class SprAdrnDeserializer extends IndexModelDeserializer<SprAdrn> {
 
         byte[] actionsBytes = new byte[2];
         in.read(actionsBytes);
-        sprAdrn.setAddress(BitwiseUtils.uint16(actionsBytes));
+        sprAdrn.setActions(BitwiseUtils.uint16(actionsBytes));
 
         byte[] soundBytes = new byte[2];
         in.read(soundBytes);

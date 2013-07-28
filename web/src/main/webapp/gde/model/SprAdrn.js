@@ -5,5 +5,13 @@ Ext.define('GDE.model.SprAdrn', {
     {name: 'address', type: 'int'},
     {name: 'actions', type: 'int'},
     {name: 'sound', type: 'int'}
-  ]
+  ],
+  proxy: {
+    type: 'rest',
+    url: '/api/animation/spradrn',
+    reader: {
+      root: 'views',
+      totalProperty: 'total'
+    }
+  }
 });
