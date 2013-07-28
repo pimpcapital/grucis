@@ -10,7 +10,7 @@ Ext.define('GDE.view.OffsetImageCanvas', {
         {
           icon: 'resources/images/disk_blue.png',
           text: 'Download',
-          id: 'download',
+          itemId: 'download',
           disabled: true,
           handler: function() {
             Ext.Array.each(me.bitmaps, function(bitmap) {

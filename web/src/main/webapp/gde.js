@@ -6,9 +6,11 @@ Ext.application({
     'SprAdrn'
   ],
   stores: [
-    'AdrnStore'
+    'AdrnStore',
+    'SprAdrnStore'
   ],
   views: [
+    'AnimationGallery',
     'BitmapGallery',
     'OffsetImageCanvas'
   ],

@@ -10,7 +10,8 @@ Ext.define('GDE.view.Viewport', {
       xtype: 'tabpanel',
       flex: 1,
       items: [
-        {xtype: 'bitmap'}
+        {xtype: 'bitmap'},
+        {xtype: 'animation'}
       ]
     }
   ]
