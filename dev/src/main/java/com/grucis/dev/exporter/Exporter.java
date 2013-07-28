@@ -12,17 +12,17 @@ public abstract class Exporter<OM extends OutputModel> {
 
   public static final String APPENDIX_FILE_SUFFIX = ".txt";
 
-  public abstract byte[] getBinaryData(OutputModel model);
+  public abstract byte[] getBinaryData(OM model);
 
-  public String getAppendix(OutputModel model) {
+  public String getAppendix(OM model) {
     return null;
   }
 
-  public final void export(String filePath, OutputModel model) {
+  public final void export(String filePath, OM model) {
     export(new File(filePath), model);
   }
 
-  public final void export(File file, OutputModel model) {
+  public final void export(File file, OM model) {
     try {
       FileOutputStream out = new FileOutputStream(file);
       out.write(getBinaryData(model));

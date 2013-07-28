@@ -47,7 +47,7 @@ public final class Spr extends RawModel {
     this.frames = frames;
   }
 
-  public static class SprFrame {
+  public static final class SprFrame {
     private int image;
     private String reference;
 
