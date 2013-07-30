@@ -6,14 +6,93 @@ import java.util.*;
 import java.util.List;
 
 import com.grucis.dev.utils.math.IntegerUtils;
-import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Component
 public final class SpriteSheetPacker {
 
-  public Map<BufferedImage, Rectangle> packImageRectangles(List<BufferedImage> images, int padding, boolean requirePow2, boolean requireSquare, int outputWidth, int outputHeight) {
+  private Logger LOG = LoggerFactory.getLogger(SpriteSheetPacker.class);
+
+  private List<BufferedImage> images = new ArrayList<BufferedImage>();
+  private Map<BufferedImage, Rectangle> imagePlacements;
+  private BufferedImage spriteImage;
+  private int padding = 0;
+  private boolean requirePow2 = false;
+  private boolean requireSquare = false;
+  private int outputWidth = 1024;
+  private int outputHeight = 4096;
+
+  public List<BufferedImage> getImages() {
+    return images;
+  }
+
+  public void setImages(List<BufferedImage> images) {
+    this.images = images;
+  }
+
+  public Map<BufferedImage, Rectangle> getImagePlacements() {
+    return imagePlacements;
+  }
+
+  public BufferedImage getSpriteImage() {
+    return spriteImage;
+  }
+
+  public int getPadding() {
+    return padding;
+  }
+
+  public void setPadding(int padding) {
+    this.padding = padding;
+  }
+
+  public boolean isRequirePow2() {
+    return requirePow2;
+  }
+
+  public void setRequirePow2(boolean requirePow2) {
+    this.requirePow2 = requirePow2;
+  }
+
+  public boolean isRequireSquare() {
+    return requireSquare;
+  }
+
+  public void setRequireSquare(boolean requireSquare) {
+    this.requireSquare = requireSquare;
+  }
+
+  public int getOutputWidth() {
+    return outputWidth;
+  }
+
+  public void setOutputWidth(int outputWidth) {
+    this.outputWidth = outputWidth;
+  }
+
+  public int getOutputHeight() {
+    return outputHeight;
+  }
+
+  public void setOutputHeight(int outputHeight) {
+    this.outputHeight = outputHeight;
+  }
+
+  public void addImage(BufferedImage image) {
+    images.add(image);
+  }
+
+  public void addImages(Collection<BufferedImage> images) {
+    this.images.addAll(images);
+  }
+
+  public Map<BufferedImage, Rectangle> packImageRectangles() {
+    if(images.isEmpty()) {
+      LOG.error("There is no image to pack");
+      return imagePlacements;
+    }
+
     Collections.sort(images, new Comparator<BufferedImage>() {
-      @Override
       public int compare(BufferedImage i1, BufferedImage i2) {
         int c = Integer.compare(i2.getWidth(), i1.getWidth());
         if(c != 0) return c;
@@ -33,13 +112,13 @@ public final class SpriteSheetPacker {
     int testWidth = outputWidth;
     int testHeight = outputHeight;
     boolean shrinkVertical = false;
-    Map<BufferedImage, Rectangle> imagePlacement = new HashMap<BufferedImage, Rectangle>();
+    imagePlacements = new HashMap<BufferedImage, Rectangle>();
     while(true) {
       testImagePlacement.clear();
 
-      if(!testPackingImages(images, padding, testWidth, testHeight, testImagePlacement)) {
-        if(imagePlacement.size() == 0) return null;
-        if(shrinkVertical) return imagePlacement;
+      if(!testPackingImages(testWidth, testHeight, testImagePlacement)) {
+        if(imagePlacements.size() == 0) return imagePlacements;
+        if(shrinkVertical) return imagePlacements;
 
         shrinkVertical = true;
         testWidth += smallestWidth + padding + padding;
@@ -47,10 +126,10 @@ public final class SpriteSheetPacker {
         continue;
       }
 
-      imagePlacement = new HashMap<BufferedImage, Rectangle>(testImagePlacement);
+      imagePlacements = new HashMap<BufferedImage, Rectangle>(testImagePlacement);
 
       testWidth = testHeight = 0;
-      for(Map.Entry<BufferedImage, Rectangle> entry : imagePlacement.entrySet()) {
+      for(Map.Entry<BufferedImage, Rectangle> entry : imagePlacements.entrySet()) {
         testWidth = Math.max(testWidth, (int)entry.getValue().getMaxX());
         testHeight = Math.max(testHeight, (int)entry.getValue().getMaxY());
       }
@@ -69,7 +148,7 @@ public final class SpriteSheetPacker {
       }
 
       if(testWidth == outputWidth && testHeight == outputHeight) {
-        if(shrinkVertical) return imagePlacement;
+        if(shrinkVertical) return imagePlacements;
         shrinkVertical = true;
       }
 
@@ -81,7 +160,7 @@ public final class SpriteSheetPacker {
     }
   }
 
-  private boolean testPackingImages(List<BufferedImage> images, int padding, int testWidth, int testHeight, Map<BufferedImage, Rectangle> testImagePlacement) {
+  private boolean testPackingImages(int testWidth, int testHeight, Map<BufferedImage, Rectangle> testImagePlacement) {
     ArevaloRectanglePacker rectanglePacker = new ArevaloRectanglePacker(testWidth, testHeight);
 
     for(BufferedImage image : images) {
@@ -93,7 +172,22 @@ public final class SpriteSheetPacker {
     return true;
   }
 
-  public BufferedImage generateOutputImage(Map<BufferedImage, Rectangle> placement, int width, int height) {
-    return null;
+  public BufferedImage generateOutputImage() {
+    if(imagePlacements == null || imagePlacements.isEmpty()) {
+      LOG.error("There is no image placement");
+      return spriteImage;
+    }
+    spriteImage = new BufferedImage(outputWidth, outputHeight, BufferedImage.TYPE_INT_ARGB);
+    for(Map.Entry<BufferedImage, Rectangle> entry : imagePlacements.entrySet()) {
+      BufferedImage image = entry.getKey();
+      Rectangle placement = entry.getValue();
+      for(int y = 0; y < image.getHeight(); y++) {
+        for(int x = 0; x < image.getWidth(); x++) {
+          int rgb = image.getRGB(x, y);
+          spriteImage.setRGB(x + placement.x, y + placement.y, rgb);
+        }
+      }
+    }
+    return spriteImage;
   }
 }
