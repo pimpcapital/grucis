@@ -59,7 +59,7 @@ public final class SpriteSheetMapper extends ExportModelMapper<SpriteAnimationMa
           frames.add(placeRefCount++);
         }
         aRef.setFrames(frames);
-        aRef.setFrequency(1000d / ((double) animation.getDuration() / animation.getLength()));
+        aRef.setDuration(animation.getDuration());
         String aRefKey = direction.toString().toLowerCase() + "_" + action.toString().toLowerCase();
         animationRefs.put(aRefKey, aRef);
       }

@@ -2,13 +2,12 @@ package com.grucis.web.controller;
 
 import java.io.IOException;
 import java.util.List;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
 import com.grucis.dev.service.BitmapImageService;
 import com.grucis.dev.service.RawModelService;
+import com.grucis.dev.utils.image.ImageUtils;
 import com.grucis.web.mapper.AdrnViewMapper;
 import com.grucis.web.view.AdrnView;
 import com.grucis.web.view.BufferedViewCollection;
@@ -39,15 +38,16 @@ public final class BitmapGalleryController {
   @GET
   @Path("/image/{id}.png")
   @Produces("image/png")
-  public byte[] getImage(@PathParam("id") int id) throws IOException {
-    return bitmapImageService.getImageBytes(id);
+  public Response getImage(@PathParam("id") int id) throws IOException {
+    return Response.ok(ImageUtils.toBytes(bitmapImageService.getBitmapImage(id))).build();
   }
 
   @GET
   @Path("/download/{id}.png")
   @Produces("image/png")
-  public byte[] downloadImage(@PathParam("id") int id, @Context HttpServletResponse response) throws IOException {
-    response.addHeader("Content-Disposition", "attachment; filename=\"" + id + ".png\"");
-    return bitmapImageService.getImageBytes(id);
+  public Response downloadImage(@PathParam("id") int id) throws IOException {
+    return Response.ok(ImageUtils.toBytes(bitmapImageService.getBitmapImage(id)))
+             .header("Content-Disposition", "attachment; filename=\"" + id + ".png\"")
+             .build();
   }
 }

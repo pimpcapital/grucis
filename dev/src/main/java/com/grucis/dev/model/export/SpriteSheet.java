@@ -94,7 +94,7 @@ public final class SpriteSheet extends ExportModel {
   public static class AnimationReference {
     private List<Integer> frames;
     private String next;
-    private double frequency;
+    private int duration;
 
     public List<Integer> getFrames() {
       return frames;
@@ -112,12 +112,12 @@ public final class SpriteSheet extends ExportModel {
       this.next = next;
     }
 
-    public double getFrequency() {
-      return frequency;
+    public int getDuration() {
+      return duration;
     }
 
-    public void setFrequency(double frequency) {
-      this.frequency = frequency;
+    public void setDuration(int duration) {
+      this.duration = duration;
     }
   }
 }
