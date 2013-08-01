@@ -16,10 +16,10 @@ public final class SpriteSheetPacker {
   private List<BufferedImage> images = new ArrayList<BufferedImage>();
   private Map<BufferedImage, Rectangle> imagePlacements;
   private BufferedImage spriteImage;
-  private int padding = 0;
+  private int padding = 2;
   private boolean requirePow2 = false;
   private boolean requireSquare = false;
-  private int outputWidth = 1024;
+  private int outputWidth = 4096;
   private int outputHeight = 4096;
 
   public List<BufferedImage> getImages() {

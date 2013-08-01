@@ -14,7 +14,6 @@ public final class ArevaloRectanglePacker {
   private List<Point> anchors = new ArrayList<Point>();
   private List<Rectangle> packedRectangles = new ArrayList<Rectangle>();
   private Comparator<Point> anchorRankComparator = new Comparator<Point>() {
-    @Override
     public int compare(Point p1, Point p2) {
       return (p1.x + p1.y) - (p2.x + p2.y);
     }
@@ -28,7 +27,7 @@ public final class ArevaloRectanglePacker {
   public Point tryPack(int rectangleWidth, int rectangleHeight) {
     int anchorIndex = selectAnchorRecursive(rectangleWidth, rectangleHeight, actualPackingAreaWidth, actualPackingAreaHeight);
 
-    if (anchorIndex == -1) return null;
+    if(anchorIndex == -1) return null;
 
     Point placement = anchors.get(anchorIndex);
     optimizePlacement(placement, rectangleWidth, rectangleHeight);
@@ -36,7 +35,7 @@ public final class ArevaloRectanglePacker {
       ((placement.x + rectangleWidth) > anchors.get(anchorIndex).x) &&
         ((placement.y + rectangleHeight) > anchors.get(anchorIndex).y);
 
-    if (blocksAnchor)
+    if(blocksAnchor)
       anchors.remove(anchorIndex);
 
     insertAnchor(new Point(placement.x + rectangleWidth, placement.y));
@@ -50,25 +49,25 @@ public final class ArevaloRectanglePacker {
     Rectangle rectangle = new Rectangle(placement.x, placement.y, rectangleWidth, rectangleHeight);
 
     int leftMost = placement.x;
-    while (isFree(rectangle, packingAreaWidth, packingAreaHeight)) {
+    while(isFree(rectangle, packingAreaWidth, packingAreaHeight)) {
       leftMost = rectangle.x;
       --rectangle.x;
     }
     rectangle.x = placement.x;
 
     int topMost = placement.y;
-    while (isFree(rectangle, packingAreaWidth, packingAreaHeight)) {
+    while(isFree(rectangle, packingAreaWidth, packingAreaHeight)) {
       topMost = rectangle.y;
       --rectangle.y;
     }
 
-    if ((placement.x - leftMost) > (placement.y - topMost)) placement.x = leftMost;
+    if((placement.x - leftMost) > (placement.y - topMost)) placement.x = leftMost;
     else placement.y = topMost;
   }
 
   private int selectAnchorRecursive(int rectangleWidth, int rectangleHeight, int testedPackingAreaWidth, int testedPackingAreaHeight) {
     int freeAnchorIndex = findFirstFreeAnchor(rectangleWidth, rectangleHeight, testedPackingAreaWidth, testedPackingAreaHeight);
-    if (freeAnchorIndex != -1) {
+    if(freeAnchorIndex != -1) {
       actualPackingAreaWidth = testedPackingAreaWidth;
       actualPackingAreaHeight = testedPackingAreaHeight;
       return freeAnchorIndex;
@@ -77,10 +76,10 @@ public final class ArevaloRectanglePacker {
     boolean canEnlargeHeight = (testedPackingAreaHeight < packingAreaHeight);
     boolean shouldEnlargeHeight = (!canEnlargeWidth) || (testedPackingAreaHeight < testedPackingAreaWidth);
 
-    if (canEnlargeHeight && shouldEnlargeHeight) {
+    if(canEnlargeHeight && shouldEnlargeHeight) {
       return selectAnchorRecursive(rectangleWidth, rectangleHeight, testedPackingAreaWidth, Math.min(testedPackingAreaHeight * 2, packingAreaHeight));
     }
-    if (canEnlargeWidth) {
+    if(canEnlargeWidth) {
       return selectAnchorRecursive(rectangleWidth, rectangleHeight, Math.min(testedPackingAreaWidth * 2, packingAreaWidth), testedPackingAreaHeight);
     }
 
@@ -90,11 +89,11 @@ public final class ArevaloRectanglePacker {
   private int findFirstFreeAnchor(int rectangleWidth, int rectangleHeight, int testedPackingAreaWidth, int testedPackingAreaHeight) {
     Rectangle potentialLocation = new Rectangle(0, 0, rectangleWidth, rectangleHeight);
 
-    for (int index = 0; index < anchors.size(); ++index) {
+    for(int index = 0; index < anchors.size(); ++index) {
       potentialLocation.x = anchors.get(index).x;
       potentialLocation.y = anchors.get(index).y;
 
-      if (isFree(potentialLocation, testedPackingAreaWidth, testedPackingAreaHeight))
+      if(isFree(potentialLocation, testedPackingAreaWidth, testedPackingAreaHeight))
         return index;
     }
 
@@ -103,7 +102,7 @@ public final class ArevaloRectanglePacker {
 
   private boolean isFree(Rectangle rectangle, int testedPackingAreaWidth, int testedPackingAreaHeight) {
     boolean leavesPackingArea = (rectangle.x < 0) || (rectangle.y < 0) || (rectangle.getMaxX() > testedPackingAreaWidth) || (rectangle.getMaxY() > testedPackingAreaHeight);
-    if (leavesPackingArea) return false;
+    if(leavesPackingArea) return false;
 
     for(Rectangle packedRectangle : packedRectangles) {
       if(packedRectangle.intersects(rectangle))
@@ -115,7 +114,7 @@ public final class ArevaloRectanglePacker {
 
   private void insertAnchor(Point anchor) {
     int insertIndex = Collections.binarySearch(anchors, anchor, anchorRankComparator);
-    if (insertIndex < 0) insertIndex = ~insertIndex;
+    if(insertIndex < 0) insertIndex = ~insertIndex;
 
     anchors.add(insertIndex, anchor);
   }
