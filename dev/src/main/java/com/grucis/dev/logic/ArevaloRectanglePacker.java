@@ -22,6 +22,7 @@ public final class ArevaloRectanglePacker {
   public ArevaloRectanglePacker(int packingAreaWidth, int packingAreaHeight) {
     this.packingAreaWidth = packingAreaWidth;
     this.packingAreaHeight = packingAreaHeight;
+    anchors.add(new Point(0, 0));
   }
 
   public Point tryPack(int rectangleWidth, int rectangleHeight) {

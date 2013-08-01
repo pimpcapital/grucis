@@ -112,12 +112,11 @@ public final class SpriteSheetPacker {
     int testWidth = outputWidth;
     int testHeight = outputHeight;
     boolean shrinkVertical = false;
-    imagePlacements = new HashMap<BufferedImage, Rectangle>();
     while(true) {
       testImagePlacement.clear();
 
       if(!testPackingImages(testWidth, testHeight, testImagePlacement)) {
-        if(imagePlacements.size() == 0) return imagePlacements;
+        if(imagePlacements == null) return imagePlacements;
         if(shrinkVertical) return imagePlacements;
 
         shrinkVertical = true;
