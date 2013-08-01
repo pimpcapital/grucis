@@ -3,9 +3,10 @@ package com.grucis.web.mapper;
 import java.util.*;
 
 import com.grucis.dev.model.export.SpriteSheet;
-import com.grucis.dev.model.output.SpriteAnimationMap;
 import com.grucis.web.view.SpriteSheetView;
+import org.springframework.stereotype.Component;
 
+@Component
 public final class SpriteSheetViewMapper extends ViewMapper<SpriteSheet, SpriteSheetView> {
   @Override
   public SpriteSheetView map(SpriteSheet model) {

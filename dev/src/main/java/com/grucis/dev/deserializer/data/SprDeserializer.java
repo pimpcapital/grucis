@@ -42,7 +42,7 @@ public final class SprDeserializer extends DataModelDeserializer<Spr> {
 
     byte[] actionBytes = new byte[2];
     access.read(actionBytes);
-    ret.setAction(BitwiseUtils.uint16(directionBytes));
+    ret.setAction(BitwiseUtils.uint16(actionBytes));
 
     byte[] durationBytes = new byte[4];
     access.read(durationBytes);
