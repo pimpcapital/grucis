@@ -5,7 +5,7 @@ Ext.define('GDE.view.SpriteAnimationCanvas', {
   spradrns: {},
   initComponent: function () {
     var me = this;
-    createjs.Ticker.setFPS(60);
+    createjs.Ticker.setFPS(50);
     Ext.apply(me, {
       drawPlan: [
         function () {
@@ -23,7 +23,7 @@ Ext.define('GDE.view.SpriteAnimationCanvas', {
             height: 48,
             listeners: {
               mousedown: function(evt) {
-                alert(evt);
+                console.log('south: ' + evt.target.south + ' east: ' + evt.target.east);
               }
             }
           });
