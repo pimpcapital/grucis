@@ -6,20 +6,6 @@ Ext.define('GDE.view.OffsetImageCanvas', {
   initComponent: function () {
     var me = this;
     Ext.apply(me, {
-      tbar: [
-        {
-          icon: 'resources/images/disk_blue.png',
-          text: 'Download',
-          itemId: 'download',
-          disabled: true,
-          handler: function() {
-            Ext.Array.each(me.bitmaps, function(bitmap) {
-              window.location = 'api/bitmap/download/' + bitmap.name;
-            });
-          }
-        }
-      ],
-
       drawPlan: [
         function () {
           Ext.ux.EaselPanelUtils.drawScales(me.stage, {
@@ -53,8 +39,8 @@ Ext.define('GDE.view.OffsetImageCanvas', {
       },
 
       loadImage: function (adrn, keepPrevious) {
-        var name = adrn.get('id') + '.png';
-        var url = 'api/bitmap/image/' + name;
+        var name = adrn.get('id');
+        var url = 'api/bitmap/image/' + name + '.png';
         var queue = new createjs.LoadQueue(false);
         if(!keepPrevious) me.unload();
         queue.addEventListener('fileload', function(payload) {

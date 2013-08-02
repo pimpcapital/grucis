@@ -45,7 +45,7 @@ public final class AnimationGalleryController {
   }
 
   @GET
-  @Path("/animation/{id}.json")
+  @Path("/index/{id}.json")
   public Response getAnimationReference(@PathParam("id") int id) {
     return Response.ok(spriteSheetViewMapper.map(spriteSheetService.getSpriteSheet(id, true))).build();
   }

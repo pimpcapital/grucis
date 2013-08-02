@@ -22,10 +22,13 @@ Ext.define('GDE.view.AnimationGallery', {
               grid.getStore().load({});
             },
             selectionchange: function(sm, selected) {
+              if(selected.length == 1) {
+                me.down('spriteanimation').loadAnimation(selected[0]);
+              }
             }
           }
         }, {
-          xtype: 'sprite',
+          xtype: 'spriteanimation',
           flex: 5
         }
       ]

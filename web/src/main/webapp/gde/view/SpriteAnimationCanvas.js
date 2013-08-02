@@ -1,22 +1,12 @@
 Ext.define('GDE.view.SpriteAnimationCanvas', {
   extend: 'Ext.ux.EaselPanel',
-  alias: 'widget.sprite',
-  bitmaps: [],
-  adrns: {},
+  alias: 'widget.spriteanimation',
+  animations: [],
+  spradrns: {},
   initComponent: function () {
     var me = this;
+    createjs.Ticker.setFPS(30);
     Ext.apply(me, {
-      tbar: [
-        {
-          icon: 'resources/images/disk_blue.png',
-          text: 'Download',
-          itemId: 'download',
-          disabled: true,
-          handler: function() {
-          }
-        }
-      ],
-
       drawPlan: [
         function () {
           var origin = Ext.ux.EaselPanelUtils.getOrigin(me.stage);
@@ -26,8 +16,60 @@ Ext.define('GDE.view.SpriteAnimationCanvas', {
             width: 64,
             height: 48
           });
+        },
+
+        function() {
+          Ext.Array.each(me.animations, function(animation) {
+            me.placeAnimation(animation);
+          });
         }
-      ]
+      ],
+
+      placeAnimation: function(animation) {
+        var origin = Ext.ux.EaselPanelUtils.getOrigin(me.stage);
+        animation.x = origin.x;
+        animation.y = origin.y;
+        animation.play("south_attack");
+        me.stage.addChild(animation);
+      },
+
+      unload: function() {
+        createjs.Ticker.removeAllListeners();
+        Ext.Array.each(me.animations, function(animation) {
+          me.stage.removeChild(animation);
+        });
+        me.animations = [];
+        me.spradrns = {};
+      },
+
+      loadAnimation: function(spradrn, keepPrevious) {
+        var name = spradrn.get('id');
+        var spriteUrl = 'api/animation/sprite/' + name + '.png';
+        var indexUrl = 'api/animation/index/' + name + '.json';
+        var queue = new createjs.LoadQueue(false);
+        if(!keepPrevious) me.unload();
+        var sprite, index;
+        queue.addEventListener('fileload', function(payload) {
+          if(payload.item.id == 'sprite') sprite = payload.result;
+          else index = payload.result;
+        });
+        queue.addEventListener('complete', function() {
+          Ext.applyIf(index, {
+            images: [sprite]
+          });
+          var spriteSheet = new createjs.SpriteSheet(index);
+          var animation = new createjs.BitmapAnimation(spriteSheet);
+          animation.name = name;
+          me.animations.push(animation);
+          me.spradrns[name] = spradrn;
+          me.placeAnimation(animation);
+        });
+        queue.loadManifest([
+          {src: spriteUrl, type: 'image', id: 'sprite'},
+          {src: indexUrl, type: 'json', id: 'index'}
+        ], true);
+        createjs.Ticker.addEventListener("tick", me.stage);
+      }
 
 
     });
