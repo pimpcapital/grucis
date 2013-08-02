@@ -35,7 +35,6 @@ Ext.define('GDE.view.OffsetImageCanvas', {
         });
         me.bitmaps = [];
         me.adrns = {};
-        me.down('#download').disable();
       },
 
       loadImage: function (adrn, keepPrevious) {
@@ -49,7 +48,6 @@ Ext.define('GDE.view.OffsetImageCanvas', {
           me.bitmaps.push(bitmap);
           me.adrns[name] = adrn;
           me.placeImage(bitmap);
-          me.down('#download').enable();
         });
         queue.loadFile(url);
       }
