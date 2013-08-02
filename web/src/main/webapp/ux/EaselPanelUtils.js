@@ -91,50 +91,66 @@ Ext.define('Ext.ux.EaselPanelUtils', {
       this.createVerticalScale(stage, origin.x, 0, stage.canvas.height, origin.y, options);
     },
 
-    drawIsometricTile: function(stage, x, y, options) {
+    drawIsometricTile: function(stage, x, y, south, east, options) {
       var g = new createjs.Graphics();
-      var left = x - options.width / 2;
-      var right = x + options.width / 2;
-      var top = y - options.height / 2;
-      var bottom = y + options.height / 2;
+      var left = -options.width / 2;
+      var right = options.width / 2;
+      var top = -options.height / 2;
+      var bottom = options.height / 2;
       g.beginFill(options.fill)
         .beginStroke(options.stroke)
-        .moveTo(left, y)
-        .lineTo(x, bottom)
-        .lineTo(right, y)
-        .lineTo(x, top)
+        .moveTo(left, 0)
+        .lineTo(0, bottom)
+        .lineTo(right, 0)
+        .lineTo(0, top)
         .closePath();
-      stage.addChild(new createjs.Shape(g));
+      var shape = new createjs.Shape(g);
+      if(options.listeners) {
+        Ext.iterate(options.listeners, function(type, fn) {
+          shape.addEventListener(type, fn);
+        });
+      }
+      shape.x = x;
+      shape.y = y;
+      shape.east = east;
+      shape.south = south;
+      stage.addChild(shape);
     },
 
     drawIsometricGrid: function(stage, origin, options) {
       var me = this;
       var xStep = options.width / 2;
       var yStep = options.height / 2;
-      me.drawIsometricTile(stage, origin.x, origin.y, options);
+      me.drawIsometricTile(stage, origin.x, origin.y, origin.south, origin.east, options);
       for(var i = 0; i <= options.radius; i++) {
         var x = origin.x - i * options.width;
         var y = origin.y;
+        var south = origin.south - i;
+        var east = origin.east - i;
         var j;
         for(j = 0; j < i * 2; j++) {
-          me.drawIsometricTile(stage, x, y, options);
+          me.drawIsometricTile(stage, x, y, south, east, options);
           x += xStep;
           y += yStep;
+          south++;
         }
         for(j = 0; j < i * 2; j++) {
-          me.drawIsometricTile(stage, x, y, options);
+          me.drawIsometricTile(stage, x, y, south, east, options);
           x += xStep;
           y -= yStep;
+          east++;
         }
         for(j = 0; j < i * 2; j++) {
-          me.drawIsometricTile(stage, x, y, options);
+          me.drawIsometricTile(stage, x, y, south, east, options);
           x -= xStep;
           y -= yStep;
+          south--;
         }
         for(j = 0; j < i * 2; j++) {
-          me.drawIsometricTile(stage, x, y, options);
+          me.drawIsometricTile(stage, x, y, south, east, options);
           x -= xStep;
           y += yStep;
+          east--;
         }
       }
 

@@ -10,11 +10,22 @@ Ext.define('GDE.view.SpriteAnimationCanvas', {
       drawPlan: [
         function () {
           var origin = Ext.ux.EaselPanelUtils.getOrigin(me.stage);
+          var radius = Math.floor(Math.min(8, (me.stage.canvas.width - 64) / 128, (me.stage.canvas.height - 48) / 96));
+          Ext.applyIf(origin, {
+            south: radius,
+            east: radius
+          });
           Ext.ux.EaselPanelUtils.drawIsometricGrid(me.stage, origin, {
             stroke: '#c8c8c8',
-            radius: Math.min(8, (me.stage.canvas.width - 64) / 128, (me.stage.canvas.height - 48) / 96),
+            fill: '#2b2b2b',
+            radius: radius,
             width: 64,
-            height: 48
+            height: 48,
+            listeners: {
+              mousedown: function(evt) {
+                alert(evt);
+              }
+            }
           });
         },
 
