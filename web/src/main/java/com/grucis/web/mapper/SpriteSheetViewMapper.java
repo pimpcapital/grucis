@@ -33,8 +33,9 @@ public final class SpriteSheetViewMapper extends ViewMapper<SpriteSheet, SpriteS
       SpriteSheet.AnimationReference aRef = entry.getValue();
       SpriteSheetView.AnimationView aView = new SpriteSheetView.AnimationView();
       aView.setFrames(aRef.getFrames());
-      aView.setNext(aRef.getNext());
-      aView.setFrequency(1000d / aRef.getDuration() * aRef.getFrames().size());
+      String next = aRef.getNext();
+      aView.setNext(next == null ? false : next);
+      aView.setFrequency(Math.ceil(((double)aRef.getDuration()) * 30 / aRef.getFrames().size() / 1000));
       animations.put(entry.getKey(), aView);
     }
     ret.setAnimations(animations);

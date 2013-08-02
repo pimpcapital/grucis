@@ -5,7 +5,7 @@ Ext.define('GDE.view.SpriteAnimationCanvas', {
   spradrns: {},
   initComponent: function () {
     var me = this;
-    createjs.Ticker.setFPS(30);
+    createjs.Ticker.setFPS(60);
     Ext.apply(me, {
       drawPlan: [
         function () {
@@ -29,7 +29,7 @@ Ext.define('GDE.view.SpriteAnimationCanvas', {
         var origin = Ext.ux.EaselPanelUtils.getOrigin(me.stage);
         animation.x = origin.x;
         animation.y = origin.y;
-        animation.play("south_attack");
+        animation.gotoAndPlay("south_attack");
         me.stage.addChild(animation);
       },
 

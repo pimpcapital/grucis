@@ -25,7 +25,7 @@ public final class SpriteSheetView extends View {
 
   public static class AnimationView {
     List<Integer> frames;
-    String next;
+    Object next;
     double frequency;
 
     public List<Integer> getFrames() {
@@ -36,11 +36,11 @@ public final class SpriteSheetView extends View {
       this.frames = frames;
     }
 
-    public String getNext() {
+    public Object getNext() {
       return next;
     }
 
-    public void setNext(String next) {
+    public void setNext(Object next) {
       this.next = next;
     }
 
