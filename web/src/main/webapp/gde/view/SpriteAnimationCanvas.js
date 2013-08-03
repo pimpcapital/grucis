@@ -5,12 +5,13 @@ Ext.define('GDE.view.SpriteAnimationCanvas', {
   spradrns: {},
   initComponent: function () {
     var me = this;
+    var origin, radius;
     createjs.Ticker.setFPS(50);
     Ext.apply(me, {
       drawPlan: [
         function () {
-          var origin = Ext.ux.EaselPanelUtils.getOrigin(me.stage);
-          var radius = Math.floor(Math.min(8, (me.stage.canvas.width - 64) / 128, (me.stage.canvas.height - 48) / 96));
+          origin = Ext.ux.EaselPanelUtils.getOrigin(me.stage);
+          radius = Math.floor(Math.min(8, (me.stage.canvas.width - 64) / 128, (me.stage.canvas.height - 48) / 96));
           Ext.applyIf(origin, {
             south: radius,
             east: radius
@@ -23,7 +24,35 @@ Ext.define('GDE.view.SpriteAnimationCanvas', {
             height: 48,
             listeners: {
               mousedown: function(evt) {
-                console.log('south: ' + evt.target.south + ' east: ' + evt.target.east);
+                if(evt.nativeEvent.button == 2) {
+                  Ext.Array.each(me.animations, function(animation) {
+                    var south = evt.target.south - animation.south;
+                    var east = evt.target.east - animation.east;
+                    var atan = Math.atan2(east, south);
+                    var direction;
+                    if(atan > Math.PI * 7 / 8) {
+                      direction = 'north';
+                    } else if(atan > Math.PI * 5 / 8) {
+                      direction = 'northeast';
+                    } else if(atan > Math.PI * 3 / 8) {
+                      direction = 'east';
+                    } else if(atan > Math.PI / 8) {
+                      direction = 'southeast';
+                    } else if(atan > -Math.PI / 8) {
+                      direction = 'south';
+                    } else if(atan > -Math.PI * 3 / 8) {
+                      direction = 'southwest';
+                    } else if(atan > -Math.PI * 5 / 8) {
+                      direction = 'west';
+                    } else if(atan > -Math.PI * 7 / 8) {
+                      direction = 'northwest';
+                    } else {
+                      direction = 'north';
+                    }
+                    var action = animation.action;
+                    animation.gotoAndPlay(direction + '_' + action);
+                  });
+                }
               }
             }
           });
@@ -37,10 +66,13 @@ Ext.define('GDE.view.SpriteAnimationCanvas', {
       ],
 
       placeAnimation: function(animation) {
-        var origin = Ext.ux.EaselPanelUtils.getOrigin(me.stage);
         animation.x = origin.x;
         animation.y = origin.y;
-        animation.gotoAndPlay("south_attack");
+        animation.south = radius;
+        animation.east = radius;
+        animation.action = 'attack';
+        animation.direction = 'south';
+        animation.gotoAndPlay(animation.direction + '_' + animation.action);
         me.stage.addChild(animation);
       },
 
