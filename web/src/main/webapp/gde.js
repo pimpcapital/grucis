@@ -11,6 +11,7 @@ Ext.application({
   ],
   views: [
     'AnimationGallery',
+    'BitmapExportWindow',
     'BitmapGallery',
     'OffsetImageCanvas',
     'SpriteAnimationCanvas'

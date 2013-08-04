@@ -1,6 +1,6 @@
 package com.grucis.dev.model.raw;
 
-public final class Adrn extends RawModel{
+public final class Adrn extends RawModel implements Comparable<Adrn> {
   private int id;
   private int address;
   private int size;
@@ -108,5 +108,10 @@ public final class Adrn extends RawModel{
 
   public void setMap(int map) {
     this.map = map;
+  }
+
+  @Override
+  public int compareTo(Adrn o) {
+    return Integer.compare(id, o.getId());
   }
 }

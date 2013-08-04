@@ -2,13 +2,20 @@ package com.grucis.web.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
+import com.grucis.dev.io.ExportManager;
+import com.grucis.dev.model.progress.BitmapExportProgress;
 import com.grucis.dev.service.BitmapImageService;
 import com.grucis.dev.service.RawModelService;
 import com.grucis.dev.utils.image.ImageUtils;
 import com.grucis.web.mapper.AdrnViewMapper;
+import com.grucis.web.mapper.BitmapExportSettingViewMapper;
 import com.grucis.web.view.AdrnView;
 import com.grucis.web.view.BufferedViewCollection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +25,21 @@ import org.springframework.stereotype.Controller;
 @Path("api/bitmap")
 @Produces("application/json")
 public final class BitmapGalleryController {
+
+  public static final String BITMAP_EXPORT_PROGRESS = "BITMAP_EXPORT_PROGRESS";
+
   @Autowired
   private RawModelService rawModelService;
   @Autowired
   private BitmapImageService bitmapImageService;
   @Autowired
+  private ExportManager exportManager;
+  @Autowired
   private AdrnViewMapper adrnViewMapper;
+  @Autowired
+  private BitmapExportSettingViewMapper bitmapExportSettingViewMapper;
+  @Autowired
+  protected ExecutorService executorService;
 
   @GET
   @Path("/adrns")
@@ -50,4 +66,35 @@ public final class BitmapGalleryController {
              .header("Content-Disposition", "attachment; filename=\"" + id + ".png\"")
              .build();
   }
+
+  @GET
+  @Path("/export/setting")
+  public Response reviewSetting() {
+    return Response.ok(bitmapExportSettingViewMapper.map(exportManager.getBitmapExportSetting())).build();
+  }
+
+  @POST
+  @Path("/export/start")
+  public Response startExport(@Context HttpServletRequest request) {
+    HttpSession session = request.getSession(true);
+    if(session.getAttribute(BITMAP_EXPORT_PROGRESS) == null) {
+      final BitmapExportProgress progress = new BitmapExportProgress();
+      session.setAttribute(BITMAP_EXPORT_PROGRESS, progress);
+      executorService.submit(new Runnable() {
+        @Override
+        public void run() {
+          exportManager.exportBitmaps(progress);
+        }
+      });
+    }
+    return Response.ok().build();
+  }
+
+  @GET
+  @Path("/export/update")
+  public Response updateExportProgress(@Context HttpServletRequest request) {
+    HttpSession session = request.getSession(true);
+    return Response.ok(session.getAttribute(BITMAP_EXPORT_PROGRESS)).build();
+  }
+
 }

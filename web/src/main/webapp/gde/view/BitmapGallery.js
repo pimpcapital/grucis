@@ -13,6 +13,14 @@ Ext.define('GDE.view.BitmapGallery', {
           minWidth: 320,
           flex: 1,
           sortableColumns: false,
+          tbar: [
+            {
+              text: 'Export',
+              handler: function() {
+                Ext.createByAlias('widget.bitmapexport');
+              }
+            }
+          ],
           columns: [
             {text: 'ID', dataIndex: 'id', flex: 1},
             {text: 'Map Index', dataIndex: 'map', flex: 1},

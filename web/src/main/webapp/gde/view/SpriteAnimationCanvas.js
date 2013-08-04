@@ -24,35 +24,37 @@ Ext.define('GDE.view.SpriteAnimationCanvas', {
             height: 48,
             listeners: {
               mousedown: function(evt) {
-                if(evt.nativeEvent.button == 2) {
-                  Ext.Array.each(me.animations, function(animation) {
-                    var south = evt.target.south - animation.south;
-                    var east = evt.target.east - animation.east;
-                    var atan = Math.atan2(east, south);
-                    var direction;
-                    if(atan > Math.PI * 7 / 8) {
-                      direction = 'north';
-                    } else if(atan > Math.PI * 5 / 8) {
-                      direction = 'northeast';
-                    } else if(atan > Math.PI * 3 / 8) {
-                      direction = 'east';
-                    } else if(atan > Math.PI / 8) {
-                      direction = 'southeast';
-                    } else if(atan > -Math.PI / 8) {
-                      direction = 'south';
-                    } else if(atan > -Math.PI * 3 / 8) {
-                      direction = 'southwest';
-                    } else if(atan > -Math.PI * 5 / 8) {
-                      direction = 'west';
-                    } else if(atan > -Math.PI * 7 / 8) {
-                      direction = 'northwest';
-                    } else {
-                      direction = 'north';
-                    }
+                Ext.Array.each(me.animations, function(animation) {
+                  var south = evt.target.south - animation.south;
+                  var east = evt.target.east - animation.east;
+                  var atan = Math.atan2(east, south);
+                  var direction;
+                  if(atan > Math.PI * 7 / 8) {
+                    direction = 'north';
+                  } else if(atan > Math.PI * 5 / 8) {
+                    direction = 'northeast';
+                  } else if(atan > Math.PI * 3 / 8) {
+                    direction = 'east';
+                  } else if(atan > Math.PI / 8) {
+                    direction = 'southeast';
+                  } else if(atan > -Math.PI / 8) {
+                    direction = 'south';
+                  } else if(atan > -Math.PI * 3 / 8) {
+                    direction = 'southwest';
+                  } else if(atan > -Math.PI * 5 / 8) {
+                    direction = 'west';
+                  } else if(atan > -Math.PI * 7 / 8) {
+                    direction = 'northwest';
+                  } else {
+                    direction = 'north';
+                  }
+                  if(evt.nativeEvent.button == 2) {
                     var action = animation.action;
                     animation.gotoAndPlay(direction + '_' + action);
-                  });
-                }
+                  } else {
+
+                  }
+                });
               }
             }
           });
