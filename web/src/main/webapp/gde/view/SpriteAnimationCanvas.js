@@ -23,6 +23,19 @@ Ext.define('GDE.view.SpriteAnimationCanvas', {
             width: 64,
             height: 48,
             listeners: {
+              mouseover: function(evt){
+                var tile = evt.target;
+                if(!me.tileIndicator) {
+                  var tileIndicator = new createjs.Bitmap('api/bitmap/image/8828.png');
+                  tileIndicator.regX = 32;
+                  tileIndicator.regY = 24;
+                  me.stage.addChild(tileIndicator);
+                  me.tileIndicator = tileIndicator;
+                }
+                me.tileIndicator.x = tile.x;
+                me.tileIndicator.y = tile.y;
+                me.stage.update();
+              },
               mousedown: function(evt) {
                 Ext.Array.each(me.animations, function(animation) {
                   var south = evt.target.south - animation.south;

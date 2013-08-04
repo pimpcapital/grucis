@@ -7,6 +7,7 @@ Ext.define('Ext.ux.EaselPanel', {
     me.callParent(arguments);
     me.on('render', function() {
       me.stage = new createjs.Stage(me.canvasEl);
+      me.stage.enableMouseOver();
     });
 
     me.draw = function() {
