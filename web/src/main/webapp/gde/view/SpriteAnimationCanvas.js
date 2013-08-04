@@ -7,6 +7,9 @@ Ext.define('GDE.view.SpriteAnimationCanvas', {
     var me = this;
     var origin, radius;
     createjs.Ticker.setFPS(50);
+    var tileIndicator = new createjs.Bitmap('api/bitmap/image/8828.png');
+    tileIndicator.regX = 32;
+    tileIndicator.regY = 24;
     Ext.apply(me, {
       drawPlan: [
         function () {
@@ -25,15 +28,8 @@ Ext.define('GDE.view.SpriteAnimationCanvas', {
             listeners: {
               mouseover: function(evt){
                 var tile = evt.target;
-                if(!me.tileIndicator) {
-                  var tileIndicator = new createjs.Bitmap('api/bitmap/image/8828.png');
-                  tileIndicator.regX = 32;
-                  tileIndicator.regY = 24;
-                  me.stage.addChild(tileIndicator);
-                  me.tileIndicator = tileIndicator;
-                }
-                me.tileIndicator.x = tile.x;
-                me.tileIndicator.y = tile.y;
+                tileIndicator.x = tile.x;
+                tileIndicator.y = tile.y;
                 me.stage.update();
               },
               mousedown: function(evt) {
@@ -71,6 +67,10 @@ Ext.define('GDE.view.SpriteAnimationCanvas', {
               }
             }
           });
+        },
+
+        function() {
+          me.stage.addChild(tileIndicator);
         },
 
         function() {
