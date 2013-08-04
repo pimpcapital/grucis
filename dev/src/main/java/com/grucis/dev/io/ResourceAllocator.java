@@ -36,19 +36,50 @@ public final class ResourceAllocator {
 
 
   private InputStream getDataInputStream(String prefix) {
+    File file = findDataFile(prefix);
     try {
-      return new FileInputStream(findDataFile(prefix));
+      return new FileInputStream(file);
     } catch(FileNotFoundException e) {
-      LOG.error("Cannot get input stream on missing data file {} under {}", prefix, dataFolder.getAbsolutePath());
+      LOG.error("Cannot get input stream on missing data file {} under {}", file.getAbsolutePath(), dataFolder.getAbsolutePath());
       return null;
     }
   }
 
   private RandomAccessFile getDataRandomAccessFile(String prefix) {
+    File file = findDataFile(prefix);
     try {
-      return new RandomAccessFile(findDataFile(prefix), "r");
+      return new RandomAccessFile(file, "r");
     } catch(FileNotFoundException e) {
-      LOG.error("Cannot get random access on missing data file {} under {}", prefix, dataFolder.getAbsolutePath());
+      LOG.error("Cannot get random access on missing data file {} under {}", file.getAbsolutePath(), dataFolder.getAbsolutePath());
+      return null;
+    }
+  }
+
+  public InputStream getPaletteInputStream(final String prefix) {
+    File[] paletteFolder = dataFolder.listFiles(new FileFilter() {
+      @Override
+      public boolean accept(File pathname) {
+        return pathname.getName().equalsIgnoreCase("pal") && pathname.isDirectory();
+      }
+    });
+    if(paletteFolder.length != 1) {
+      LOG.error("Cannot find palette folder under {}", dataFolder.getAbsolutePath());
+      return null;
+    }
+    File[] pal = paletteFolder[0].listFiles(new FilenameFilter() {
+      @Override
+      public boolean accept(File dir, String name) {
+        return StringUtils.startsWithIgnoreCase(name, prefix);
+      }
+    });
+    if(pal.length < 1) {
+      LOG.error("Cannot find palette file with prefix {} under {}", prefix, paletteFolder[0].getAbsolutePath());
+      return null;
+    }
+    try {
+      return new FileInputStream(pal[0]);
+    } catch(FileNotFoundException e) {
+      LOG.error("Cannot get input stream on missing palette file {} under {}", pal[0].getAbsolutePath(), paletteFolder[0].getAbsolutePath());
       return null;
     }
   }

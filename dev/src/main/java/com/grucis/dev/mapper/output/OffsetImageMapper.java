@@ -1,16 +1,16 @@
 package com.grucis.dev.mapper.output;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import javax.annotation.PostConstruct;
 
+import com.grucis.dev.io.ResourceAllocator;
 import com.grucis.dev.model.output.OffsetImage;
 import com.grucis.dev.model.raw.Adrn;
 import com.grucis.dev.model.raw.Real;
 import com.grucis.dev.service.RawModelService;
-import com.grucis.dev.utils.bitwise.BitwiseUtils;
 import com.grucis.dev.utils.bitwise.UInt8;
+import com.grucis.dev.utils.image.ImageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,25 +18,29 @@ import org.springframework.stereotype.Component;
 public final class OffsetImageMapper extends OutputModelMapper<Adrn, OffsetImage> {
 
   @Autowired
+  private ResourceAllocator resourceAllocator;
+  @Autowired
   private RawModelService rawModelService;
 
   int[] palette;
 
   @PostConstruct
   public void init() throws Exception {
-    InputStream paletteInput = getClass().getResourceAsStream("/palette.dat");
-    byte[] paletteBytes = new byte[1024];
-    paletteInput.read(paletteBytes);
-
-    palette = new int[256];
-    int pos = 0;
-    for(int i = 0; i < 256; i++) {
-      int b = BitwiseUtils.uint8(paletteBytes[pos++]);
-      int g = BitwiseUtils.uint8(paletteBytes[pos++]);
-      int r = BitwiseUtils.uint8(paletteBytes[pos++]);
-      pos++;
-      palette[i] = new Color(r, g, b).getRGB();
-    }
+    //    InputStream paletteInput = getClass().getResourceAsStream("/Palet_0.sap");
+    //    byte[] paletteBytes = new byte[1024];
+    //    paletteInput.read(paletteBytes);
+    //
+    //    palette = new int[256];
+    //    int pos = 0;
+    //    for(int i = 0; i < 256; i++) {
+    //      int b = BitwiseUtils.uint8(paletteBytes[pos++]);
+    //      int g = BitwiseUtils.uint8(paletteBytes[pos++]);
+    //      int r = BitwiseUtils.uint8(paletteBytes[pos++]);
+    //      pos++;
+    //      palette[i] = new Color(r, g, b).getRGB();
+    //    }
+    InputStream input = resourceAllocator.getPaletteInputStream("PALET_1");
+    palette = ImageUtils.readPalette(input);
   }
 
   private BufferedImage generateImage(byte[] bitmap, int width, int height) {
@@ -47,7 +51,7 @@ public final class OffsetImageMapper extends OutputModelMapper<Adrn, OffsetImage
     int bitmapLength = bitmap.length;
     int pix;
     while(pos < bitmapLength) {
-      pix =  new UInt8(bitmap[pos]).intValue();
+      pix = new UInt8(bitmap[pos]).intValue();
       if(pix != 0) {
         ret.setRGB(x, y, palette[pix]);
       }

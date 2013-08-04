@@ -11,8 +11,8 @@
   <name>Grucis</name>
 
   <modules>
-    <module>dev</module>
     <module>core</module>
+    <module>dev</module>
     <module>web</module>
   </modules>
 
