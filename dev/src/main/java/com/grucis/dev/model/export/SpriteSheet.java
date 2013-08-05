@@ -93,7 +93,7 @@ public final class SpriteSheet extends ExportModel {
 
   public static class AnimationReference {
     private List<Integer> frames;
-    private String next;
+    private boolean next;
     private int duration;
 
     public List<Integer> getFrames() {
@@ -104,11 +104,11 @@ public final class SpriteSheet extends ExportModel {
       this.frames = frames;
     }
 
-    public String getNext() {
+    public boolean getNext() {
       return next;
     }
 
-    public void setNext(String next) {
+    public void setNext(boolean next) {
       this.next = next;
     }
 

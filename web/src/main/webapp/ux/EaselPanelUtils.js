@@ -115,45 +115,52 @@ Ext.define('Ext.ux.EaselPanelUtils', {
       shape.east = east;
       shape.south = south;
       stage.addChild(shape);
+      return shape;
     },
 
     drawIsometricGrid: function(stage, origin, options) {
       var me = this;
       var xStep = options.width / 2;
       var yStep = options.height / 2;
-      me.drawIsometricTile(stage, origin.x, origin.y, origin.south, origin.east, options);
-      for(var i = 0; i <= options.radius; i++) {
+      var dimension = 1 + options.radius * 2;
+      var ret = [];
+      var i;
+      for(i = 0; i < dimension; i++) {
+        ret[i] = [];
+      }
+      ret[options.radius][options.radius] = me.drawIsometricTile(stage, origin.x, origin.y, origin.south, origin.east, options);
+      for(i = 0; i <= options.radius; i++) {
         var x = origin.x - i * options.width;
         var y = origin.y;
         var south = origin.south - i;
         var east = origin.east - i;
         var j;
         for(j = 0; j < i * 2; j++) {
-          me.drawIsometricTile(stage, x, y, south, east, options);
+          ret[south][east] = me.drawIsometricTile(stage, x, y, south, east, options);
           x += xStep;
           y += yStep;
           south++;
         }
         for(j = 0; j < i * 2; j++) {
-          me.drawIsometricTile(stage, x, y, south, east, options);
+          ret[south][east] = me.drawIsometricTile(stage, x, y, south, east, options);
           x += xStep;
           y -= yStep;
           east++;
         }
         for(j = 0; j < i * 2; j++) {
-          me.drawIsometricTile(stage, x, y, south, east, options);
+          ret[south][east] = me.drawIsometricTile(stage, x, y, south, east, options);
           x -= xStep;
           y -= yStep;
           south--;
         }
         for(j = 0; j < i * 2; j++) {
-          me.drawIsometricTile(stage, x, y, south, east, options);
+          ret[south][east] = me.drawIsometricTile(stage, x, y, south, east, options);
           x -= xStep;
           y += yStep;
           east--;
         }
       }
-
+      return ret;
     }
   }
 });

@@ -1,8 +1,7 @@
 Ext.define('GDE.view.SpriteAnimationCanvas', {
   extend: 'Ext.ux.EaselPanel',
   alias: 'widget.spriteanimation',
-  animations: [],
-  spradrns: {},
+  path: [],
   initComponent: function () {
     var me = this;
     var origin, radius;
@@ -11,6 +10,48 @@ Ext.define('GDE.view.SpriteAnimationCanvas', {
     tileIndicator.regX = 32;
     tileIndicator.regY = 24;
     Ext.apply(me, {
+
+      walk: function() {
+        if(!me.tick) {
+          var next = me.path.shift();
+          if(!next) {
+            me.animation.action = 'stand';
+            me.animation.gotoAndPlay(me.animation.direction + '_' + me.animation.action);
+          } else {
+            var steps;
+            if(next.x > me.animation.south && next.y > me.animation.east || next.x < me.animation.south && next.y < me.animation.east) {
+              steps = 24;
+            } else if(next.x == me.animation.south || next.y == me.animation.east) {
+              steps = 15;
+            } else {
+              steps = 18;
+            }
+            var nextTile = me.grid[next.x][next.y];
+            var xStep = (nextTile.x - me.animation.x) / steps;
+            var yStep = (nextTile.y - me.animation.y) / steps;
+            var count = 0;
+            me.animation.direction = Ext.ux.PathUtils.getDirection({x: me.animation.south, y: me.animation.east}, {x: nextTile.south, y: nextTile.east});
+            me.animation.action = 'walk';
+            me.animation.gotoAndPlay(me.animation.direction + '_' + me.animation.action);
+            me.animation.south = nextTile.south;
+            me.animation.east = nextTile.east;
+            me.tick = function() {
+              me.animation.x += xStep;
+              me.animation.y += yStep;
+              count++;
+              if(count == steps) {
+                me.animation.x = nextTile.x;
+                me.animation.y = nextTile.y;
+                createjs.Ticker.removeEventListener('tick', me.tick);
+                delete me.tick;
+                me.walk();
+              }
+            };
+            createjs.Ticker.addEventListener('tick', me.tick);
+          }
+        }
+      },
+
       drawPlan: [
         function () {
           origin = Ext.ux.EaselPanelUtils.getOrigin(me.stage);
@@ -19,7 +60,7 @@ Ext.define('GDE.view.SpriteAnimationCanvas', {
             south: radius,
             east: radius
           });
-          Ext.ux.EaselPanelUtils.drawIsometricGrid(me.stage, origin, {
+          me.grid = Ext.ux.EaselPanelUtils.drawIsometricGrid(me.stage, origin, {
             stroke: '#c8c8c8',
             fill: '#2b2b2b',
             radius: radius,
@@ -33,37 +74,17 @@ Ext.define('GDE.view.SpriteAnimationCanvas', {
                 me.stage.update();
               },
               mousedown: function(evt) {
-                Ext.Array.each(me.animations, function(animation) {
-                  var south = evt.target.south - animation.south;
-                  var east = evt.target.east - animation.east;
-                  var atan = Math.atan2(east, south);
-                  var direction;
-                  if(atan > Math.PI * 7 / 8) {
-                    direction = 'north';
-                  } else if(atan > Math.PI * 5 / 8) {
-                    direction = 'northeast';
-                  } else if(atan > Math.PI * 3 / 8) {
-                    direction = 'east';
-                  } else if(atan > Math.PI / 8) {
-                    direction = 'southeast';
-                  } else if(atan > -Math.PI / 8) {
-                    direction = 'south';
-                  } else if(atan > -Math.PI * 3 / 8) {
-                    direction = 'southwest';
-                  } else if(atan > -Math.PI * 5 / 8) {
-                    direction = 'west';
-                  } else if(atan > -Math.PI * 7 / 8) {
-                    direction = 'northwest';
-                  } else {
-                    direction = 'north';
-                  }
+                if(me.animation) {
+                  var animation = me.animation;
                   if(evt.nativeEvent.button == 2) {
+                    var direction = Ext.ux.PathUtils.getDirection({x: animation.south, y: animation.east}, {x: evt.target.south, y: evt.target.east});
                     var action = animation.action;
                     animation.gotoAndPlay(direction + '_' + action);
-                  } else {
-
+                  } else if(evt.nativeEvent.button == 0) {
+                    me.path = Ext.ux.PathUtils.getPath({x: animation.south, y: animation.east}, {x: evt.target.south, y: evt.target.east});
+                    me.walk();
                   }
-                });
+                }
               }
             }
           });
@@ -74,9 +95,9 @@ Ext.define('GDE.view.SpriteAnimationCanvas', {
         },
 
         function() {
-          Ext.Array.each(me.animations, function(animation) {
-            me.placeAnimation(animation);
-          });
+          if(me.animation) {
+            me.placeAnimation(me.animation);
+          }
         }
       ],
 
@@ -93,11 +114,8 @@ Ext.define('GDE.view.SpriteAnimationCanvas', {
 
       unload: function() {
         createjs.Ticker.removeAllListeners();
-        Ext.Array.each(me.animations, function(animation) {
-          me.stage.removeChild(animation);
-        });
-        me.animations = [];
-        me.spradrns = {};
+        me.stage.removeChild(me.animation);
+        delete me.spradrn;
       },
 
       loadAnimation: function(spradrn, keepPrevious) {
@@ -118,8 +136,8 @@ Ext.define('GDE.view.SpriteAnimationCanvas', {
           var spriteSheet = new createjs.SpriteSheet(index);
           var animation = new createjs.BitmapAnimation(spriteSheet);
           animation.name = name;
-          me.animations.push(animation);
-          me.spradrns[name] = spradrn;
+          me.animation = animation;
+          me.spradrn = spradrn;
           me.placeAnimation(animation);
         });
         queue.loadManifest([

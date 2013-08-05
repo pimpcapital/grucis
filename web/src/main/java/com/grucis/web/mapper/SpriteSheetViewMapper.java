@@ -28,15 +28,15 @@ public final class SpriteSheetViewMapper extends ViewMapper<SpriteSheet, SpriteS
     ret.setFrames(frames);
 
     Map<String, SpriteSheet.AnimationReference> aRefs = model.getAnimations();
-    Map<String, SpriteSheetView.AnimationView> animations = new LinkedHashMap<String, SpriteSheetView.AnimationView>();
+    Map<String, List<Object>> animations = new LinkedHashMap<String, List<Object>>();
     for(Map.Entry<String, SpriteSheet.AnimationReference> entry : aRefs.entrySet()) {
       SpriteSheet.AnimationReference aRef = entry.getValue();
-      SpriteSheetView.AnimationView aView = new SpriteSheetView.AnimationView();
-      aView.setFrames(aRef.getFrames());
-      String next = aRef.getNext();
-      aView.setNext(next == null ? false : next);
-      aView.setFrequency(Math.ceil(((double)aRef.getDuration()) * 30 / aRef.getFrames().size() / 1000));
-      animations.put(entry.getKey(), aView);
+      List<Object> animation = new ArrayList<Object>();
+      animation.add(Collections.min(aRef.getFrames()));
+      animation.add(Collections.max(aRef.getFrames()));
+      animation.add(aRef.getNext());
+      animation.add(Math.ceil(((double)aRef.getDuration()) * 30 / aRef.getFrames().size() / 1000));
+      animations.put(entry.getKey(), animation);
     }
     ret.setAnimations(animations);
 
