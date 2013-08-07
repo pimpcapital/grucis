@@ -2,43 +2,45 @@ package com.grucis.web.mapper;
 
 import java.util.*;
 
-import com.grucis.dev.model.export.SpriteSheet;
+import com.grucis.dev.model.export.sprite.animation.*;
 import com.grucis.web.view.SpriteSheetView;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class SpriteSheetViewMapper extends ViewMapper<SpriteSheet, SpriteSheetView> {
+public final class SpriteSheetViewMapper extends ViewMapper<AnimationSprite, SpriteSheetView> {
   @Override
-  public SpriteSheetView map(SpriteSheet model) {
+  public SpriteSheetView map(AnimationSprite model) {
     SpriteSheetView ret = new SpriteSheetView();
 
-    List<SpriteSheet.PlacementReference> pRefs = model.getPlacements();
-    List<List<Integer>> frames = new ArrayList<List<Integer>>();
-    for(SpriteSheet.PlacementReference pRef : pRefs) {
-      List<Integer> placement = new ArrayList<Integer>();
-      placement.add(pRef.getX());
-      placement.add(pRef.getY());
-      placement.add(pRef.getWidth());
-      placement.add(pRef.getHeight());
-      placement.add(0);
-      placement.add(pRef.getRegX());
-      placement.add(pRef.getRegY());
-      frames.add(placement);
-    }
-    ret.setFrames(frames);
+    AnimationIndex animationIndex = model.getSpriteIndex();
 
-    Map<String, SpriteSheet.AnimationReference> aRefs = model.getAnimations();
-    Map<String, List<Object>> animations = new LinkedHashMap<String, List<Object>>();
-    for(Map.Entry<String, SpriteSheet.AnimationReference> entry : aRefs.entrySet()) {
-      SpriteSheet.AnimationReference aRef = entry.getValue();
-      List<Object> animation = new ArrayList<Object>();
-      animation.add(Collections.min(aRef.getFrames()));
-      animation.add(Collections.max(aRef.getFrames()));
-      animation.add(aRef.getNext());
-      animation.add(Math.ceil(((double)aRef.getDuration()) * 30 / aRef.getFrames().size() / 1000));
-      animations.put(entry.getKey(), animation);
+    List<AnimationFrame> frames = animationIndex.getFrames();
+    List<List<Integer>> frameRefs = new ArrayList<List<Integer>>();
+    for(AnimationFrame frame : frames) {
+      List<Integer> placement = new ArrayList<Integer>();
+      placement.add(frame.getX());
+      placement.add(frame.getY());
+      placement.add(frame.getWidth());
+      placement.add(frame.getHeight());
+      placement.add(0);
+      placement.add(frame.getRegX());
+      placement.add(frame.getRegY());
+      frameRefs.add(placement);
     }
-    ret.setAnimations(animations);
+    ret.setFrames(frameRefs);
+
+    Map<String, AnimationDef> animations = animationIndex.getAnimations();
+    Map<String, List<Object>> animationRefs = new LinkedHashMap<String, List<Object>>();
+    for(Map.Entry<String, AnimationDef> entry : animations.entrySet()) {
+      AnimationDef animation = entry.getValue();
+      List<Object> arrayDef = new ArrayList<Object>();
+      arrayDef.add(Collections.min(animation.getFrames()));
+      arrayDef.add(Collections.max(animation.getFrames()));
+      arrayDef.add(animation.getNext());
+      arrayDef.add(animation.getFrequency());
+      animationRefs.put(entry.getKey(), arrayDef);
+    }
+    ret.setAnimations(animationRefs);
 
     return ret;
   }

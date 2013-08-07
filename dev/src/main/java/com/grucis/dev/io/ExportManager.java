@@ -33,6 +33,7 @@ public final class ExportManager {
     return bitmapExportSetting;
   }
 
+
   public void exportBitmaps(BitmapExportProgress progress) {
     List<BitmapExportProgress.BitmapExportError> errors = new ArrayList<BitmapExportProgress.BitmapExportError>();
     progress.setErrors(errors);

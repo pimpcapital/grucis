@@ -57,7 +57,6 @@ public final class ResourceAllocator {
 
   public InputStream getPaletteInputStream(final String prefix) {
     File[] paletteFolder = dataFolder.listFiles(new FileFilter() {
-      @Override
       public boolean accept(File pathname) {
         return pathname.getName().equalsIgnoreCase("pal") && pathname.isDirectory();
       }
@@ -67,7 +66,6 @@ public final class ResourceAllocator {
       return null;
     }
     File[] pal = paletteFolder[0].listFiles(new FilenameFilter() {
-      @Override
       public boolean accept(File dir, String name) {
         return StringUtils.startsWithIgnoreCase(name, prefix);
       }

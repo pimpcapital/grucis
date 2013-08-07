@@ -48,6 +48,7 @@ public final class SpriteAnimationMapper extends OutputModelMapper<SprAdrn, Spri
       }
       actionSpriteAnimationMap.put(action, animation);
     }
+    ret.setId(source.getId());
     ret.setAnimationMap(animationMap);
 
     return ret;

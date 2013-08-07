@@ -6,16 +6,16 @@ import java.util.*;
 import java.util.List;
 
 import com.grucis.dev.logic.SpriteSheetPacker;
-import com.grucis.dev.model.export.SpriteSheet;
+import com.grucis.dev.model.export.sprite.animation.*;
 import com.grucis.dev.model.output.*;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class SpriteSheetMapper extends ExportModelMapper<SpriteAnimationMap, SpriteSheet> {
+public final class SpriteSheetMapper extends ExportModelMapper<SpriteAnimationMap, AnimationSprite> {
 
   @Override
-  public SpriteSheet map(SpriteAnimationMap source) {
-    SpriteSheet ret = new SpriteSheet();
+  public AnimationSprite map(SpriteAnimationMap source) {
+    AnimationSprite ret = new AnimationSprite();
 
     Map<Direction, Map<Action, SpriteAnimationMap.SpriteAnimation>> animationMap = source.getAnimationMap();
     Set<BufferedImage> images = new LinkedHashSet<BufferedImage>();
@@ -32,9 +32,9 @@ public final class SpriteSheetMapper extends ExportModelMapper<SpriteAnimationMa
     Map<BufferedImage, Rectangle> placements = packer.packImageRectangles();
     ret.setImage(packer.generateOutputImage());
 
-    List<SpriteSheet.PlacementReference> placementRefs = new ArrayList<SpriteSheet.PlacementReference>();
+    List<AnimationFrame> frames = new ArrayList<AnimationFrame>();
     int placeRefCount = 0;
-    Map<String, SpriteSheet.AnimationReference> animationRefs = new LinkedHashMap<String, SpriteSheet.AnimationReference>();
+    Map<String, AnimationDef> animations = new LinkedHashMap<String, AnimationDef>();
 
     for(Map.Entry<Direction, Map<Action, SpriteAnimationMap.SpriteAnimation>> de : animationMap.entrySet()) {
       Direction direction = de.getKey();
@@ -42,38 +42,41 @@ public final class SpriteSheetMapper extends ExportModelMapper<SpriteAnimationMa
         Action action = ae.getKey();
         SpriteAnimationMap.SpriteAnimation animation = ae.getValue();
 
-        SpriteSheet.AnimationReference aRef = new SpriteSheet.AnimationReference();
-        List<Integer> frames = new ArrayList<Integer>();
+        AnimationDef def = new AnimationDef();
+        List<Integer> frameIndices = new ArrayList<Integer>();
         for(OffsetImage oi : animation.getFrames()) {
           BufferedImage image = oi.getImage();
           Rectangle placement = placements.get(image);
-          SpriteSheet.PlacementReference pRef = new SpriteSheet.PlacementReference();
-          pRef.setWidth(image.getWidth());
-          pRef.setHeight(image.getHeight());
-          pRef.setX(placement.x);
-          pRef.setY(placement.y);
-          pRef.setRegX(-oi.getxOffset());
-          pRef.setRegY(-oi.getyOffset());
+          AnimationFrame frame = new AnimationFrame();
+          frame.setWidth(image.getWidth());
+          frame.setHeight(image.getHeight());
+          frame.setX(placement.x);
+          frame.setY(placement.y);
+          frame.setRegX(-oi.getxOffset());
+          frame.setRegY(-oi.getyOffset());
 
-          placementRefs.add(pRef);
-          frames.add(placeRefCount++);
+          frames.add(frame);
+          frameIndices.add(placeRefCount++);
         }
-        aRef.setFrames(frames);
-        aRef.setNext(action == Action.ANGRY
-                       || action == Action.HAPPY
-                       || action == Action.NOD
-                       || action == Action.SAD
-                       || action == Action.STAND
-                       || action == Action.WALK
-                       || action == Action.WAVE);
-        aRef.setDuration(animation.getDuration());
+        def.setFrames(frameIndices);
+        def.setNext(action == Action.ANGRY
+                      || action == Action.HAPPY
+                      || action == Action.NOD
+                      || action == Action.SAD
+                      || action == Action.STAND
+                      || action == Action.WALK
+                      || action == Action.WAVE);
+        def.setFrequency((int)Math.ceil(((double)animation.getDuration()) * 30 / frameIndices.size() / 1000));
         String aRefKey = direction.toString().toLowerCase() + "_" + action.toString().toLowerCase();
-        animationRefs.put(aRefKey, aRef);
+        animations.put(aRefKey, def);
       }
     }
 
-    ret.setPlacements(placementRefs);
-    ret.setAnimations(animationRefs);
+    ret.setIndex(source.getId());
+    AnimationIndex animationIndex = new AnimationIndex();
+    animationIndex.setAnimations(animations);
+    animationIndex.setFrames(frames);
+    ret.setSpriteIndex(animationIndex);
     return ret;
   }
 }

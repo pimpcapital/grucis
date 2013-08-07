@@ -4,7 +4,16 @@ import java.util.Map;
 
 public final class SpriteAnimationMap extends OutputModel {
 
+  private int id;
   private Map<Direction, Map<Action, SpriteAnimation>> animationMap;
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
 
   public Map<Direction, Map<Action, SpriteAnimation>> getAnimationMap() {
     return animationMap;
