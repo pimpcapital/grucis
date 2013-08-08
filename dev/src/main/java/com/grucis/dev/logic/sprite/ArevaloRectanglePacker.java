@@ -1,8 +1,12 @@
-package com.grucis.dev.logic;
+package com.grucis.dev.logic.sprite;
 
-import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import com.grucis.dev.utils.sprite.Anchor;
+import com.grucis.dev.utils.sprite.RectanglePlacement;
+import com.grucis.dev.utils.sprite.SpriteUtils;
 
 public final class ArevaloRectanglePacker {
 
@@ -11,59 +15,54 @@ public final class ArevaloRectanglePacker {
 
   private int actualPackingAreaHeight = 1;
   private int actualPackingAreaWidth = 1;
-  private List<Point> anchors = new ArrayList<Point>();
-  private List<Rectangle> packedRectangles = new ArrayList<Rectangle>();
-  private Comparator<Point> anchorRankComparator = new Comparator<Point>() {
-    public int compare(Point p1, Point p2) {
-      return (p1.x + p1.y) - (p2.x + p2.y);
-    }
-  };
+  private List<Anchor> anchors = new ArrayList<Anchor>();
+  private List<RectanglePlacement> packedRectangles = new ArrayList<RectanglePlacement>();
 
   public ArevaloRectanglePacker(int packingAreaWidth, int packingAreaHeight) {
     this.packingAreaWidth = packingAreaWidth;
     this.packingAreaHeight = packingAreaHeight;
-    anchors.add(new Point(0, 0));
+    anchors.add(new Anchor(0, 0));
   }
 
-  public Point tryPack(int rectangleWidth, int rectangleHeight) {
+  public Anchor tryPack(int rectangleWidth, int rectangleHeight) {
     int anchorIndex = selectAnchorRecursive(rectangleWidth, rectangleHeight, actualPackingAreaWidth, actualPackingAreaHeight);
 
     if(anchorIndex == -1) return null;
 
-    Point placement = anchors.get(anchorIndex);
+    Anchor placement = anchors.get(anchorIndex);
     optimizePlacement(placement, rectangleWidth, rectangleHeight);
     boolean blocksAnchor =
-      ((placement.x + rectangleWidth) > anchors.get(anchorIndex).x) &&
-        ((placement.y + rectangleHeight) > anchors.get(anchorIndex).y);
+      ((placement.getX() + rectangleWidth) > anchors.get(anchorIndex).getX()) &&
+        ((placement.getY() + rectangleHeight) > anchors.get(anchorIndex).getY());
 
     if(blocksAnchor)
       anchors.remove(anchorIndex);
 
-    insertAnchor(new Point(placement.x + rectangleWidth, placement.y));
-    insertAnchor(new Point(placement.x, placement.y + rectangleHeight));
-    packedRectangles.add(new Rectangle(placement.x, placement.y, rectangleWidth, rectangleHeight));
+    insertAnchor(new Anchor(placement.getX() + rectangleWidth, placement.getY()));
+    insertAnchor(new Anchor(placement.getX(), placement.getY() + rectangleHeight));
+    packedRectangles.add(new RectanglePlacement(placement.getX(), placement.getY(), rectangleWidth, rectangleHeight));
 
     return placement;
   }
 
-  private void optimizePlacement(Point placement, int rectangleWidth, int rectangleHeight) {
-    Rectangle rectangle = new Rectangle(placement.x, placement.y, rectangleWidth, rectangleHeight);
+  private void optimizePlacement(Anchor placement, int rectangleWidth, int rectangleHeight) {
+    RectanglePlacement rectangle = new RectanglePlacement(placement.getX(), placement.getY(), rectangleWidth, rectangleHeight);
 
-    int leftMost = placement.x;
+    int leftMost = placement.getX();
     while(isFree(rectangle, packingAreaWidth, packingAreaHeight)) {
-      leftMost = rectangle.x;
-      --rectangle.x;
+      leftMost = rectangle.getX();
+      rectangle.setX(leftMost - 1);
     }
-    rectangle.x = placement.x;
+    rectangle.setX(placement.getX());
 
-    int topMost = placement.y;
+    int topMost = placement.getY();
     while(isFree(rectangle, packingAreaWidth, packingAreaHeight)) {
-      topMost = rectangle.y;
-      --rectangle.y;
+      topMost = rectangle.getY();
+      rectangle.setY(topMost - 1);
     }
 
-    if((placement.x - leftMost) > (placement.y - topMost)) placement.x = leftMost;
-    else placement.y = topMost;
+    if((placement.getX() - leftMost) > (placement.getY() - topMost)) placement.setX(leftMost);
+    else placement.setY(topMost);
   }
 
   private int selectAnchorRecursive(int rectangleWidth, int rectangleHeight, int testedPackingAreaWidth, int testedPackingAreaHeight) {
@@ -88,11 +87,11 @@ public final class ArevaloRectanglePacker {
   }
 
   private int findFirstFreeAnchor(int rectangleWidth, int rectangleHeight, int testedPackingAreaWidth, int testedPackingAreaHeight) {
-    Rectangle potentialLocation = new Rectangle(0, 0, rectangleWidth, rectangleHeight);
+    RectanglePlacement potentialLocation = new RectanglePlacement(0, 0, rectangleWidth, rectangleHeight);
 
     for(int index = 0; index < anchors.size(); ++index) {
-      potentialLocation.x = anchors.get(index).x;
-      potentialLocation.y = anchors.get(index).y;
+      potentialLocation.setX(anchors.get(index).getX());
+      potentialLocation.setY(anchors.get(index).getY());
 
       if(isFree(potentialLocation, testedPackingAreaWidth, testedPackingAreaHeight))
         return index;
@@ -101,20 +100,24 @@ public final class ArevaloRectanglePacker {
     return -1;
   }
 
-  private boolean isFree(Rectangle rectangle, int testedPackingAreaWidth, int testedPackingAreaHeight) {
-    boolean leavesPackingArea = (rectangle.x < 0) || (rectangle.y < 0) || (rectangle.getMaxX() > testedPackingAreaWidth) || (rectangle.getMaxY() > testedPackingAreaHeight);
+
+
+  private boolean isFree(RectanglePlacement rectangle, int testedPackingAreaWidth, int testedPackingAreaHeight) {
+    boolean leavesPackingArea = (rectangle.getX() < 0)
+                                  || (rectangle.getY() < 0)
+                                  || (rectangle.getX() + rectangle.getWidth() > testedPackingAreaWidth)
+                                  || (rectangle.getY() + rectangle.getHeight() > testedPackingAreaHeight);
     if(leavesPackingArea) return false;
 
-    for(Rectangle packedRectangle : packedRectangles) {
-      if(packedRectangle.intersects(rectangle))
-        return false;
+    for(RectanglePlacement packedRectangle : packedRectangles) {
+      if(SpriteUtils.intersects(packedRectangle, rectangle)) return false;
     }
 
     return true;
   }
 
-  private void insertAnchor(Point anchor) {
-    int insertIndex = Collections.binarySearch(anchors, anchor, anchorRankComparator);
+  private void insertAnchor(Anchor anchor) {
+    int insertIndex = Collections.binarySearch(anchors, anchor);
     if(insertIndex < 0) insertIndex = ~insertIndex;
 
     anchors.add(insertIndex, anchor);

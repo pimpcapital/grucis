@@ -11,7 +11,7 @@ import javax.ws.rs.core.Response;
 
 import com.grucis.dev.io.ExportManager;
 import com.grucis.dev.model.progress.BitmapExportProgress;
-import com.grucis.dev.service.BitmapImageService;
+import com.grucis.dev.service.ExportModelService;
 import com.grucis.dev.service.RawModelService;
 import com.grucis.dev.utils.image.ImageUtils;
 import com.grucis.web.mapper.AdrnViewMapper;
@@ -31,7 +31,7 @@ public final class BitmapGalleryController {
   @Autowired
   private RawModelService rawModelService;
   @Autowired
-  private BitmapImageService bitmapImageService;
+  private ExportModelService exportModelService;
   @Autowired
   private ExportManager exportManager;
   @Autowired
@@ -55,14 +55,14 @@ public final class BitmapGalleryController {
   @Path("/image/{id}.png")
   @Produces("image/png")
   public Response getImage(@PathParam("id") int id) throws IOException {
-    return Response.ok(ImageUtils.toBytes(bitmapImageService.getBitmapImage(id))).build();
+    return Response.ok(ImageUtils.toBytes(exportModelService.getOffsetBitmap(id).getImage())).build();
   }
 
   @GET
   @Path("/download/{id}.png")
   @Produces("image/png")
   public Response downloadImage(@PathParam("id") int id) throws IOException {
-    return Response.ok(ImageUtils.toBytes(bitmapImageService.getBitmapImage(id)))
+    return Response.ok(ImageUtils.toBytes(exportModelService.getOffsetBitmap(id).getImage()))
              .header("Content-Disposition", "attachment; filename=\"" + id + ".png\"")
              .build();
   }

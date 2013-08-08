@@ -12,7 +12,7 @@ public final class SpriteSheetViewMapper extends ViewMapper<AnimationSprite, Spr
   public SpriteSheetView map(AnimationSprite model) {
     SpriteSheetView ret = new SpriteSheetView();
 
-    AnimationIndex animationIndex = model.getSpriteIndex();
+    AnimationIndex animationIndex = model.getIndex();
 
     List<AnimationFrame> frames = animationIndex.getFrames();
     List<List<Integer>> frameRefs = new ArrayList<List<Integer>>();

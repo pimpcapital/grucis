@@ -6,7 +6,7 @@ public final class MapSprite extends SpriteSheet<MapIndex> {
 
   public static final String NAME = "map";
 
-  public MapSprite() {
-    super(NAME, MapIndex.class);
+  public MapSprite(int id) {
+    super(NAME, id);
   }
 }

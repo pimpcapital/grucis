@@ -54,7 +54,7 @@ public final class ExportManager {
       String current = path + "\\" + id + "." + format;
       progress.setCurrent(current);
       try {
-        BufferedImage image = outputModelService.getImage(id).getImage();
+        BufferedImage image = outputModelService.getOffsetImage(id).getImage();
         byte[] bytes = ImageUtils.toBytes(image);
         File file = new File(current);
         if(file.exists()) file.delete();

@@ -19,7 +19,7 @@ public final class OutputModelService {
   @Autowired
   private SpriteAnimationMapper spriteAnimationMapper;
 
-  public OffsetImage getImage(int id) {
+  public OffsetImage getOffsetImage(int id) {
     Adrn adrn = rawModelService.getAdrn(id);
     return offsetImageMapper.map(adrn);
   }

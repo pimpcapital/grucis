@@ -5,18 +5,13 @@ import java.awt.image.BufferedImage;
 import com.grucis.dev.model.export.ExportModel;
 
 public abstract class SpriteSheet<SI extends SpriteIndex> extends ExportModel {
-  private final Class<SI> indexClass;
   protected BufferedImage image;
-  protected SI spriteIndex;
+  protected SI index;
 
-  protected SpriteSheet(String name, Class<SI> indexClass) {
-    super(name);
-    this.indexClass = indexClass;
+  protected SpriteSheet(String name, int id) {
+    super(name, id);
   }
 
-  public Class<SI> getIndexClass() {
-    return indexClass;
-  }
 
   public BufferedImage getImage() {
     return image;
@@ -26,11 +21,11 @@ public abstract class SpriteSheet<SI extends SpriteIndex> extends ExportModel {
     this.image = image;
   }
 
-  public SI getSpriteIndex() {
-    return spriteIndex;
+  public SI getIndex() {
+    return index;
   }
 
-  public void setSpriteIndex(SI spriteIndex) {
-    this.spriteIndex = spriteIndex;
+  public void setIndex(SI index) {
+    this.index = index;
   }
 }

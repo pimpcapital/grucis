@@ -4,8 +4,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.grucis.dev.model.output.*;
-import com.grucis.dev.model.raw.Adrn;
+import com.grucis.dev.model.output.Action;
+import com.grucis.dev.model.output.Direction;
+import com.grucis.dev.model.output.SpriteAnimationMap;
 import com.grucis.dev.model.raw.Spr;
 import com.grucis.dev.model.raw.SprAdrn;
 import com.grucis.dev.service.RawModelService;
@@ -17,12 +18,10 @@ public final class SpriteAnimationMapper extends OutputModelMapper<SprAdrn, Spri
 
   @Autowired
   private RawModelService rawModelService;
-  @Autowired
-  private OffsetImageMapper offsetImageMapper;
 
   @Override
   public SpriteAnimationMap map(SprAdrn source) {
-    SpriteAnimationMap ret = new SpriteAnimationMap();
+    SpriteAnimationMap ret = new SpriteAnimationMap(source.getId());
 
     List<Spr> sprs = rawModelService.getSprs(source);
     Map<Direction, Map<Action, SpriteAnimationMap.SpriteAnimation>> animationMap = new LinkedHashMap<Direction, Map<Action, SpriteAnimationMap.SpriteAnimation>>();
@@ -32,10 +31,9 @@ public final class SpriteAnimationMapper extends OutputModelMapper<SprAdrn, Spri
       animation.setLength(length);
       animation.setDuration(spr.getDuration());
       Spr.SprFrame[] frames = spr.getFrames();
-      OffsetImage[] images = new OffsetImage[length];
+      int[] images = new int[length];
       for(int i = 0; i < length; i++) {
-        Adrn adrn = rawModelService.getAdrn(frames[i].getImage());
-        images[i] = offsetImageMapper.map(adrn);
+        images[i] = frames[i].getImage();
       }
       animation.setFrames(images);
 
@@ -48,7 +46,6 @@ public final class SpriteAnimationMapper extends OutputModelMapper<SprAdrn, Spri
       }
       actionSpriteAnimationMap.put(action, animation);
     }
-    ret.setId(source.getId());
     ret.setAnimationMap(animationMap);
 
     return ret;

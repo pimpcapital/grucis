@@ -3,10 +3,13 @@ package com.grucis.dev.model.output;
 import java.awt.image.BufferedImage;
 
 public final class OffsetImage extends OutputModel {
-
   private int xOffset;
   private int yOffset;
   private BufferedImage image;
+
+  public OffsetImage(int id) {
+    super(id);
+  }
 
   public int getxOffset() {
     return xOffset;

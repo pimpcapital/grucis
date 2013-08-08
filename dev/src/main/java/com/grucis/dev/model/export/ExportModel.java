@@ -5,21 +5,19 @@ import com.grucis.dev.model.Model;
 public abstract class ExportModel extends Model {
 
   private final String name;
-  protected int index;
+  private final int id;
 
-  protected ExportModel(String name) {
+  protected ExportModel(String name, int id) {
     this.name = name;
+    this.id = id;
   }
 
   public String getName() {
     return name;
   }
 
-  public int getIndex() {
-    return index;
+  public int getId() {
+    return id;
   }
 
-  public void setIndex(int index) {
-    this.index = index;
-  }
 }

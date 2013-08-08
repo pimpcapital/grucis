@@ -6,7 +6,7 @@ public final class AnimationSprite extends SpriteSheet<AnimationIndex> {
 
   public static final String NAME = "animation";
 
-  public AnimationSprite() {
-    super(NAME, AnimationIndex.class);
+  public AnimationSprite(int id) {
+    super(NAME, id);
   }
 }

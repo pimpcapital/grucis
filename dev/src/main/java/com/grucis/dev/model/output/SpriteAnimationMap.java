@@ -4,15 +4,10 @@ import java.util.Map;
 
 public final class SpriteAnimationMap extends OutputModel {
 
-  private int id;
   private Map<Direction, Map<Action, SpriteAnimation>> animationMap;
 
-  public int getId() {
-    return id;
-  }
-
-  public void setId(int id) {
-    this.id = id;
+  public SpriteAnimationMap(int id) {
+    super(id);
   }
 
   public Map<Direction, Map<Action, SpriteAnimation>> getAnimationMap() {
@@ -26,7 +21,7 @@ public final class SpriteAnimationMap extends OutputModel {
   public static final class SpriteAnimation {
     private int duration;
     private int length;
-    private OffsetImage[] frames;
+    private int[] frames;
 
     public int getDuration() {
       return duration;
@@ -44,11 +39,11 @@ public final class SpriteAnimationMap extends OutputModel {
       this.length = length;
     }
 
-    public OffsetImage[] getFrames() {
+    public int[] getFrames() {
       return frames;
     }
 
-    public void setFrames(OffsetImage[] frames) {
+    public void setFrames(int[] frames) {
       this.frames = frames;
     }
   }

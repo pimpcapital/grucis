@@ -26,19 +26,6 @@ public final class OffsetImageMapper extends OutputModelMapper<Adrn, OffsetImage
 
   @PostConstruct
   public void init() throws Exception {
-    //    InputStream paletteInput = getClass().getResourceAsStream("/Palet_0.sap");
-    //    byte[] paletteBytes = new byte[1024];
-    //    paletteInput.read(paletteBytes);
-    //
-    //    palette = new int[256];
-    //    int pos = 0;
-    //    for(int i = 0; i < 256; i++) {
-    //      int b = BitwiseUtils.uint8(paletteBytes[pos++]);
-    //      int g = BitwiseUtils.uint8(paletteBytes[pos++]);
-    //      int r = BitwiseUtils.uint8(paletteBytes[pos++]);
-    //      pos++;
-    //      palette[i] = new Color(r, g, b).getRGB();
-    //    }
     InputStream input = resourceAllocator.getPaletteInputStream("PALET_1");
     palette = ImageUtils.readPalette(input);
   }
@@ -154,7 +141,7 @@ public final class OffsetImageMapper extends OutputModelMapper<Adrn, OffsetImage
 
   @Override
   public OffsetImage map(Adrn source) {
-    OffsetImage ret = new OffsetImage();
+    OffsetImage ret = new OffsetImage(source.getId());
 
     ret.setxOffset(source.getxOffset());
     ret.setyOffset(source.getyOffset());
