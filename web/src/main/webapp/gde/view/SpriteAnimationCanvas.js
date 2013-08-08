@@ -6,6 +6,7 @@ Ext.define('GDE.view.SpriteAnimationCanvas', {
     var me = this;
     var origin, radius;
     createjs.Ticker.setFPS(50);
+    createjs.LoadQueue.LOAD_TIMEOUT = 30000;
     var tileIndicator = new createjs.Bitmap('api/bitmap/image/8828.png');
     tileIndicator.regX = 32;
     tileIndicator.regY = 24;
@@ -79,7 +80,11 @@ Ext.define('GDE.view.SpriteAnimationCanvas', {
                   if(evt.nativeEvent.button == 2) {
                     var direction = Ext.ux.PathUtils.getDirection({x: animation.south, y: animation.east}, {x: evt.target.south, y: evt.target.east});
                     var action = animation.action;
-                    animation.gotoAndPlay(direction + '_' + action);
+                    if(!me.tick) animation.gotoAndPlay(direction + '_' + action);
+                    else {
+                      me.path = [];
+                      me.animation.direction = direction;
+                    }
                   } else if(evt.nativeEvent.button == 0) {
                     me.path = Ext.ux.PathUtils.getPath({x: animation.south, y: animation.east}, {x: evt.target.south, y: evt.target.east});
                     me.walk();
@@ -116,6 +121,10 @@ Ext.define('GDE.view.SpriteAnimationCanvas', {
         createjs.Ticker.removeAllListeners();
         me.stage.removeChild(me.animation);
         delete me.spradrn;
+        if(me.tick) {
+          createjs.Ticker.removeEventListener('tick', me.tick);
+          delete me.tick;
+        }
       },
 
       loadAnimation: function(spradrn, keepPrevious) {

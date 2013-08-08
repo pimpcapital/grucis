@@ -2,8 +2,8 @@ package com.grucis.dev.service;
 
 import com.grucis.dev.mapper.output.OffsetImageMapper;
 import com.grucis.dev.mapper.output.SpriteAnimationMapper;
+import com.grucis.dev.model.output.AnimationMap;
 import com.grucis.dev.model.output.OffsetImage;
-import com.grucis.dev.model.output.SpriteAnimationMap;
 import com.grucis.dev.model.raw.Adrn;
 import com.grucis.dev.model.raw.SprAdrn;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public final class OutputModelService {
     return offsetImageMapper.map(adrn);
   }
 
-  public SpriteAnimationMap getAnimation(int id) {
+  public AnimationMap getAnimationMap(int id) {
     SprAdrn sprAdrn = rawModelService.getSprAdrn(id);
     return spriteAnimationMapper.map(sprAdrn);
   }

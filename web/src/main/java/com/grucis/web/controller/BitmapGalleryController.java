@@ -55,14 +55,14 @@ public final class BitmapGalleryController {
   @Path("/image/{id}.png")
   @Produces("image/png")
   public Response getImage(@PathParam("id") int id) throws IOException {
-    return Response.ok(ImageUtils.toBytes(exportModelService.getOffsetBitmap(id).getImage())).build();
+    return Response.ok(ImageUtils.toBytes(exportModelService.getBitmapImage(id, false))).build();
   }
 
   @GET
   @Path("/download/{id}.png")
   @Produces("image/png")
   public Response downloadImage(@PathParam("id") int id) throws IOException {
-    return Response.ok(ImageUtils.toBytes(exportModelService.getOffsetBitmap(id).getImage()))
+    return Response.ok(ImageUtils.toBytes(exportModelService.getBitmapImage(id, false)))
              .header("Content-Disposition", "attachment; filename=\"" + id + ".png\"")
              .build();
   }

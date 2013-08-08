@@ -18,8 +18,8 @@ public final class SpriteSheetPacker {
   private int padding = 2;
   private boolean requirePow2 = false;
   private boolean requireSquare = false;
-  private int outputWidth = 8192;
-  private int outputHeight = 8192;
+  private int outputWidth = 4096;
+  private int outputHeight = 4096;
 
   public int getPadding() {
     return padding;

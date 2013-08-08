@@ -2,11 +2,11 @@ package com.grucis.dev.model.output;
 
 import java.util.Map;
 
-public final class SpriteAnimationMap extends OutputModel {
+public final class AnimationMap extends OutputModel {
 
   private Map<Direction, Map<Action, SpriteAnimation>> animationMap;
 
-  public SpriteAnimationMap(int id) {
+  public AnimationMap(int id) {
     super(id);
   }
 

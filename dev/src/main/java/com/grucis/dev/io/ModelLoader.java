@@ -7,7 +7,10 @@ import javax.imageio.ImageIO;
 import com.google.gson.Gson;
 import com.grucis.dev.model.export.bitmap.BitmapIndex;
 import com.grucis.dev.model.export.bitmap.OffsetBitmap;
+import com.grucis.dev.model.export.sprite.animation.AnimationSprite;
+import com.grucis.dev.model.export.sprite.animation.AnimationSpriteIndex;
 import com.grucis.dev.model.setting.BitmapExportSetting;
+import com.grucis.dev.model.setting.SpriteExportSetting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,8 @@ public final class ModelLoader {
 
   @Autowired
   public BitmapExportSetting bitmapExportSetting;
+  @Autowired
+  public SpriteExportSetting spriteExportSetting;
 
   private BufferedImage loadImage(String path) {
     File file = new File(path);
@@ -50,16 +55,50 @@ public final class ModelLoader {
     }
   }
 
-  public OffsetBitmap loadOffsetBitmap(int id) {
-    String parent = bitmapExportSetting.getPath() + "\\" + OffsetBitmap.NAME;
-    String path = parent + "\\" + id;
+  private String getBitmapPath(int id) {
+    return bitmapExportSetting.getPath() + "\\" + OffsetBitmap.NAME + "\\" + id;
+  }
 
-    BufferedImage image = loadImage(path + "." + bitmapExportSetting.getFormat());
+  public BufferedImage loadBitmapImage(int id) {
+    return loadImage(getBitmapPath(id) + "." + bitmapExportSetting.getFormat());
+  }
+
+  public BitmapIndex loadBitmapIndex(int id) {
+    return loadObject(getBitmapPath(id) + ".json", BitmapIndex.class);
+  }
+
+  public OffsetBitmap loadOffsetBitmap(int id) {
+    BufferedImage image = loadBitmapImage(id);
     if(image == null) return null;
-    BitmapIndex index = loadObject(path + ".json", BitmapIndex.class);
+    BitmapIndex index = loadBitmapIndex(id);
     if(index == null) return null;
 
     OffsetBitmap ret = new OffsetBitmap(id);
+    ret.setImage(image);
+    ret.setIndex(index);
+
+    return ret;
+  }
+
+  private String getAnimationPath(int id) {
+    return spriteExportSetting.getPath() + "\\" + AnimationSprite.NAME + "\\" + id;
+  }
+
+  public BufferedImage loadAnimationSpriteImage(int id) {
+    return loadImage(getAnimationPath(id) + "." + spriteExportSetting.getFormat());
+  }
+
+  public AnimationSpriteIndex loadAnimationSpriteIndex(int id) {
+    return loadObject(getAnimationPath(id) + ".json", AnimationSpriteIndex.class);
+  }
+
+  public AnimationSprite loadAnimationSprite(int id) {
+    BufferedImage image = loadAnimationSpriteImage(id);
+    if(image == null) return null;
+    AnimationSpriteIndex index = loadAnimationSpriteIndex(id);
+    if(index == null) return null;
+
+    AnimationSprite ret = new AnimationSprite(id);
     ret.setImage(image);
     ret.setIndex(index);
 

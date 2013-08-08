@@ -23,10 +23,6 @@ public final class AnimationDef {
     this.next = next;
   }
 
-  public boolean isNext() {
-    return next;
-  }
-
   public int getFrequency() {
     return frequency;
   }
