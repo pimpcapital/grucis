@@ -6,8 +6,8 @@ import javax.annotation.PostConstruct;
 
 import com.grucis.dev.io.ResourceAllocator;
 import com.grucis.dev.model.output.OffsetImage;
-import com.grucis.dev.model.raw.Adrn;
-import com.grucis.dev.model.raw.Real;
+import com.grucis.dev.model.raw.data.Real;
+import com.grucis.dev.model.raw.index.Adrn;
 import com.grucis.dev.service.RawModelService;
 import com.grucis.dev.utils.bitwise.UInt8;
 import com.grucis.dev.utils.image.ImageUtils;

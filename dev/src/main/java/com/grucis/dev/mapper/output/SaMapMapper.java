@@ -1,7 +1,7 @@
 package com.grucis.dev.mapper.output;
 
 import com.grucis.dev.model.output.SaMap;
-import com.grucis.dev.model.raw.LS2Map;
+import com.grucis.dev.model.raw.atomic.LS2Map;
 import org.springframework.stereotype.Component;
 
 @Component

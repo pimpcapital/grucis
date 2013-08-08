@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.grucis.dev.io.ResourceAllocator;
-import com.grucis.dev.model.raw.SprAdrn;
+import com.grucis.dev.model.raw.index.SprAdrn;
 import com.grucis.dev.utils.bitwise.BitwiseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

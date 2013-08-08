@@ -3,7 +3,7 @@ package com.grucis.dev.deserializer.data;
 import java.io.RandomAccessFile;
 
 import com.grucis.dev.io.ResourceAllocator;
-import com.grucis.dev.model.raw.Real;
+import com.grucis.dev.model.raw.data.Real;
 import com.grucis.dev.utils.bitwise.BitwiseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

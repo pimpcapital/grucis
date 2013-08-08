@@ -1,6 +1,6 @@
-package com.grucis.dev.model.raw;
+package com.grucis.dev.model.raw.atomic;
 
-public final class LS2Map extends RawModel {
+public final class LS2Map extends AtomicModel {
   private String version;
   private int east;
   private int south;

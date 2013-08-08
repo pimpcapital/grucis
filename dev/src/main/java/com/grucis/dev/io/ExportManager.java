@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.grucis.dev.model.progress.BitmapExportProgress;
-import com.grucis.dev.model.raw.Adrn;
+import com.grucis.dev.model.raw.index.Adrn;
 import com.grucis.dev.model.setting.BitmapExportSetting;
 import com.grucis.dev.service.OutputModelService;
 import com.grucis.dev.service.RawModelService;

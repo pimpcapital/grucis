@@ -1,6 +1,6 @@
-package com.grucis.dev.model.raw;
+package com.grucis.dev.model.raw.data;
 
-public final class Real extends RawModel {
+public final class Real extends DataModel {
   private String magic;
   private int major;
   private int minor;

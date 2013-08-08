@@ -1,6 +1,6 @@
 package com.grucis.web.mapper;
 
-import com.grucis.dev.model.raw.Adrn;
+import com.grucis.dev.model.raw.index.Adrn;
 import com.grucis.web.view.AdrnView;
 import org.springframework.stereotype.Component;
 

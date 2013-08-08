@@ -1,6 +1,6 @@
-package com.grucis.dev.model.raw;
+package com.grucis.dev.model.raw.index;
 
-public final class Adrn extends RawModel implements Comparable<Adrn> {
+public final class Adrn extends IndexModel implements Comparable<Adrn> {
   private int id;
   private int address;
   private int size;

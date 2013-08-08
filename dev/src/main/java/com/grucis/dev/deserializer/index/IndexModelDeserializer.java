@@ -2,11 +2,12 @@ package com.grucis.dev.deserializer.index;
 
 import java.util.Collection;
 
-import com.grucis.dev.model.raw.RawModel;
+import com.grucis.dev.deserializer.Deserializer;
+import com.grucis.dev.model.raw.index.IndexModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class IndexModelDeserializer<RM extends RawModel> {
+public abstract class IndexModelDeserializer<IM extends IndexModel> extends Deserializer<IM> {
 
   private static final Logger LOG = LoggerFactory.getLogger(IndexModelDeserializer.class);
 
@@ -16,9 +17,9 @@ public abstract class IndexModelDeserializer<RM extends RawModel> {
     this.type = type;
   }
 
-  protected abstract Collection<RM> deserialize() throws Exception;
+  protected abstract Collection<IM> deserialize() throws Exception;
 
-  public final Collection<RM> getRawModels() {
+  public final Collection<IM> getRawModels() {
     try {
       return deserialize();
     } catch(Exception e) {

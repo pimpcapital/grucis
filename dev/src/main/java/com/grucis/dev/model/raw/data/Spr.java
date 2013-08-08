@@ -1,6 +1,6 @@
-package com.grucis.dev.model.raw;
+package com.grucis.dev.model.raw.data;
 
-public final class Spr extends RawModel {
+public final class Spr extends DataModel {
   private int direction;
   private int action;
   private int duration;

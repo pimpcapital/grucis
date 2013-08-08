@@ -1,10 +1,11 @@
 package com.grucis.dev.deserializer.data;
 
-import com.grucis.dev.model.raw.RawModel;
+import com.grucis.dev.deserializer.Deserializer;
+import com.grucis.dev.model.raw.data.DataModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class DataModelDeserializer<RM extends RawModel> {
+public abstract class DataModelDeserializer<DM extends DataModel> extends Deserializer<DM> {
 
   private static final Logger LOG = LoggerFactory.getLogger(DataModelDeserializer.class);
 
@@ -14,9 +15,9 @@ public abstract class DataModelDeserializer<RM extends RawModel> {
     this.type = type;
   }
 
-  protected abstract RM deserialize(int address) throws Exception;
+  protected abstract DM deserialize(int address) throws Exception;
 
-  public final RM getRawModel(int address) {
+  public final DM getRawModel(int address) {
     try {
       return deserialize(address);
     } catch(Exception e) {
@@ -25,6 +26,6 @@ public abstract class DataModelDeserializer<RM extends RawModel> {
     }
   }
 
-  public abstract int getDataSize(RM model);
+  public abstract int getDataSize(DM model);
 
 }

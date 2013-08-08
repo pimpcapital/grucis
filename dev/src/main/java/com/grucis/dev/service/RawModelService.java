@@ -6,7 +6,10 @@ import com.grucis.dev.deserializer.data.RealDeserializer;
 import com.grucis.dev.deserializer.data.SprDeserializer;
 import com.grucis.dev.deserializer.index.AdrnDeserializer;
 import com.grucis.dev.deserializer.index.SprAdrnDeserializer;
-import com.grucis.dev.model.raw.*;
+import com.grucis.dev.model.raw.data.Real;
+import com.grucis.dev.model.raw.data.Spr;
+import com.grucis.dev.model.raw.index.Adrn;
+import com.grucis.dev.model.raw.index.SprAdrn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

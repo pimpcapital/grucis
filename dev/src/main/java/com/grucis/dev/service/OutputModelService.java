@@ -4,8 +4,8 @@ import com.grucis.dev.mapper.output.OffsetImageMapper;
 import com.grucis.dev.mapper.output.SpriteAnimationMapper;
 import com.grucis.dev.model.output.AnimationMap;
 import com.grucis.dev.model.output.OffsetImage;
-import com.grucis.dev.model.raw.Adrn;
-import com.grucis.dev.model.raw.SprAdrn;
+import com.grucis.dev.model.raw.index.Adrn;
+import com.grucis.dev.model.raw.index.SprAdrn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

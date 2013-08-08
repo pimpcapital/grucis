@@ -1,6 +1,6 @@
-package com.grucis.dev.model.raw;
+package com.grucis.dev.model.raw.index;
 
-public final class SprAdrn extends RawModel {
+public final class SprAdrn extends IndexModel {
   private int id;
   private int address;
   private int actions;
