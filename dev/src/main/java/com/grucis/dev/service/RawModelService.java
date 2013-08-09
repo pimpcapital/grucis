@@ -6,6 +6,7 @@ import com.grucis.dev.deserializer.data.RealDeserializer;
 import com.grucis.dev.deserializer.data.SprDeserializer;
 import com.grucis.dev.deserializer.index.AdrnDeserializer;
 import com.grucis.dev.deserializer.index.SprAdrnDeserializer;
+import com.grucis.dev.model.raw.atomic.LS2Map;
 import com.grucis.dev.model.raw.data.Real;
 import com.grucis.dev.model.raw.data.Spr;
 import com.grucis.dev.model.raw.index.Adrn;
@@ -96,6 +97,10 @@ public final class RawModelService {
 
   public Collection<SprAdrn> getAllSprAdrns() {
     return getSprAdrnMap().values();
+  }
+
+  public Collection<LS2Map> getAllLS2Maps() {
+      return null;
   }
 
 }

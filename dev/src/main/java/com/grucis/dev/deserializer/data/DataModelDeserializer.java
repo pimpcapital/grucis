@@ -9,7 +9,7 @@ public abstract class DataModelDeserializer<DM extends DataModel> extends Deseri
 
   private static final Logger LOG = LoggerFactory.getLogger(DataModelDeserializer.class);
 
-  private DataType type;
+  private final DataType type;
 
   protected DataModelDeserializer(DataType type) {
     this.type = type;

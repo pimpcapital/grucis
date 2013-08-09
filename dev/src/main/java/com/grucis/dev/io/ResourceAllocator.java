@@ -1,7 +1,11 @@
 package com.grucis.dev.io;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.input.AutoCloseInputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +44,7 @@ public final class ResourceAllocator {
     try {
       return new FileInputStream(file);
     } catch(FileNotFoundException e) {
-      LOG.error("Cannot get input stream on missing data file {} under {}", file.getAbsolutePath(), dataFolder.getAbsolutePath());
+      LOG.error("Cannot get input stream on missing data file {}", file.getAbsolutePath());
       return null;
     }
   }
@@ -50,7 +54,7 @@ public final class ResourceAllocator {
     try {
       return new RandomAccessFile(file, "r");
     } catch(FileNotFoundException e) {
-      LOG.error("Cannot get random access on missing data file {} under {}", file.getAbsolutePath(), dataFolder.getAbsolutePath());
+      LOG.error("Cannot get random access on missing data file {}", file.getAbsolutePath());
       return null;
     }
   }
@@ -77,9 +81,24 @@ public final class ResourceAllocator {
     try {
       return new FileInputStream(pal[0]);
     } catch(FileNotFoundException e) {
-      LOG.error("Cannot get input stream on missing palette file {} under {}", pal[0].getAbsolutePath(), paletteFolder[0].getAbsolutePath());
+      LOG.error("Cannot get input stream on missing palette file {}", pal[0].getAbsolutePath());
       return null;
     }
+  }
+
+  public Collection<InputStream> getMapInputStreams() {
+    Collection<File> files = FileUtils.listFiles(mapFolder, null, true);
+
+    Collection<InputStream> ret = new ArrayList<InputStream>();
+    for(File file : files) {
+      try {
+        ret.add(new AutoCloseInputStream(new FileInputStream(file)));
+      } catch(FileNotFoundException e) {
+        LOG.error("Cannot get input stream on missing map file {}", file.getAbsolutePath());
+      }
+    }
+
+    return ret;
   }
 
   public InputStream getAdrn() {

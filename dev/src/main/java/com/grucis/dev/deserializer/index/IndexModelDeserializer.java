@@ -11,7 +11,7 @@ public abstract class IndexModelDeserializer<IM extends IndexModel> extends Dese
 
   private static final Logger LOG = LoggerFactory.getLogger(IndexModelDeserializer.class);
 
-  private IndexType type;
+  private final IndexType type;
 
   protected IndexModelDeserializer(IndexType type) {
     this.type = type;
