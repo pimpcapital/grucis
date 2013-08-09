@@ -23,7 +23,6 @@ public final class RectangleImagePlaceholder implements Comparable<RectangleImag
     return height;
   }
 
-  @Override
   public int compareTo(RectangleImagePlaceholder o) {
     int c = Integer.compare(o.getWidth(), getWidth());
     if(c != 0) return c;
