@@ -1,16 +1,11 @@
 package com.grucis.web.mapper;
 
 import com.grucis.dev.model.raw.index.SprAdrn;
-import com.grucis.dev.service.RawModelService;
 import com.grucis.web.view.SprAdrnView;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public final class SprAdrnViewMapper extends ViewMapper<SprAdrn, SprAdrnView> {
-
-  @Autowired
-  private RawModelService rawModelService;
 
   @Override
   public SprAdrnView map(SprAdrn model) {

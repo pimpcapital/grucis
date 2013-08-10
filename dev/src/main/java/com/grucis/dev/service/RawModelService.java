@@ -2,6 +2,7 @@ package com.grucis.dev.service;
 
 import java.util.*;
 
+import com.grucis.dev.deserializer.atomic.LS2MapDeserializer;
 import com.grucis.dev.deserializer.data.RealDeserializer;
 import com.grucis.dev.deserializer.data.SprDeserializer;
 import com.grucis.dev.deserializer.index.AdrnDeserializer;
@@ -25,11 +26,14 @@ public final class RawModelService {
   private RealDeserializer realDeserializer;
   @Autowired
   private SprDeserializer sprDeserializer;
+  @Autowired
+  private LS2MapDeserializer ls2MapDeserializer;
 
 
   private Map<Integer, Adrn> mapElementMap;
   private Map<Integer, Adrn> adrnMap;
   private Map<Integer, SprAdrn> sprAdrnMap;
+  private Map<Integer, LS2Map> ls2MapMap;
 
   private void prepareAdrns() {
     mapElementMap = new TreeMap<Integer, Adrn>();
@@ -99,8 +103,18 @@ public final class RawModelService {
     return getSprAdrnMap().values();
   }
 
+  public void prepareLS2Maps() {
+    ls2MapMap = new TreeMap<Integer, LS2Map>();
+    for(LS2Map ls2Map : ls2MapDeserializer.getRawModels()) {
+      ls2MapMap.put(ls2Map.getId(), ls2Map);
+    }
+  }
+
   public Collection<LS2Map> getAllLS2Maps() {
-      return null;
+    if(ls2MapMap == null) {
+      prepareLS2Maps();
+    }
+    return ls2MapMap.values();
   }
 
 }
