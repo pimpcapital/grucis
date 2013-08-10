@@ -1,7 +1,7 @@
 package com.grucis.dev.config;
 
+import com.grucis.dev.model.setting.AnimationExportSetting;
 import com.grucis.dev.model.setting.BitmapExportSetting;
-import com.grucis.dev.model.setting.SpriteExportSetting;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,10 +15,10 @@ public class ExportConfig {
   private String bitmapPath;
   @Value("${bitmap.format}")
   private String bitmapFormat;
-  @Value("${sprite.path}")
-  private String spritePath;
-  @Value("${sprite.format}")
-  private String spriteFormat;
+  @Value("${animation.path}")
+  private String animationPath;
+  @Value("${animation.format}")
+  private String animationFormat;
 
   @Bean
   public BitmapExportSetting bitmapExportSetting() {
@@ -29,10 +29,10 @@ public class ExportConfig {
   }
 
   @Bean
-  public SpriteExportSetting spriteExportSetting() {
-    SpriteExportSetting ret = new SpriteExportSetting();
-    ret.setPath(spritePath);
-    ret.setFormat(spriteFormat);
+  public AnimationExportSetting animationExportSetting() {
+    AnimationExportSetting ret = new AnimationExportSetting();
+    ret.setPath(animationPath);
+    ret.setFormat(animationFormat);
     return ret;
   }
 

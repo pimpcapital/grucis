@@ -6,9 +6,9 @@ import java.util.*;
 import com.grucis.dev.logic.sprite.SpriteSheetPacker;
 import com.grucis.dev.model.export.bitmap.BitmapIndex;
 import com.grucis.dev.model.export.bitmap.OffsetBitmap;
-import com.grucis.dev.model.export.sprite.animation.AnimationDef;
-import com.grucis.dev.model.export.sprite.animation.AnimationSprite;
-import com.grucis.dev.model.export.sprite.animation.AnimationSpriteIndex;
+import com.grucis.dev.model.export.sprite.AnimationDef;
+import com.grucis.dev.model.export.sprite.AnimationSpriteSheet;
+import com.grucis.dev.model.export.sprite.AnimationSpriteSheetIndex;
 import com.grucis.dev.model.output.Action;
 import com.grucis.dev.model.output.AnimationMap;
 import com.grucis.dev.model.output.Direction;
@@ -20,14 +20,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class AnimationSpriteMapper extends ExportModelMapper<AnimationMap, AnimationSprite> {
+public final class AnimationSpriteMapper extends ExportModelMapper<AnimationMap, AnimationSpriteSheet> {
 
   @Autowired
   private ExportModelService exportModelService;
 
   @Override
-  public AnimationSprite map(AnimationMap source) {
-    AnimationSprite ret = new AnimationSprite(source.getId());
+  public AnimationSpriteSheet map(AnimationMap source) {
+    AnimationSpriteSheet ret = new AnimationSpriteSheet(source.getId());
 
     Map<Direction, Map<Action, AnimationMap.SpriteAnimation>> animationMap = source.getAnimationMap();
     List<RectangleImagePlaceholder> placeholders = new ArrayList<RectangleImagePlaceholder>();
@@ -93,7 +93,7 @@ public final class AnimationSpriteMapper extends ExportModelMapper<AnimationMap,
       }
     }
 
-    AnimationSpriteIndex animationSpriteIndex = new AnimationSpriteIndex();
+    AnimationSpriteSheetIndex animationSpriteIndex = new AnimationSpriteSheetIndex();
     animationSpriteIndex.setAnimations(animations);
     animationSpriteIndex.setFrames(frames);
     ret.setIndex(animationSpriteIndex);

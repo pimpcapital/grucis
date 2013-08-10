@@ -1,4 +1,4 @@
-package com.grucis.dev.model.export.sprite.animation;
+package com.grucis.dev.model.export.sprite;
 
 import java.util.List;
 

@@ -2,15 +2,15 @@ package com.grucis.dev.service;
 
 import java.awt.image.BufferedImage;
 
+import com.grucis.dev.exporter.AnimationExporter;
 import com.grucis.dev.exporter.BitmapExporter;
-import com.grucis.dev.exporter.SpriteExporter;
 import com.grucis.dev.io.ModelLoader;
 import com.grucis.dev.mapper.export.AnimationSpriteMapper;
 import com.grucis.dev.mapper.export.OffsetBitmapMapper;
 import com.grucis.dev.model.export.bitmap.BitmapIndex;
 import com.grucis.dev.model.export.bitmap.OffsetBitmap;
-import com.grucis.dev.model.export.sprite.animation.AnimationSprite;
-import com.grucis.dev.model.export.sprite.animation.AnimationSpriteIndex;
+import com.grucis.dev.model.export.sprite.AnimationSpriteSheet;
+import com.grucis.dev.model.export.sprite.AnimationSpriteSheetIndex;
 import com.grucis.dev.model.output.AnimationMap;
 import com.grucis.dev.model.output.OffsetImage;
 import org.slf4j.Logger;
@@ -32,7 +32,7 @@ public class ExportModelService {
   @Autowired
   private BitmapExporter bitmapExporter;
   @Autowired
-  private SpriteExporter spriteExporterr;
+  private AnimationExporter animationExporterr;
   @Autowired
   private ModelLoader modelLoader;
 
@@ -72,14 +72,14 @@ public class ExportModelService {
     return ret;
   }
 
-  public AnimationSprite getAnimationSprite(int id, boolean refresh) {
-    AnimationSprite ret;
+  public AnimationSpriteSheet getAnimationSpriteSheet(int id, boolean refresh) {
+    AnimationSpriteSheet ret;
 
-    if(refresh || (ret = modelLoader.loadAnimationSprite(id)) == null) {
+    if(refresh || (ret = modelLoader.loadAnimationSpriteSheet(id)) == null) {
       AnimationMap animation = outputModelService.getAnimationMap(id);
       ret = animationSpriteMapper.map(animation);
       try {
-        spriteExporterr.export(ret);
+        animationExporterr.export(ret);
       } catch(Exception e) {
         LOG.error("Cannot export AnimationSprite #{}", id);
       }
@@ -91,18 +91,18 @@ public class ExportModelService {
   public BufferedImage getAnimationSpriteImage(int id, boolean refresh) {
     BufferedImage ret;
 
-    if(refresh || (ret = modelLoader.loadAnimationSpriteImage(id)) == null) {
-      ret = getAnimationSprite(id, true).getImage();
+    if(refresh || (ret = modelLoader.loadAnimationSpriteSheetImage(id)) == null) {
+      ret = getAnimationSpriteSheet(id, true).getImage();
     }
 
     return ret;
   }
 
-  public AnimationSpriteIndex getAnimationSpriteIndex(int id, boolean refresh) {
-    AnimationSpriteIndex ret;
+  public AnimationSpriteSheetIndex getAnimationSpriteIndex(int id, boolean refresh) {
+    AnimationSpriteSheetIndex ret;
 
-    if(refresh || (ret = modelLoader.loadAnimationSpriteIndex(id)) == null) {
-      ret = getAnimationSprite(id, true).getIndex();
+    if(refresh || (ret = modelLoader.loadAnimationSpriteSheetIndex(id)) == null) {
+      ret = getAnimationSpriteSheet(id, true).getIndex();
     }
 
     return ret;

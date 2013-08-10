@@ -6,13 +6,11 @@ import com.grucis.dev.model.export.ExportModel;
 
 public final class OffsetBitmap extends ExportModel {
 
-  public static final String NAME = "bitmap";
-
   private BitmapIndex index;
   private BufferedImage image;
 
   public OffsetBitmap(int id) {
-    super(NAME, id);
+    super(id);
   }
 
   public BitmapIndex getIndex() {

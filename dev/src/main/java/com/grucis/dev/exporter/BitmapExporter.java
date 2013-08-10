@@ -13,7 +13,7 @@ public final class BitmapExporter extends Exporter<OffsetBitmap> {
 
   @Override
   public void export(OffsetBitmap model) throws Exception {
-    String parent = bitmapExportSetting.getPath() + "\\" + model.getName();
+    String parent = bitmapExportSetting.getPath();
     String path = parent + "\\" + model.getId();
     prepareFolder(parent);
     writeImage(model.getImage(), path + "." + bitmapExportSetting.getFormat());

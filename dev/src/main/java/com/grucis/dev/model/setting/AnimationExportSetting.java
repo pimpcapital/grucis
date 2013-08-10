@@ -1,6 +1,6 @@
 package com.grucis.dev.model.setting;
 
-public final class SpriteExportSetting extends SettingModel {
+public final class AnimationExportSetting extends SettingModel {
   private String path;
   private String format;
 

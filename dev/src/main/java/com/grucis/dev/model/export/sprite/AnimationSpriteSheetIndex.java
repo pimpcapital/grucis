@@ -1,11 +1,9 @@
-package com.grucis.dev.model.export.sprite.animation;
+package com.grucis.dev.model.export.sprite;
 
 import java.util.List;
 import java.util.Map;
 
-import com.grucis.dev.model.export.sprite.SpriteIndex;
-
-public final class AnimationSpriteIndex extends SpriteIndex {
+public final class AnimationSpriteSheetIndex {
   private Map<String, AnimationDef> animations;
   private List<List<Integer>> frames;
 
