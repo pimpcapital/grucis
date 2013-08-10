@@ -117,4 +117,11 @@ public final class RawModelService {
     return ls2MapMap.values();
   }
 
+  public LS2Map getLS2Map(int id) {
+    if(ls2MapMap == null) {
+      prepareLS2Maps();
+    }
+    return ls2MapMap.get(id);
+  }
+
 }

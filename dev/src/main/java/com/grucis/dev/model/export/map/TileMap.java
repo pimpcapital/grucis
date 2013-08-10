@@ -1,23 +1,25 @@
-package com.grucis.dev.model.output;
+package com.grucis.dev.model.export.map;
 
-public final class SaMap extends OutputModel {
+import com.grucis.dev.model.export.ExportModel;
 
-  private int south;
-  private int east;
+public final class TileMap extends ExportModel {
+
   private String name;
+  private int east;
+  private int south;
   private int[][] tiles;
   private int[][] objects;
 
-  public SaMap(int id) {
+  public TileMap(int id) {
     super(id);
   }
 
-  public int getSouth() {
-    return south;
+  public String getName() {
+    return name;
   }
 
-  public void setSouth(int south) {
-    this.south = south;
+  public void setName(String name) {
+    this.name = name;
   }
 
   public int getEast() {
@@ -28,12 +30,12 @@ public final class SaMap extends OutputModel {
     this.east = east;
   }
 
-  public String getName() {
-    return name;
+  public int getSouth() {
+    return south;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setSouth(int south) {
+    this.south = south;
   }
 
   public int[][] getTiles() {

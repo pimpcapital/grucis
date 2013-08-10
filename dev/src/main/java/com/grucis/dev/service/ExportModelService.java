@@ -4,15 +4,19 @@ import java.awt.image.BufferedImage;
 
 import com.grucis.dev.exporter.AnimationExporter;
 import com.grucis.dev.exporter.BitmapExporter;
+import com.grucis.dev.exporter.MapExporter;
 import com.grucis.dev.io.ModelLoader;
 import com.grucis.dev.mapper.export.AnimationSpriteMapper;
 import com.grucis.dev.mapper.export.OffsetBitmapMapper;
+import com.grucis.dev.mapper.export.TileMapMapper;
 import com.grucis.dev.model.export.animation.AnimationSpriteSheet;
 import com.grucis.dev.model.export.animation.AnimationSpriteSheetIndex;
 import com.grucis.dev.model.export.bitmap.BitmapIndex;
 import com.grucis.dev.model.export.bitmap.OffsetBitmap;
+import com.grucis.dev.model.export.map.TileMap;
 import com.grucis.dev.model.output.AnimationMap;
 import com.grucis.dev.model.output.OffsetImage;
+import com.grucis.dev.model.output.SaMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +34,13 @@ public final class ExportModelService {
   @Autowired
   private AnimationSpriteMapper animationSpriteMapper;
   @Autowired
+  private TileMapMapper tileMapMapper;
+  @Autowired
   private BitmapExporter bitmapExporter;
   @Autowired
-  private AnimationExporter animationExporterr;
+  private AnimationExporter animationExporter;
+  @Autowired
+  private MapExporter mapExporter;
   @Autowired
   private ModelLoader modelLoader;
 
@@ -79,9 +87,9 @@ public final class ExportModelService {
       AnimationMap animation = outputModelService.getAnimationMap(id);
       ret = animationSpriteMapper.map(animation);
       try {
-        animationExporterr.export(ret);
+        animationExporter.export(ret);
       } catch(Exception e) {
-        LOG.error("Cannot export AnimationSprite #{}", id);
+        LOG.error("Cannot export AnimationSpriteSheet #{}", id);
       }
     }
 
@@ -103,6 +111,22 @@ public final class ExportModelService {
 
     if(refresh || (ret = modelLoader.loadAnimationSpriteSheetIndex(id)) == null) {
       ret = getAnimationSpriteSheet(id, true).getIndex();
+    }
+
+    return ret;
+  }
+
+  public TileMap getTileMap(int id, boolean refresh) {
+    TileMap ret;
+
+    if(refresh || (ret = modelLoader.loadTileMap(id)) == null) {
+      SaMap saMap = outputModelService.getSaMap(id);
+      ret = tileMapMapper.map(saMap);
+      try {
+        mapExporter.export(ret);
+      } catch(Exception e) {
+        LOG.error("Cannot export TileMap #{}", id);
+      }
     }
 
     return ret;

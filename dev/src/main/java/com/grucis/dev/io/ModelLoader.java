@@ -9,8 +9,10 @@ import com.grucis.dev.model.export.animation.AnimationSpriteSheet;
 import com.grucis.dev.model.export.animation.AnimationSpriteSheetIndex;
 import com.grucis.dev.model.export.bitmap.BitmapIndex;
 import com.grucis.dev.model.export.bitmap.OffsetBitmap;
+import com.grucis.dev.model.export.map.TileMap;
 import com.grucis.dev.model.setting.AnimationExportSetting;
 import com.grucis.dev.model.setting.BitmapExportSetting;
+import com.grucis.dev.model.setting.MapExportSetting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,8 @@ public final class ModelLoader {
   public BitmapExportSetting bitmapExportSetting;
   @Autowired
   public AnimationExportSetting animationExportSetting;
+  @Autowired
+  public MapExportSetting mapExportSetting;
 
   private BufferedImage loadImage(String path) {
     File file = new File(path);
@@ -103,5 +107,9 @@ public final class ModelLoader {
     ret.setIndex(index);
 
     return ret;
+  }
+
+  public TileMap loadTileMap(int id) {
+    return loadObject(mapExportSetting.getPath() + "\\" + id + ".json", TileMap.class);
   }
 }

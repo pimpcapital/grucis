@@ -2,6 +2,7 @@ package com.grucis.dev.config;
 
 import com.grucis.dev.model.setting.AnimationExportSetting;
 import com.grucis.dev.model.setting.BitmapExportSetting;
+import com.grucis.dev.model.setting.MapExportSetting;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +20,9 @@ public class ExportConfig {
   private String animationPath;
   @Value("${animation.format}")
   private String animationFormat;
+  @Value("${map.path}")
+  private String mapPath;
+
 
   @Bean
   public BitmapExportSetting bitmapExportSetting() {
@@ -35,5 +39,13 @@ public class ExportConfig {
     ret.setFormat(animationFormat);
     return ret;
   }
+
+  @Bean
+  public MapExportSetting mapExportSetting() {
+    MapExportSetting ret = new MapExportSetting();
+    ret.setPath(mapPath);
+    return ret;
+  }
+
 
 }

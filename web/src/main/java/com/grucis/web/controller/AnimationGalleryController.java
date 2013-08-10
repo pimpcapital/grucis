@@ -10,6 +10,7 @@ import com.grucis.dev.utils.image.ImageUtils;
 import com.grucis.web.mapper.SprAdrnViewMapper;
 import com.grucis.web.view.BufferedViewCollection;
 import com.grucis.web.view.SprAdrnView;
+import org.jboss.resteasy.annotations.cache.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -37,12 +38,14 @@ public final class AnimationGalleryController {
   @GET
   @Path("/sprite/{id}.png")
   @Produces("image/png")
+  @Cache(maxAge = Integer.MAX_VALUE)
   public Response getSpriteImage(@PathParam("id") int id) {
     return Response.ok(ImageUtils.toBytes(exportModelService.getAnimationSpriteImage(id, false))).build();
   }
 
   @GET
   @Path("/index/{id}.json")
+  @Cache(maxAge = Integer.MAX_VALUE)
   public Response getAnimationReference(@PathParam("id") int id) {
     return Response.ok(exportModelService.getAnimationSpriteIndex(id, false)).build();
   }
