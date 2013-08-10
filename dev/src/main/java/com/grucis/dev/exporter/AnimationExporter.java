@@ -1,6 +1,6 @@
 package com.grucis.dev.exporter;
 
-import com.grucis.dev.model.export.sprite.AnimationSpriteSheet;
+import com.grucis.dev.model.export.animation.AnimationSpriteSheet;
 import com.grucis.dev.model.setting.AnimationExportSetting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

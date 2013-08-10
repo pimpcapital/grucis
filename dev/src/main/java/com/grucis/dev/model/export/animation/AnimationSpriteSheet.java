@@ -1,4 +1,4 @@
-package com.grucis.dev.model.export.sprite;
+package com.grucis.dev.model.export.animation;
 
 import java.awt.image.BufferedImage;
 

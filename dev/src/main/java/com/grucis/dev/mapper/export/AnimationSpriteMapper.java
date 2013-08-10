@@ -4,11 +4,11 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 
 import com.grucis.dev.logic.sprite.SpriteSheetPacker;
+import com.grucis.dev.model.export.animation.AnimationDef;
+import com.grucis.dev.model.export.animation.AnimationSpriteSheet;
+import com.grucis.dev.model.export.animation.AnimationSpriteSheetIndex;
 import com.grucis.dev.model.export.bitmap.BitmapIndex;
 import com.grucis.dev.model.export.bitmap.OffsetBitmap;
-import com.grucis.dev.model.export.sprite.AnimationDef;
-import com.grucis.dev.model.export.sprite.AnimationSpriteSheet;
-import com.grucis.dev.model.export.sprite.AnimationSpriteSheetIndex;
 import com.grucis.dev.model.output.Action;
 import com.grucis.dev.model.output.AnimationMap;
 import com.grucis.dev.model.output.Direction;

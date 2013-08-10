@@ -5,10 +5,10 @@ import java.io.*;
 import javax.imageio.ImageIO;
 
 import com.google.gson.Gson;
+import com.grucis.dev.model.export.animation.AnimationSpriteSheet;
+import com.grucis.dev.model.export.animation.AnimationSpriteSheetIndex;
 import com.grucis.dev.model.export.bitmap.BitmapIndex;
 import com.grucis.dev.model.export.bitmap.OffsetBitmap;
-import com.grucis.dev.model.export.sprite.AnimationSpriteSheet;
-import com.grucis.dev.model.export.sprite.AnimationSpriteSheetIndex;
 import com.grucis.dev.model.setting.AnimationExportSetting;
 import com.grucis.dev.model.setting.BitmapExportSetting;
 import org.slf4j.Logger;
