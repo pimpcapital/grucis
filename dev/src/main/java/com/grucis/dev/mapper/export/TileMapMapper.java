@@ -2,6 +2,7 @@ package com.grucis.dev.mapper.export;
 
 import com.grucis.dev.model.export.map.TileMap;
 import com.grucis.dev.model.output.SaMap;
+import com.grucis.dev.model.raw.index.Adrn;
 import com.grucis.dev.service.RawModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,8 +28,10 @@ public final class TileMapMapper extends ExportModelMapper<SaMap, TileMap> {
     int[][] objects = new int [south][east];
     for(int s = 0; s < south; s++) {
       for(int e = 0; e < east; e++) {
-        tiles[s][e] = rawModelService.getAdrnByMapElementId(mapElementTiles[s][e]).getId();
-        objects[s][e] = rawModelService.getAdrnByMapElementId(mapElementObjects[s][e]).getId();
+        Adrn tile = rawModelService.getAdrnByMapElementId(mapElementTiles[s][e]);
+        tiles[s][e] = tile != null ? tile.getId() : -1;
+        Adrn object = rawModelService.getAdrnByMapElementId(mapElementObjects[s][e]);
+        objects[s][e] = object != null ? object.getId() : -1;
       }
     }
     ret.setTiles(tiles);
