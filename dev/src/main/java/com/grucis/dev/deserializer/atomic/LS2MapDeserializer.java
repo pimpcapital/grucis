@@ -49,23 +49,26 @@ public final class LS2MapDeserializer extends AtomicModelDeserializer<LS2Map> {
 
       byte[] idBytes = new byte[2];
       input.read(idBytes);
-      int id = BitwiseUtils.uint16(idBytes);
+      int id = BitwiseUtils.uint16BE(idBytes);
       ls2Map.setId(id);
 
       byte[] nameBytes = new byte[32];
       input.read(nameBytes);
       String name = new String(nameBytes, "gbk");
-      name = name.substring(0, Math.min(name.indexOf('|'), name.indexOf('\u0000')));
+      int length = name.indexOf('|');
+      if(length != -1) name = name.substring(0, length);
+      length = name.indexOf('\u0000');
+      if(length != -1) name = name.substring(0, length);
       ls2Map.setName(name);
 
       byte[] eastBytes = new byte[2];
       input.read(eastBytes);
-      int east = BitwiseUtils.uint16(eastBytes);
+      int east = BitwiseUtils.uint16BE(eastBytes);
       ls2Map.setEast(east);
 
       byte[] southBytes = new byte[2];
       input.read(southBytes);
-      int south = BitwiseUtils.uint16(eastBytes);
+      int south = BitwiseUtils.uint16BE(southBytes);
       ls2Map.setSouth(south);
 
       int max = east * south;
@@ -73,7 +76,7 @@ public final class LS2MapDeserializer extends AtomicModelDeserializer<LS2Map> {
       for(int i = 0; i < max; i++) {
         byte[] tileBytes = new byte[2];
         input.read(tileBytes);
-        tiles[i] = BitwiseUtils.uint16(tileBytes);
+        tiles[i] = BitwiseUtils.uint16BE(tileBytes);
       }
       ls2Map.setTiles(tiles);
 
@@ -81,7 +84,7 @@ public final class LS2MapDeserializer extends AtomicModelDeserializer<LS2Map> {
       for(int i = 0; i < max; i++) {
         byte[] objectBytes = new byte[2];
         input.read(objectBytes);
-        objects[i] = BitwiseUtils.uint16(objectBytes);
+        objects[i] = BitwiseUtils.uint16BE(objectBytes);
       }
       ls2Map.setObjects(objects);
 

@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
-@Path("api/bitmap")
+@Path("api/map")
 @Produces("application/json")
 public final class MapGalleryController {
 

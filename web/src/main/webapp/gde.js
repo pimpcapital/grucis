@@ -3,16 +3,19 @@ Ext.application({
   controllers: [],
   models: [
     'Adrn',
+    'Map',
     'SprAdrn'
   ],
   stores: [
     'AdrnStore',
+    'MapStore',
     'SprAdrnStore'
   ],
   views: [
     'AnimationGallery',
     'BitmapExportWindow',
     'BitmapGallery',
+    'MapGallery',
     'OffsetImageCanvas',
     'SpriteAnimationCanvas'
   ],
