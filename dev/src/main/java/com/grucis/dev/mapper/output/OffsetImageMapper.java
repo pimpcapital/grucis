@@ -145,6 +145,9 @@ public final class OffsetImageMapper extends OutputModelMapper<Adrn, OffsetImage
 
     ret.setxOffset(source.getxOffset());
     ret.setyOffset(source.getyOffset());
+    ret.setEast(source.getEast());
+    ret.setSouth(source.getSouth());
+    ret.setObstructive(source.getPath() == 0);
 
     Real real = rawModelService.getReal(source);
     byte[] bitmap = extractBitmap(real);

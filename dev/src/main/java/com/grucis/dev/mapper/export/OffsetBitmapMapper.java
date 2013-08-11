@@ -14,6 +14,9 @@ public final class OffsetBitmapMapper extends ExportModelMapper<OffsetImage, Off
     BitmapIndex index = new BitmapIndex();
     index.setRegX(-source.getxOffset());
     index.setRegY(-source.getyOffset());
+    index.setEast(source.getEast());
+    index.setSouth(source.getSouth());
+    index.setObstructive(source.getObstructive());
     ret.setIndex(index);
 
     ret.setImage(source.getImage());
