@@ -10,7 +10,6 @@ import com.grucis.web.mapper.MapViewMapper;
 import com.grucis.web.view.BufferedViewCollection;
 import com.grucis.web.view.MapView;
 import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -38,11 +37,9 @@ public final class MapGalleryController {
 
   @GET
   @Path("/map/{id}.json")
-  @Cache(maxAge = Integer.MAX_VALUE)
   @GZIP
   public Response getMap(@PathParam("id") int id) {
     return Response.ok(exportModelService.getTileMap(id, false)).build();
   }
-
 
 }

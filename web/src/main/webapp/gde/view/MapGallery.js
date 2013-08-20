@@ -32,8 +32,12 @@ Ext.define('GDE.view.MapGallery', {
               grid.getStore().load({});
             },
             selectionchange: function(sm, selected) {
+              me.down('tilemap').loadMap(selected[0]);
             }
           }
+        }, {
+          xtype: 'tilemap',
+          flex: 5
         }
       ]
     });
