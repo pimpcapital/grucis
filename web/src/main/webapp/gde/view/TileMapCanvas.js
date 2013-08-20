@@ -9,8 +9,8 @@ Ext.define('GDE.view.TileMapCanvas', {
     Ext.apply(me, {
       drawPlan: [
         function () {
+          me.setRadius();
           if(me.map) {
-            me.setRadius();
             me.loadAndDraw();
           }
         }
@@ -176,8 +176,11 @@ Ext.define('GDE.view.TileMapCanvas', {
 
       unload: function () {
         me.stage.removeAllChildren();
-        me.bitmaps = [];
-        me.adrns = {};
+        me.children = [];
+        me.offset = {x: 0, y: 0};
+        delete me.center;
+        delete me.map;
+        delete me.total;
       },
 
       loadMap: function (map) {
@@ -189,7 +192,6 @@ Ext.define('GDE.view.TileMapCanvas', {
           me.map = payload.result;
           me.total = map.east * map.south;
           me.center = {south: Math.floor(me.map.south / 2), east: Math.floor(me.map.east / 2)};
-          me.setRadius();
           me.loadAndDraw();
         });
         queue.loadFile(url);
