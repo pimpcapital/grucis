@@ -18,7 +18,6 @@ import com.grucis.web.mapper.AdrnViewMapper;
 import com.grucis.web.mapper.BitmapExportSettingViewMapper;
 import com.grucis.web.view.AdrnView;
 import com.grucis.web.view.BufferedViewCollection;
-import org.jboss.resteasy.annotations.cache.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -55,9 +54,14 @@ public final class BitmapGalleryController {
   @GET
   @Path("/image/{id}.png")
   @Produces("image/png")
-  @Cache(maxAge = Integer.MAX_VALUE)
   public Response getImage(@PathParam("id") int id) throws IOException {
     return Response.ok(ImageUtils.toBytes(exportModelService.getBitmapImage(id, false))).build();
+  }
+
+  @GET
+  @Path("/index/{id}.json")
+  public Response getIndex(@PathParam("id") int id) throws IOException {
+    return Response.ok(exportModelService.getBitmapIndex(id, false)).build();
   }
 
   @GET
@@ -83,7 +87,6 @@ public final class BitmapGalleryController {
       final BitmapExportProgress progress = new BitmapExportProgress();
       session.setAttribute(BITMAP_EXPORT_PROGRESS, progress);
       executorService.submit(new Runnable() {
-        @Override
         public void run() {
           exportManager.exportBitmaps(progress);
         }
