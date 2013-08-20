@@ -17,7 +17,8 @@ Ext.application({
     'BitmapGallery',
     'MapGallery',
     'OffsetImageCanvas',
-    'SpriteAnimationCanvas'
+    'SpriteAnimationCanvas',
+    'TileMapCanvas'
   ],
   name: 'GDE',
   autoCreateViewport: true,

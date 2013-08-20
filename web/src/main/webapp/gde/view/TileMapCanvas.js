@@ -25,41 +25,46 @@ Ext.define('GDE.view.TileMapCanvas', {
 
       loadAndDraw: function () {
         var load = [];
-        for(var s = me.center.south - me.radius; s <= me.center.south + me.radius; s++) {
-          for(var e = me.center.east - me.radius; e <= me.center.east + me.radius; e++) {
+        for(var s = Math.max(0, me.center.south - me.radius); s <= Math.min(me.map.south - 1, me.center.south + me.radius); s++) {
+          for(var e = Math.max(0, me.center.east - me.radius); e <= Math.min(me.map.east - 1, me.center.east + me.radius); e++) {
             var tile = me.map.tiles[s][e];
             var object = me.map.objects[s][e];
-            if(tile != -1 && !me.imageCache[tile]) load.push(tile);
-            if(object != -1 && !me.imageCache[object]) load.push(object);
+            if(tile != -1 && !me.imageCache[tile]) Ext.Array.include(load, tile);
+            if(object != -1 && !me.imageCache[object]) Ext.Array.include(load, object);
           }
         }
-        var queue = new createjs.LoadQueue(false);
-        var manifest = [];
-        Ext.Array.each(load, function (id) {
-          manifest.push({
-            src: 'api/bitmap/image/' + id + '.png',
-            type: 'image',
-            id: 'bitmap_' + id
-          }, {
-            src: 'api/bitmap/index/' + id + '.json',
-            type: 'json',
-            id: 'index_' + id
+        if(load.length) {
+          var queue = new createjs.LoadQueue(false);
+          var manifest = [];
+          Ext.Array.each(load, function (id) {
+            manifest.push({
+              src: 'api/bitmap/image/' + id + '.png',
+              type: 'image',
+              id: 'bitmap_' + id
+            }, {
+              src: 'api/bitmap/index/' + id + '.json',
+              type: 'json',
+              id: 'index_' + id
+            });
           });
-        });
-        queue.addEventListener('fileload', function (payload) {
-          var id = payload.item.id.split('_');
-          var imageId = parseInt(id[1]);
-          var image = me.imageCache[imageId];
-          if(!image) {
-            image = {};
-            me.imageCache[imageId] = image;
-          }
-          image[id[0]] = payload.result;
-        });
-        queue.addEventListener('complete', function () {
+          queue.addEventListener('fileload', function (payload) {
+            var id = payload.item.id.split('_');
+            var imageId = parseInt(id[1]);
+            var image = me.imageCache[imageId];
+            if(!image) {
+              image = {};
+              me.imageCache[imageId] = image;
+            }
+            image[id[0]] = payload.result;
+          });
+          queue.addEventListener('complete', function () {
+            me.drawMap();
+          });
+          queue.loadManifest(manifest, true);
+        } else {
           me.drawMap();
-        });
-        queue.loadManifest(manifest, true);
+        }
+
       },
 
       isImageVisible: function (xOffset, yOffset, index) {
@@ -77,14 +82,15 @@ Ext.define('GDE.view.TileMapCanvas', {
       },
 
       drawElement: function (south, east, element, index, z) {
-        var xOffset = (s + e - me.center.south - me.center.east) * 32;
-        var yOffset = (s - e - me.center.south + me.center.east) * 24;
+        if(!element) return;
+        var xOffset = (south + east - me.center.south - me.center.east) * 32;
+        var yOffset = (south - east - me.center.south + me.center.east) * 24;
 
         var child = me.children[index];
         var elementIndex = element.index;
         if(me.isImageVisible(xOffset, yOffset, element.index)) {
           if(!child) {
-            child = new createjs.Bitmap(element.image);
+            child = new createjs.Bitmap(element.bitmap);
             child.regX = elementIndex.regX;
             child.regY = elementIndex.regY;
             child.south = south;
@@ -108,32 +114,32 @@ Ext.define('GDE.view.TileMapCanvas', {
                 });
                 me.stage.update();
 
-                var load = false;
-                while(me.offset.x > 32) {
-                  me.center.south++;
-                  me.center.east++;
-                  me.offset.x -= 32;
-                  load = true;
-                }
-                while(me.offset.x < -32) {
-                  me.center.south--;
-                  me.center.east--;
-                  me.offset.x += 32;
-                  load = true;
-                }
-                while(me.offset.y > 24) {
-                  me.center.south--;
-                  me.center.east++;
-                  me.offset.y -= 24;
-                  load = true;
-                }
-                while(me.offset.y < -24) {
-                  me.center.south++;
-                  me.center.east--;
-                  me.offset.y += 24;
-                  load = true;
-                }
-                if(load) me.loadAndDraw();
+//                var load = false;
+//                while(me.offset.x > 32) {
+//                  me.center.south++;
+//                  me.center.east++;
+//                  me.offset.x -= 32;
+//                  load = true;
+//                }
+//                while(me.offset.x < -32) {
+//                  me.center.south--;
+//                  me.center.east--;
+//                  me.offset.x += 32;
+//                  load = true;
+//                }
+//                while(me.offset.y > 24) {
+//                  me.center.south--;
+//                  me.center.east++;
+//                  me.offset.y -= 24;
+//                  load = true;
+//                }
+//                while(me.offset.y < -24) {
+//                  me.center.south++;
+//                  me.center.east--;
+//                  me.offset.y += 24;
+//                  load = true;
+//                }
+//                if(load) me.loadAndDraw();
 
               });
             });
@@ -160,8 +166,8 @@ Ext.define('GDE.view.TileMapCanvas', {
       },
 
       drawMap: function () {
-        for(var e = me.center.east + me.radius; e >= me.center.east - me.radius; e--) {
-          for(var s = me.center.south - me.radius; s <= me.center.south + me.radius; s++) {
+        for(var e = Math.min(me.map.east - 1, me.center.east + me.radius); e >= Math.max(0, me.center.east - me.radius); e--) {
+          for(var s = Math.max(0, me.center.south - me.radius); s <= Math.min(me.map.south - 1, me.center.south + me.radius); s++) {
             var index = e * me.map.south + s;
             var tileId = me.map.tiles[s][e];
             var objectId = me.map.objects[s][e];
@@ -190,7 +196,7 @@ Ext.define('GDE.view.TileMapCanvas', {
         me.unload();
         queue.addEventListener('fileload', function (payload) {
           me.map = payload.result;
-          me.total = map.east * map.south;
+          me.total = me.map.east * me.map.south;
           me.center = {south: Math.floor(me.map.south / 2), east: Math.floor(me.map.east / 2)};
           me.loadAndDraw();
         });

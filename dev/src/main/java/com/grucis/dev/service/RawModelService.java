@@ -39,7 +39,11 @@ public final class RawModelService {
     mapElementMap = new TreeMap<Integer, Adrn>();
     adrnMap = new TreeMap<Integer, Adrn>();
     for(Adrn adrn : adrnDeserializer.getRawModels()) {
-      mapElementMap.put(adrn.getMap(), adrn);
+      int id = adrn.getId();
+      int meId = adrn.getMap();
+      if(meId > 0 && id < 5846 && id > 0) {
+        mapElementMap.put(meId, adrn);
+      }
       adrnMap.put(adrn.getId(), adrn);
     }
   }
