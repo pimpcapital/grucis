@@ -6,6 +6,7 @@ import java.util.Collection;
 import com.grucis.dev.mapper.output.OffsetImageMapper;
 import com.grucis.dev.mapper.output.SaMapMapper;
 import com.grucis.dev.mapper.output.SpriteAnimationMapper;
+import com.grucis.dev.model.dictionary.map.MapEntry;
 import com.grucis.dev.model.output.AnimationMap;
 import com.grucis.dev.model.output.OffsetImage;
 import com.grucis.dev.model.output.SaMap;
@@ -20,6 +21,8 @@ public final class OutputModelService {
 
   @Autowired
   private RawModelService rawModelService;
+  @Autowired
+  private DictionaryModelService dictionaryModelService;
   @Autowired
   private OffsetImageMapper offsetImageMapper;
   @Autowired
@@ -38,7 +41,8 @@ public final class OutputModelService {
   }
 
   public SaMap getSaMap(int id) {
-    LS2Map ls2Map = rawModelService.getLS2Map(id);
+    MapEntry mapEntry = dictionaryModelService.getMapEntry(id);
+    LS2Map ls2Map = rawModelService.getLS2Map(mapEntry.getPath());
     return saMapMapper.map(ls2Map);
   }
 

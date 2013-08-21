@@ -1,5 +1,6 @@
 package com.grucis.dev.deserializer.atomic;
 
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,51 +27,46 @@ public final class LS2MapDeserializer extends AtomicModelDeserializer<LS2Map> {
     super(AtomicType.LS2MAP);
   }
 
-  @Override
-  protected Collection<LS2Map> deserialize() throws Exception {
-    Map<String, InputStream> inputs = resourceAllocator.getMapInputStreams();
+  private LS2Map deserialize(InputStream input, String path, boolean headerOnly) throws Exception {
+    LS2Map ret = new LS2Map(path);
 
-    Collection<LS2Map> ret = new ArrayList<LS2Map>();
-    for(Map.Entry<String, InputStream> entry : inputs.entrySet()) {
-      InputStream input = entry.getValue();
-      LS2Map ls2Map = new LS2Map();
-
-      byte[] versionBytes = new byte[6];
-      input.read(versionBytes);
-      String version = new String(versionBytes);
-      if(!version.equals("LS2MAP")) {
-        if(StringUtils.isAsciiPrintable(version)) {
-          LOG.error("Unrecognized map version {} in {}", version, entry.getKey());
-        }
-        input.close();
-        continue;
+    byte[] versionBytes = new byte[6];
+    input.read(versionBytes);
+    String version = new String(versionBytes);
+    if(!version.equals("LS2MAP")) {
+      if(StringUtils.isAsciiPrintable(version)) {
+        LOG.error("Unrecognized map version {} in {}", version, path);
       }
-      ls2Map.setVersion(version);
+      input.close();
+      return null;
+    }
+    ret.setVersion(version);
 
-      byte[] idBytes = new byte[2];
-      input.read(idBytes);
-      int id = BitwiseUtils.uint16BE(idBytes);
-      ls2Map.setId(id);
+    byte[] idBytes = new byte[2];
+    input.read(idBytes);
+    int id = BitwiseUtils.uint16BE(idBytes);
+    ret.setId(id);
 
-      byte[] nameBytes = new byte[32];
-      input.read(nameBytes);
-      String name = new String(nameBytes, "gbk");
-      int length = name.indexOf('|');
-      if(length != -1) name = name.substring(0, length);
-      length = name.indexOf('\u0000');
-      if(length != -1) name = name.substring(0, length);
-      ls2Map.setName(name);
+    byte[] nameBytes = new byte[32];
+    input.read(nameBytes);
+    String name = new String(nameBytes, "gbk");
+    int length = name.indexOf('|');
+    if(length != -1) name = name.substring(0, length);
+    length = name.indexOf('\u0000');
+    if(length != -1) name = name.substring(0, length);
+    ret.setName(name);
 
-      byte[] eastBytes = new byte[2];
-      input.read(eastBytes);
-      int east = BitwiseUtils.uint16BE(eastBytes);
-      ls2Map.setEast(east);
+    byte[] eastBytes = new byte[2];
+    input.read(eastBytes);
+    int east = BitwiseUtils.uint16BE(eastBytes);
+    ret.setEast(east);
 
-      byte[] southBytes = new byte[2];
-      input.read(southBytes);
-      int south = BitwiseUtils.uint16BE(southBytes);
-      ls2Map.setSouth(south);
+    byte[] southBytes = new byte[2];
+    input.read(southBytes);
+    int south = BitwiseUtils.uint16BE(southBytes);
+    ret.setSouth(south);
 
+    if(!headerOnly) {
       int max = east * south;
       int[] tiles = new int[max];
       for(int i = 0; i < max; i++) {
@@ -78,7 +74,7 @@ public final class LS2MapDeserializer extends AtomicModelDeserializer<LS2Map> {
         input.read(tileBytes);
         tiles[i] = BitwiseUtils.uint16BE(tileBytes);
       }
-      ls2Map.setTiles(tiles);
+      ret.setTiles(tiles);
 
       int[] objects = new int[max];
       for(int i = 0; i < max; i++) {
@@ -86,9 +82,31 @@ public final class LS2MapDeserializer extends AtomicModelDeserializer<LS2Map> {
         input.read(objectBytes);
         objects[i] = BitwiseUtils.uint16BE(objectBytes);
       }
-      ls2Map.setObjects(objects);
+      ret.setObjects(objects);
+    }
+    return ret;
+  }
 
-      ret.add(ls2Map);
+  @Override
+  public LS2Map getRawModel(String path, boolean headerOnly) {
+    try {
+      return deserialize(new FileInputStream(path), path, headerOnly);
+    } catch(Exception e) {
+      LOG.error("Cannot deserialize LS2MAP in {}", path);
+      return null;
+    }
+  }
+
+  @Override
+  protected Collection<LS2Map> deserializeAll(boolean headerOnly) throws Exception {
+    Map<String, InputStream> inputs = resourceAllocator.getMapInputStreams();
+
+    Collection<LS2Map> ret = new ArrayList<LS2Map>();
+    for(Map.Entry<String, InputStream> entry : inputs.entrySet()) {
+      InputStream input = entry.getValue();
+      String path = entry.getKey();
+      LS2Map ls2Map = deserialize(input, path, headerOnly);
+      if(ls2Map != null) ret.add(ls2Map);
       input.close();
     }
 

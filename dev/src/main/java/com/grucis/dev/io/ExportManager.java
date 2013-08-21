@@ -51,7 +51,7 @@ public final class ExportManager {
     int count = 0;
     for(Adrn adrn : adrns) {
       int id = adrn.getId();
-      String current = path + "\\" + id + "." + format;
+      String current = path + File.separator + id + "." + format;
       progress.setCurrent(current);
       try {
         BufferedImage image = outputModelService.getOffsetImage(id).getImage();

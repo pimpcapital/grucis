@@ -17,13 +17,15 @@ public abstract class AtomicModelDeserializer<AM extends AtomicModel> extends De
     this.type = type;
   }
 
-  protected abstract Collection<AM> deserialize() throws Exception;
+  protected abstract Collection<AM> deserializeAll(boolean headerOnly) throws Exception;
 
-  public final Collection<AM> getRawModels() {
+  public abstract AM getRawModel(String path, boolean headerOnly);
+
+  public final Collection<AM> getRawModels(boolean headerOnly) {
     try {
-      return deserialize();
+      return deserializeAll(headerOnly);
     } catch(Exception e) {
-      LOG.error("Cannot deserialize " + type + " data into raw models", e);
+      LOG.error("Cannot deserializeAll " + type + " data into raw models", e);
       return null;
     }
   }

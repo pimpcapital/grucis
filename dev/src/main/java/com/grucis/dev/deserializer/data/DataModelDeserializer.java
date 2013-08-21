@@ -21,7 +21,7 @@ public abstract class DataModelDeserializer<DM extends DataModel> extends Deseri
     try {
       return deserialize(address);
     } catch(Exception e) {
-      LOG.error("Cannot deserialize " + type + " data into raw models", e);
+      LOG.error("Cannot deserializeAll " + type + " data into raw models", e);
       return null;
     }
   }

@@ -23,7 +23,7 @@ public abstract class IndexModelDeserializer<IM extends IndexModel> extends Dese
     try {
       return deserialize();
     } catch(Exception e) {
-      LOG.error("Cannot deserialize " + type + " data into raw models", e);
+      LOG.error("Cannot deserializeAll " + type + " data into raw models", e);
       return null;
     }
   }

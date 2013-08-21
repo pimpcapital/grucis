@@ -9,6 +9,10 @@ public final class LS2Map extends AtomicModel {
   private int[] tiles;
   private int[] objects;
 
+  public LS2Map(String path) {
+    super(path);
+  }
+
   public String getVersion() {
     return version;
   }

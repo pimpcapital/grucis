@@ -4,8 +4,8 @@ import java.util.List;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
+import com.grucis.dev.service.DictionaryModelService;
 import com.grucis.dev.service.ExportModelService;
-import com.grucis.dev.service.RawModelService;
 import com.grucis.web.mapper.MapViewMapper;
 import com.grucis.web.view.BufferedViewCollection;
 import com.grucis.web.view.MapView;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Controller;
 public final class MapGalleryController {
 
   @Autowired
-  private RawModelService rawModelService;
+  private DictionaryModelService dictionaryModelService;
   @Autowired
   private ExportModelService exportModelService;
   @Autowired
@@ -28,7 +28,7 @@ public final class MapGalleryController {
   @GET
   @Path("/maps")
   public Response getMaps(@QueryParam("start") int start, @QueryParam("limit") int limit) {
-    List<MapView> views = mapViewMapper.map(rawModelService.getAllLS2Maps());
+    List<MapView> views = mapViewMapper.map(dictionaryModelService.getAllMapEntries());
     int to = start + limit;
     int total = views.size();
     if(to > total) to = total;

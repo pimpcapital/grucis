@@ -1,13 +1,13 @@
 package com.grucis.web.mapper;
 
-import com.grucis.dev.model.raw.atomic.LS2Map;
+import com.grucis.dev.model.dictionary.map.MapEntry;
 import com.grucis.web.view.MapView;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class MapViewMapper extends ViewMapper<LS2Map, MapView> {
+public final class MapViewMapper extends ViewMapper<MapEntry, MapView> {
   @Override
-  public MapView map(LS2Map model) {
+  public MapView map(MapEntry model) {
     MapView ret = new MapView();
 
     ret.setId(model.getId());

@@ -107,9 +107,9 @@ public final class RawModelService {
     return getSprAdrnMap().values();
   }
 
-  public void prepareLS2Maps() {
+  private void prepareLS2Maps() {
     ls2MapMap = new TreeMap<Integer, LS2Map>();
-    for(LS2Map ls2Map : ls2MapDeserializer.getRawModels()) {
+    for(LS2Map ls2Map : ls2MapDeserializer.getRawModels(true)) {
       ls2MapMap.put(ls2Map.getId(), ls2Map);
     }
   }
@@ -125,7 +125,15 @@ public final class RawModelService {
     if(ls2MapMap == null) {
       prepareLS2Maps();
     }
-    return ls2MapMap.get(id);
+    LS2Map ls2Map = ls2MapMap.get(id);
+    if(ls2Map != null) {
+      ls2Map = ls2MapDeserializer.getRawModel(ls2Map.getPath(), false);
+    }
+    return ls2Map;
+  }
+
+  public LS2Map getLS2Map(String path) {
+    return ls2MapDeserializer.getRawModel(path, false);
   }
 
 }

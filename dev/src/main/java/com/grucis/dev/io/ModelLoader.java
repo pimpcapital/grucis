@@ -5,6 +5,7 @@ import java.io.*;
 import javax.imageio.ImageIO;
 
 import com.google.gson.Gson;
+import com.grucis.dev.model.dictionary.map.MapDictionary;
 import com.grucis.dev.model.export.animation.AnimationSpriteSheet;
 import com.grucis.dev.model.export.animation.AnimationSpriteSheetIndex;
 import com.grucis.dev.model.export.bitmap.BitmapIndex;
@@ -60,7 +61,7 @@ public final class ModelLoader {
   }
 
   private String getBitmapPath(int id) {
-    return bitmapExportSetting.getPath() + "\\" + id;
+    return bitmapExportSetting.getPath() + File.separator + id;
   }
 
   public BufferedImage loadBitmapImage(int id) {
@@ -85,7 +86,7 @@ public final class ModelLoader {
   }
 
   private String getAnimationPath(int id) {
-    return animationExportSetting.getPath() + "\\" + id;
+    return animationExportSetting.getPath() + File.separator + id;
   }
 
   public BufferedImage loadAnimationSpriteSheetImage(int id) {
@@ -110,6 +111,10 @@ public final class ModelLoader {
   }
 
   public TileMap loadTileMap(int id) {
-    return loadObject(mapExportSetting.getPath() + "\\" + id + ".json", TileMap.class);
+    return loadObject(mapExportSetting.getPath() + File.separator + id + ".json", TileMap.class);
+  }
+
+  public MapDictionary loadMapDictionary() {
+    return loadObject(mapExportSetting.getPath() + File.separator + "dictionary.json", MapDictionary.class);
   }
 }
