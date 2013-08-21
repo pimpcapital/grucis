@@ -11,6 +11,9 @@ Ext.define('GDE.view.TileMapCanvas', {
         function () {
           me.setRadius();
           if(me.map) {
+            me.stage.removeAllChildren();
+            me.children = [];
+            me.offset = {x: 0, y: 0};
             me.loadAndDraw();
           }
         }
