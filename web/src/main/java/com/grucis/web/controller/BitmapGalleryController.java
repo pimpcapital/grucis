@@ -61,6 +61,14 @@ public final class BitmapGalleryController {
   }
 
   @GET
+  @Path("/map/{id}.png")
+  @Produces("image/png")
+  @Cache(maxAge = Integer.MAX_VALUE)
+  public Response getMapElement(@PathParam("id") int id) throws IOException {
+    return Response.ok(ImageUtils.toBytes(exportModelService.getBitmapImage(rawModelService.getAdrnByMapElementId(id).getId(), false))).build();
+  }
+
+  @GET
   @Path("/index/{id}.json")
   @Cache(maxAge = Integer.MAX_VALUE)
   public Response getIndex(@PathParam("id") int id) throws IOException {

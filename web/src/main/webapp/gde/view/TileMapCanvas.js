@@ -105,6 +105,7 @@ Ext.define('GDE.view.TileMapCanvas', {
             me.children[index] = child;
             me.stage.addChild(child);
             child.addEventListener("mousedown", function (evt) {
+              console.log('south: ' + evt.target.south + ', east: ' + evt.target.east);
               var offset = {x: evt.target.x - evt.stageX, y: evt.target.y - evt.stageY};
               evt.addEventListener("mousemove", function (ev) {
                 var deltaX = ev.stageX + offset.x - ev.target.x;
@@ -159,10 +160,10 @@ Ext.define('GDE.view.TileMapCanvas', {
         var sortFn = function (a, b) {
           if(a.z < b.z) return -1;
           if(a.z > b.z) return 1;
-          if(a.east > b.east) return -1;
-          if(a.east < b.east) return 1;
           if(a.south > b.south) return 1;
           if(a.south < b.south) return -1;
+          if(a.east > b.east) return -1;
+          if(a.east < b.east) return 1;
           return a.update - b.update;
         };
         me.stage.sortChildren(sortFn);

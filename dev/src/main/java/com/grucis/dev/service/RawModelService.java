@@ -41,7 +41,7 @@ public final class RawModelService {
     for(Adrn adrn : adrnDeserializer.getRawModels()) {
       int id = adrn.getId();
       int meId = adrn.getMap();
-      if(meId > 0 && id < 5846 && id > 0) {
+      if(id > 12 && meId >= 100) {
         mapElementMap.put(meId, adrn);
       }
       adrnMap.put(adrn.getId(), adrn);
