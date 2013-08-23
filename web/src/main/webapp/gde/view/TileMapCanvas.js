@@ -98,13 +98,14 @@ Ext.define('GDE.view.TileMapCanvas', {
         var xOffset = (south + east - me.reference.south - me.reference.east) * 32;
         var yOffset = (south - east - me.reference.south + me.reference.east) * 24;
 
-        var child = me.children[index];
         var elementIndex = element.index;
         elementIndex.width = element.bitmap.width;
         elementIndex.height = element.bitmap.height;
         var x = me.reference.x + xOffset;
         var y = me.reference.y + yOffset;
+
         if(me.isInBuffer(x, y, elementIndex)) {
+          var child = me.children[index];
           if(!child) {
             child = new createjs.Bitmap(element.bitmap);
             child.regX = elementIndex.regX;
@@ -130,19 +131,16 @@ Ext.define('GDE.view.TileMapCanvas', {
                 });
                 me.stage.update();
               });
-              evt.addEventListener("mouseup", function(evt) {
+              evt.addEventListener("mouseup", function (evt) {
                 me.reference.x = evt.target.x;
                 me.reference.y = evt.target.y;
                 me.loadAndDraw();
               })
             });
           }
-        } else {
-          if(child) {
-            delete me.children[index];
-            me.stage.removeChild(child);
-          }
+          return true;
         }
+        return false;
       },
 
       sortElements: function () {
@@ -159,15 +157,24 @@ Ext.define('GDE.view.TileMapCanvas', {
       },
 
       drawMap: function () {
+        var survivor = [];
         for(var e = Math.min(me.map.east - 1, me.reference.east + me.radius); e >= Math.max(0, me.reference.east - me.radius); e--) {
           for(var s = Math.max(0, me.reference.south - me.radius); s <= Math.min(me.map.south - 1, me.reference.south + me.radius); s++) {
             var index = e * me.map.south + s;
             var tileId = me.map.tiles[s][e];
-            if(tileId != -1) me.drawElement(s, e, tileId, index, 0);
+            if(tileId != -1 && me.drawElement(s, e, tileId, index, 0)) survivor.push(index);
             var objectId = me.map.objects[s][e];
-            if(objectId != -1) me.drawElement(s, e, objectId, me.total + index, 1);
+            if(objectId != -1 && me.drawElement(s, e, objectId, index += me.total, 1)) survivor.push(index);
           }
         }
+
+        $.each(me.children, function(index, child) {
+          if($.inArray(index, survivor) == -1) {
+            delete me.children[index];
+            me.stage.removeChild(child);
+          }
+        });
+
         me.sortElements();
         me.stage.update();
       },
