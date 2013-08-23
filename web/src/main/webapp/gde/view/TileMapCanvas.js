@@ -174,8 +174,6 @@ Ext.define('GDE.view.TileMapCanvas', {
       unload: function () {
         me.stage.removeAllChildren();
         me.children = [];
-        me.offset = {x: 0, y: 0};
-        delete me.center;
         delete me.map;
         delete me.total;
       },
