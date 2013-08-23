@@ -2,12 +2,12 @@ package com.grucis.dev.model.progress;
 
 import java.util.List;
 
-public final class BitmapExportProgress extends ProgressModel {
+public final class ExportProgress extends ProgressModel {
   private String current;
   private int progress;
   private int total;
   private double percent;
-  private List<BitmapExportError> errors;
+  private List<ExportError> errors;
   private boolean finished;
 
   public String getCurrent() {
@@ -42,11 +42,11 @@ public final class BitmapExportProgress extends ProgressModel {
     this.percent = percent;
   }
 
-  public List<BitmapExportError> getErrors() {
+  public List<ExportError> getErrors() {
     return errors;
   }
 
-  public void setErrors(List<BitmapExportError> errors) {
+  public void setErrors(List<ExportError> errors) {
     this.errors = errors;
   }
 
@@ -56,31 +56,5 @@ public final class BitmapExportProgress extends ProgressModel {
 
   public void setFinished(boolean finished) {
     this.finished = finished;
-  }
-
-  public static class BitmapExportError {
-    private String source;
-    private String message;
-
-    public BitmapExportError(String source, String message) {
-      this.source = source;
-      this.message = message;
-    }
-
-    public String getSource() {
-      return source;
-    }
-
-    public void setSource(String source) {
-      this.source = source;
-    }
-
-    public String getMessage() {
-      return message;
-    }
-
-    public void setMessage(String message) {
-      this.message = message;
-    }
   }
 }

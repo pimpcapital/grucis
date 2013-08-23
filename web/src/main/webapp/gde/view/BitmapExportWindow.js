@@ -7,43 +7,12 @@ Ext.define('GDE.view.BitmapExportWindow', {
   width: 1000,
   height: 800,
   bodyPadding: 20,
-  listeners: {
-    afterrender: function (me) {
-      Ext.Ajax.request({
-        url: 'api/bitmap/export/setting',
-        success: function (res) {
-          var setting = Ext.decode(res.responseText);
-          me.down('#path').setValue(setting.path);
-          me.down('#format').setValue(setting.format);
-          me.down('#total').setValue(setting.total);
-        }
-      });
-    }
-  },
   defaultType: 'container',
   initComponent: function () {
     var me = this;
     var runner = new Ext.util.TaskRunner();
     Ext.apply(me, {
       items: [
-        {
-          layout: {type: 'vbox', align: 'stretch'},
-          defaultType: 'displayfield',
-          items: [
-            {
-              itemId: 'path',
-              fieldLabel: 'Path'
-            },
-            {
-              itemId: 'format',
-              fieldLabel: 'Format'
-            },
-            {
-              itemId: 'total',
-              fieldLabel: 'Total'
-            }
-          ]
-        },
         {
           xtype: 'progressbar',
           animate: true,

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public final class BitmapExporter extends Exporter<OffsetBitmap> {
 
   @Autowired
-  public BitmapExportSetting bitmapExportSetting;
+  private BitmapExportSetting bitmapExportSetting;
 
   @Override
   public void export(OffsetBitmap model) throws Exception {

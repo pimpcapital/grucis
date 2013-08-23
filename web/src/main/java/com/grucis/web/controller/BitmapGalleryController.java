@@ -10,7 +10,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
 import com.grucis.dev.io.ExportManager;
-import com.grucis.dev.model.progress.BitmapExportProgress;
+import com.grucis.dev.model.progress.ExportProgress;
 import com.grucis.dev.service.ExportModelService;
 import com.grucis.dev.service.RawModelService;
 import com.grucis.dev.utils.image.ImageUtils;
@@ -84,18 +84,12 @@ public final class BitmapGalleryController {
              .build();
   }
 
-  @GET
-  @Path("/export/setting")
-  public Response reviewSetting() {
-    return Response.ok(bitmapExportSettingViewMapper.map(exportManager.getBitmapExportSetting())).build();
-  }
-
   @POST
   @Path("/export/start")
   public Response startExport(@Context HttpServletRequest request) {
     HttpSession session = request.getSession(true);
     if(session.getAttribute(BITMAP_EXPORT_PROGRESS) == null) {
-      final BitmapExportProgress progress = new BitmapExportProgress();
+      final ExportProgress progress = new ExportProgress();
       session.setAttribute(BITMAP_EXPORT_PROGRESS, progress);
       executorService.submit(new Runnable() {
         public void run() {
