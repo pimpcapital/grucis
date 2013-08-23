@@ -9,14 +9,15 @@ Ext.define('GDE.view.TileMapCanvas', {
       drawPlan: [
         function () {
           if(me.map) {
+            me.unload();
             me.setReference();
             me.loadAndDraw();
           }
         }
       ],
 
-      setReference: function () {
-        if(!me.reference) {
+      setReference: function (reset) {
+        if(reset || !me.reference) {
           me.reference = {
             x: Math.floor(me.canvasEl.width / 2),
             y: Math.floor(me.canvasEl.height / 2),
@@ -27,7 +28,7 @@ Ext.define('GDE.view.TileMapCanvas', {
           me.reference.x = Math.min(me.canvasEl.width, me.reference.x);
           me.reference.y = Math.min(me.canvasEl.height, me.reference.y);
         }
-        me.radius = Math.ceil(me.canvasEl.width / 64 + me.canvasEl.height / 48);
+        me.radius = Math.ceil(me.canvasEl.width / 64);
       },
 
       loadAndDraw: function () {
@@ -81,13 +82,13 @@ Ext.define('GDE.view.TileMapCanvas', {
         var regY = elementIndex.regY;
 
         var left = x - regX;
-        if(left < -me.canvasEl.width) return false;
+        if(left > me.canvasEl.width) return false;
         var right = left + width;
-        if(right > me.canvasEl.width * 2) return false;
+        if(right < 0) return false;
         var top = y - regY;
-        if(top < -me.canvasEl.height) return false;
+        if(top > me.canvasEl.height) return false;
         var bottom = top + height;
-        if(bottom > me.canvasEl * 2) return false;
+        if(bottom < 0) return false;
 
         return true;
       },
@@ -121,17 +122,15 @@ Ext.define('GDE.view.TileMapCanvas', {
               evt.addEventListener("mousemove", function (ev) {
                 var deltaX = ev.stageX + offset.x - ev.target.x;
                 var deltaY = ev.stageY + offset.y - ev.target.y;
-                me.offset.x += deltaX;
-                me.offset.y += deltaY;
                 Ext.Array.each(me.stage.children, function (obj) {
                   obj.x += deltaX;
                   obj.y += deltaY;
                 });
-                me.reference.x += evt.target.x;
-                me.reference.y = evt.target.y;
                 me.stage.update();
               });
               evt.addEventListener("mouseup", function(evt) {
+                me.reference.x = evt.target.x;
+                me.reference.y = evt.target.y;
                 me.loadAndDraw();
               })
             });
@@ -171,22 +170,24 @@ Ext.define('GDE.view.TileMapCanvas', {
         me.stage.update();
       },
 
-      unload: function () {
+      unload: function (dropMap) {
         me.stage.removeAllChildren();
         me.children = [];
-        delete me.map;
-        delete me.total;
+        if(dropMap) {
+          delete me.total;
+          delete me.map;
+        }
       },
 
       loadMap: function (map) {
         var id = map.get('id');
         var url = 'api/map/map/' + id + '.json';
         var queue = new createjs.LoadQueue(false);
-        me.unload();
+        me.unload(true);
         queue.addEventListener('fileload', function (payload) {
           me.map = payload.result;
           me.total = me.map.east * me.map.south;
-          me.setReference();
+          me.setReference(true);
           me.loadAndDraw();
         });
         queue.loadFile(url);
