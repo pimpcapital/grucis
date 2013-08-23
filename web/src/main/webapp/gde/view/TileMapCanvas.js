@@ -100,6 +100,8 @@ Ext.define('GDE.view.TileMapCanvas', {
 
         var child = me.children[index];
         var elementIndex = element.index;
+        elementIndex.width = element.bitmap.width;
+        elementIndex.height = element.bitmap.height;
         var x = me.reference.x + xOffset;
         var y = me.reference.y + yOffset;
         if(me.isInBuffer(x, y, elementIndex)) {
