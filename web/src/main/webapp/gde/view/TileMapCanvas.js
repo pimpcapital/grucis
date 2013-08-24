@@ -11,7 +11,7 @@ Ext.define('GDE.view.TileMapCanvas', {
           if(me.map) {
             me.unload();
             me.setReference();
-            me.loadAndDraw();
+            me.drawMap();
           }
         }
       ],
@@ -28,100 +28,81 @@ Ext.define('GDE.view.TileMapCanvas', {
           me.reference.x = Math.min(me.canvasEl.width, me.reference.x);
           me.reference.y = Math.min(me.canvasEl.height, me.reference.y);
         }
-        me.radius = Math.ceil(me.canvasEl.width / 64);
+        me.radius = Math.floor(me.canvasEl.width / 64);
       },
 
-      loadAndDraw: function () {
-        var load = [];
-        for(var s = Math.max(0, me.reference.south - me.radius); s <= Math.min(me.map.south - 1, me.reference.south + me.radius); s++) {
-          for(var e = Math.max(0, me.reference.east - me.radius); e <= Math.min(me.map.east - 1, me.reference.east + me.radius); e++) {
-            var tile = me.map.tiles[s][e];
-            var object = me.map.objects[s][e];
-            if(tile != -1 && !me.cache[tile]) Ext.Array.include(load, tile);
-            if(object != -1 && !me.cache[object]) Ext.Array.include(load, object);
+      loadAndDrawElement: function(south, east, id, index, z) {
+        var queue = new createjs.LoadQueue(false);
+        var manifest = [];
+        manifest.push({
+        src: 'api/bitmap/image/' + id + '.png',
+          type: 'image',
+          id: 'bitmap_' + id
+        }, {
+          src: 'api/bitmap/index/' + id + '.json',
+          type: 'json',
+          id: 'index_' + id
+        });
+        queue.addEventListener('fileload', function (payload) {
+          var id = payload.item.id.split('_');
+          var imageId = parseInt(id[1]);
+          var image = me.cache[imageId];
+          if(!image) {
+            image = {};
+            me.cache[imageId] = image;
           }
-        }
-        if(load.length) {
-          var queue = new createjs.LoadQueue(false);
-          var manifest = [];
-          Ext.Array.each(load, function (id) {
-            manifest.push({
-              src: 'api/bitmap/image/' + id + '.png',
-              type: 'image',
-              id: 'bitmap_' + id
-            }, {
-              src: 'api/bitmap/index/' + id + '.json',
-              type: 'json',
-              id: 'index_' + id
-            });
-          });
-          queue.addEventListener('fileload', function (payload) {
-            var id = payload.item.id.split('_');
-            var imageId = parseInt(id[1]);
-            var image = me.cache[imageId];
-            if(!image) {
-              image = {};
-              me.cache[imageId] = image;
-            }
-            image[id[0]] = payload.result;
-          });
-          queue.addEventListener('complete', function () {
-            me.drawMap();
-          });
-          queue.loadManifest(manifest, true);
-        } else {
-          me.drawMap();
-        }
-
+          image[id[0]] = payload.result;
+        });
+        queue.addEventListener('complete', function () {
+          me.drawElement(south, east, id, index, z);
+        });
+        queue.loadManifest(manifest, true);
       },
 
-      isInBuffer: function (x, y, elementIndex) {
-        var width = elementIndex.width;
-        var height = elementIndex.height;
-        var regX = elementIndex.regX;
-        var regY = elementIndex.regY;
-
+      isInBuffer: function (x, y, width, height, regX, regY) {
         var left = x - regX;
-        if(left > me.canvasEl.width) return false;
+        if(left > me.canvasEl.width + 128) return false;
         var right = left + width;
-        if(right < 0) return false;
+        if(right < -128) return false;
         var top = y - regY;
-        if(top > me.canvasEl.height) return false;
+        if(top > me.canvasEl.height + 96) return false;
         var bottom = top + height;
-        if(bottom < 0) return false;
+        if(bottom < -96) return false;
 
         return true;
       },
 
       drawElement: function (south, east, id, index, z) {
         var element = me.cache[id];
+        if(!element || !element.index || !element.bitmap) {
+          me.loadAndDrawElement(south, east, id, index, z);
+          return;
+        }
         var xOffset = (south + east - me.reference.south - me.reference.east) * 32;
         var yOffset = (south - east - me.reference.south + me.reference.east) * 24;
 
-        var elementIndex = element.index;
-        elementIndex.width = element.bitmap.width;
-        elementIndex.height = element.bitmap.height;
         var x = me.reference.x + xOffset;
         var y = me.reference.y + yOffset;
 
-        if(me.isInBuffer(x, y, elementIndex)) {
+        if(me.isInBuffer(x, y, element.bitmap.width, element.bitmap.height, element.index.regX, element.index.regY)) {
           var child = me.children[index];
           if(!child) {
             child = new createjs.Bitmap(element.bitmap);
-            child.regX = elementIndex.regX;
-            child.regY = elementIndex.regY;
+            child.regX = element.index.regX;
+            child.regY = element.index.regY;
             child.south = south;
             child.east = east;
             child.z = z;
             child.x = me.reference.x + xOffset;
             child.y = me.reference.y + yOffset;
-            child.update = new Date().getMilliseconds();
             me.children[index] = child;
             me.stage.addChild(child);
+            me.stage.sortChildren(me.elementSorter);
+            me.stage.update();
             child.addEventListener("mousedown", function (evt) {
               var offset = {x: evt.target.x - evt.stageX, y: evt.target.y - evt.stageY};
-              me.reference.south = evt.target.south;
-              me.reference.east = evt.target.east;
+              var centerX = Math.floor(me.canvasEl.width / 2);
+              var centerY = Math.floor(me.canvasEl.height / 2);
               evt.addEventListener("mousemove", function (ev) {
                 var deltaX = ev.stageX + offset.x - ev.target.x;
                 var deltaY = ev.stageY + offset.y - ev.target.y;
@@ -129,76 +110,71 @@ Ext.define('GDE.view.TileMapCanvas', {
                   obj.x += deltaX;
                   obj.y += deltaY;
                 });
+                me.reference.x += deltaX;
+                me.reference.y += deltaY;
                 me.stage.update();
-              });
-              evt.addEventListener("mouseup", function (evt) {
-                me.reference.x = evt.target.x;
-                me.reference.y = evt.target.y;
-                var centerX = Math.floor(me.canvasEl.width / 2);
-                var centerY = Math.floor(me.canvasEl.height / 2);
+
+                var load = false;
                 while(me.reference.x < centerX - 32) {
                   me.reference.x += 64;
                   me.reference.south++;
                   me.reference.east++;
+                  load = true
                 }
                 while(me.reference.x > centerX + 32) {
                   me.reference.x -= 64;
                   me.reference.south--;
                   me.reference.east--;
+                  load = true
                 }
                 while(me.reference.y < centerY - 24) {
                   me.reference.y += 48;
                   me.reference.south++;
                   me.reference.east--;
+                  load = true
                 }
                 while(me.reference.y > centerY + 24) {
                   me.reference.y -= 48;
                   me.reference.south--;
                   me.reference.east++;
+                  load = true
                 }
-                me.loadAndDraw();
+                if(load) me.drawMap();
+              });
+              evt.addEventListener("mouseup", function (evt) {
+                Ext.Array.every(me.children, function (child, index) {
+                  if(!me.isInBuffer(child.x, child.y, child.image.width, child.image.height, child.regX, child.regY)) {
+                    delete me.children[index];
+                    me.stage.removeChild(child);
+                  }
+                  return true;
+                });
               })
             });
           }
-          return true;
         }
-        return false;
       },
 
-      sortElements: function () {
-        var sortFn = function (a, b) {
-          if(a.z < b.z) return -1;
-          if(a.z > b.z) return 1;
-          if(a.east > b.east) return -1;
-          if(a.east < b.east) return 1;
-          if(a.south > b.south) return 1;
-          if(a.south < b.south) return -1;
-          return a.update - b.update;
-        };
-        me.stage.sortChildren(sortFn);
+      elementSorter : function(a, b) {
+        if(a.z < b.z) return -1;
+        if(a.z > b.z) return 1;
+        if(a.east > b.east) return -1;
+        if(a.east < b.east) return 1;
+        if(a.south > b.south) return 1;
+        if(a.south < b.south) return -1;
+        return 0;
       },
 
       drawMap: function () {
-        var survivor = [];
         for(var e = Math.min(me.map.east - 1, me.reference.east + me.radius); e >= Math.max(0, me.reference.east - me.radius); e--) {
           for(var s = Math.max(0, me.reference.south - me.radius); s <= Math.min(me.map.south - 1, me.reference.south + me.radius); s++) {
             var index = e * me.map.south + s;
             var tileId = me.map.tiles[s][e];
-            if(tileId != -1 && me.drawElement(s, e, tileId, index, 0)) survivor.push(index);
+            if(tileId != -1) me.drawElement(s, e, tileId, index, 0);
             var objectId = me.map.objects[s][e];
-            if(objectId != -1 && me.drawElement(s, e, objectId, index += me.total, 1)) survivor.push(index);
+            if(objectId != -1) me.drawElement(s, e, objectId, index + me.total, 1);
           }
         }
-
-        Ext.Array.each(me.children, function(child, index) {
-          if(!Ext.Array.contains(survivor, index)) {
-            delete me.children[index];
-            me.stage.removeChild(child);
-          }
-        });
-
-        me.sortElements();
-        me.stage.update();
       },
 
       unload: function (dropMap) {
@@ -219,7 +195,7 @@ Ext.define('GDE.view.TileMapCanvas', {
           me.map = payload.result;
           me.total = me.map.east * me.map.south;
           me.setReference(true);
-          me.loadAndDraw();
+          me.drawMap();
         });
         queue.loadFile(url);
       }
