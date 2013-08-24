@@ -134,6 +134,28 @@ Ext.define('GDE.view.TileMapCanvas', {
               evt.addEventListener("mouseup", function (evt) {
                 me.reference.x = evt.target.x;
                 me.reference.y = evt.target.y;
+                var centerX = Math.floor(me.canvasEl.width / 2);
+                var centerY = Math.floor(me.canvasEl.height / 2);
+                while(me.reference.x < centerX - 32) {
+                  me.reference.x += 64;
+                  me.reference.south++;
+                  me.reference.east++;
+                }
+                while(me.reference.x > centerX + 32) {
+                  me.reference.x -= 64;
+                  me.reference.south--;
+                  me.reference.east--;
+                }
+                while(me.reference.y < centerY - 24) {
+                  me.reference.y += 48;
+                  me.reference.south++;
+                  me.reference.east--;
+                }
+                while(me.reference.y > centerY + 24) {
+                  me.reference.y -= 48;
+                  me.reference.south--;
+                  me.reference.east++;
+                }
                 me.loadAndDraw();
               })
             });
