@@ -168,8 +168,8 @@ Ext.define('GDE.view.TileMapCanvas', {
           }
         }
 
-        $.each(me.children, function(index, child) {
-          if($.inArray(index, survivor) == -1) {
+        Ext.Array.each(me.children, function(child, index) {
+          if(!Ext.Array.contains(survivor, index)) {
             delete me.children[index];
             me.stage.removeChild(child);
           }
