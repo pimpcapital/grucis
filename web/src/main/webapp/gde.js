@@ -1,3 +1,6 @@
+var TILE_WIDTH = 64;
+var TILE_HEIGHT = 48;
+
 Ext.application({
   appFolder: 'gde',
   controllers: [],

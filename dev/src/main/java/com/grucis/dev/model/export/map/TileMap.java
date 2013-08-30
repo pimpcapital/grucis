@@ -1,5 +1,7 @@
 package com.grucis.dev.model.export.map;
 
+import java.util.Set;
+
 import com.grucis.dev.model.export.ExportModel;
 
 public final class TileMap extends ExportModel {
@@ -7,8 +9,9 @@ public final class TileMap extends ExportModel {
   private String name;
   private int east;
   private int south;
-  private int[][] tiles;
-  private int[][] objects;
+  private int[] tiles;
+  private int[] objects;
+  private Set<Integer> requires;
 
   public TileMap(int id) {
     super(id);
@@ -38,19 +41,27 @@ public final class TileMap extends ExportModel {
     this.south = south;
   }
 
-  public int[][] getTiles() {
+  public int[] getTiles() {
     return tiles;
   }
 
-  public void setTiles(int[][] tiles) {
+  public void setTiles(int[] tiles) {
     this.tiles = tiles;
   }
 
-  public int[][] getObjects() {
+  public int[] getObjects() {
     return objects;
   }
 
-  public void setObjects(int[][] objects) {
+  public void setObjects(int[] objects) {
     this.objects = objects;
+  }
+
+  public Set<Integer> getRequires() {
+    return requires;
+  }
+
+  public void setRequires(Set<Integer> requires) {
+    this.requires = requires;
   }
 }

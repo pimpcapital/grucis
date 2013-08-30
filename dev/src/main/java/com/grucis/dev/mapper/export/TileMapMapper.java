@@ -24,33 +24,29 @@ public final class TileMapMapper extends ExportModelMapper<SaMap, TileMap> {
     ret.setEast(east);
     int south = source.getSouth();
     ret.setSouth(south);
-    int[][] mapElementTiles = source.getTiles();
-    int[][] mapElementObjects = source.getObjects();
-    int[][] tiles = new int [south][east];
-    int[][] objects = new int [south][east];
-    TreeSet<Integer> require = new TreeSet<Integer>();
-    for(int s = 0; s < south; s++) {
-      for(int e = 0; e < east; e++) {
-        Adrn tile = rawModelService.getAdrnByMapElementId(mapElementTiles[s][e]);
-        if(tile != null) {
-          int tileElement = tile.getId();
-          tiles[s][e] = tileElement;
-          require.add(tileElement);
-        } else {
-          tiles[s][e] = -1;
-        }
-        Adrn object = rawModelService.getAdrnByMapElementId(mapElementObjects[s][e]);
-        if(object != null) {
-          int objectElement = object.getId();
-          objects[s][e] = objectElement;
-          require.add(objectElement);
-        }
-        objects[s][e] = object != null ? object.getId() : -1;
-      }
+    int[] mapElementTiles = source.getTiles();
+    int[] mapElementObjects = source.getObjects();
+    int total = south * east;
+    int[] tiles = new int [total];
+    int[] objects = new int [total];
+    TreeSet<Integer> requires = new TreeSet<Integer>();
+    for(int i = 0; i < total; i++) {
+      Adrn tile = rawModelService.getAdrnByMapElementId(mapElementTiles[i]);
+      if(tile != null) {
+        int tileElement = tile.getId();
+        tiles[i] = tileElement;
+        requires.add(tileElement);
+      } else tiles[i] = -1;
+      Adrn object = rawModelService.getAdrnByMapElementId(mapElementObjects[i]);
+      if(object != null) {
+        int objectElement = object.getId();
+        objects[i] = objectElement;
+        requires.add(objectElement);
+      } else objects[i] = -1;
     }
     ret.setTiles(tiles);
     ret.setObjects(objects);
-
+    ret.setRequires(requires);
     return ret;
   }
 }

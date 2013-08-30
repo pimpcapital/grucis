@@ -50,10 +50,6 @@ public final class LS2MapDeserializer extends AtomicModelDeserializer<LS2Map> {
     byte[] nameBytes = new byte[32];
     input.read(nameBytes);
     String name = new String(nameBytes, "gbk");
-    int length = name.indexOf('|');
-    if(length != -1) name = name.substring(0, length);
-    length = name.indexOf('\u0000');
-    if(length != -1) name = name.substring(0, length);
     ret.setName(name);
 
     byte[] eastBytes = new byte[2];

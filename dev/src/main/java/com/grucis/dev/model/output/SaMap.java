@@ -1,15 +1,12 @@
 package com.grucis.dev.model.output;
 
-import java.util.TreeSet;
-
 public final class SaMap extends OutputModel {
 
   private int south;
   private int east;
   private String name;
-  private TreeSet<Integer> require;
-  private int[][] tiles;
-  private int[][] objects;
+  private int[] tiles;
+  private int[] objects;
 
   public SaMap(int id) {
     super(id);
@@ -39,27 +36,19 @@ public final class SaMap extends OutputModel {
     this.name = name;
   }
 
-  public TreeSet<Integer> getRequire() {
-    return require;
-  }
-
-  public void setRequire(TreeSet<Integer> require) {
-    this.require = require;
-  }
-
-  public int[][] getTiles() {
+  public int[] getTiles() {
     return tiles;
   }
 
-  public void setTiles(int[][] tiles) {
+  public void setTiles(int[] tiles) {
     this.tiles = tiles;
   }
 
-  public int[][] getObjects() {
+  public int[] getObjects() {
     return objects;
   }
 
-  public void setObjects(int[][] objects) {
+  public void setObjects(int[] objects) {
     this.objects = objects;
   }
 }
