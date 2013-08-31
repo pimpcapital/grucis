@@ -18,7 +18,8 @@ Ext.define('GDE.view.Viewport', {
       items: [
         {xtype: 'bitmap', id: 'bitmap'},
         {xtype: 'animation', id: 'animation'},
-        {xtype: 'map', id: 'map'}
+        {xtype: 'map', id: 'map'},
+        {xtype: 'experiment', id: 'experiment'}
       ]
     }
   ]

@@ -24,9 +24,11 @@ Ext.define('GDE.view.ExperimentSpace', {
               grid.getStore().load({});
             },
             selectionchange: function(sm, selected) {
+              me.down('world').loadMap(selected[0].get('id'));
             }
           }
         }, {
+          xtype: 'world',
           flex: 5
         }, {
 

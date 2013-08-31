@@ -18,10 +18,12 @@ Ext.application({
     'AnimationGallery',
     'BitmapExportWindow',
     'BitmapGallery',
+    'ExperimentSpace',
     'MapGallery',
     'OffsetImageCanvas',
     'SpriteAnimationCanvas',
-    'TileMapCanvas'
+    'TileMapCanvas',
+    'WorldCanvas'
   ],
   name: 'GDE',
   autoCreateViewport: true,

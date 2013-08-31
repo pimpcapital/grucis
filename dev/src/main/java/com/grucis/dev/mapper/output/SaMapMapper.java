@@ -11,12 +11,7 @@ public final class SaMapMapper extends OutputModelMapper<LS2Map, SaMap> {
   public SaMap map(LS2Map source) {
     SaMap ret = new SaMap(source.getId());
 
-    String name = source.getName();
-    int length = name.indexOf('|');
-    if(length != -1) name = name.substring(0, length);
-    length = name.indexOf('\u0000');
-    if(length != -1) name = name.substring(0, length);
-    ret.setName(name);
+    ret.setName(source.getName());
     ret.setEast(source.getEast());
     ret.setSouth(source.getSouth());
     ret.setTiles(source.getTiles());

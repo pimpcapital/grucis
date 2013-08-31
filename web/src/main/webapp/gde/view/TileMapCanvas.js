@@ -2,7 +2,10 @@ Ext.define('GDE.view.TileMapCanvas', {
   extend: 'Ext.ux.EaselPanel',
   alias: 'widget.tilemap',
   cache: {},
+  tiles: [],
   children: [],
+  tilesContainer: new createjs.Container(),
+  objectsContainer: new createjs.Container(),
   initComponent: function () {
     var me = this;
     Ext.apply(me, {
@@ -28,7 +31,7 @@ Ext.define('GDE.view.TileMapCanvas', {
           me.reference.x = Math.min(me.canvasEl.width, me.reference.x);
           me.reference.y = Math.min(me.canvasEl.height, me.reference.y);
         }
-        me.radius = Math.floor(me.canvasEl.width / 64);
+        me.radius = Math.floor(Math.max(me.canvasEl.height / 48, me.canvasEl.width / 64));
       },
 
       loadAndDrawElement: function(south, east, id, index, z) {
@@ -97,7 +100,7 @@ Ext.define('GDE.view.TileMapCanvas', {
             child.y = me.reference.y + yOffset;
             me.children[index] = child;
             me.stage.addChild(child);
-            me.stage.sortChildren(me.elementSorter);
+//            me.stage.sortChildren(me.elementSorter);
             me.stage.update();
             child.addEventListener("mousedown", function (evt) {
               var offset = {x: evt.target.x - evt.stageX, y: evt.target.y - evt.stageY};
@@ -114,6 +117,9 @@ Ext.define('GDE.view.TileMapCanvas', {
                 me.reference.y += deltaY;
                 me.stage.update();
 
+
+              });
+              evt.addEventListener("mouseup", function (evt) {
                 var load = false;
                 while(me.reference.x < centerX - 32) {
                   me.reference.x += 64;
@@ -140,8 +146,8 @@ Ext.define('GDE.view.TileMapCanvas', {
                   load = true
                 }
                 if(load) me.drawMap();
-              });
-              evt.addEventListener("mouseup", function (evt) {
+
+
                 Ext.Array.every(me.children, function (child, index) {
                   if(!me.isInBuffer(child.x, child.y, child.image.width, child.image.height, child.regX, child.regY)) {
                     delete me.children[index];
@@ -166,15 +172,72 @@ Ext.define('GDE.view.TileMapCanvas', {
       },
 
       drawMap: function () {
+        var manifest = [];
+        var tiles = [];
+        var objects = [];
+        var survivedTiles = [];
+        var survivedObjects = [];
+
+        var prepareManifest = function(id) {
+          if(id != -1 && !me.cache[id]) {
+            manifest.push({
+              src: 'api/bitmap/image/' + id + '.png',
+              type: 'image',
+              id: 'bitmap_' + id
+            }, {
+              src: 'api/bitmap/index/' + id + '.json',
+              type: 'json',
+              id: 'index_' + id
+            });
+          }
+        };
+
+        var prepareTile = function(s, e, id) {
+
+        };
+
+        var prepareObject = function(s, e, id) {
+
+        };
+
         for(var e = Math.min(me.map.east - 1, me.reference.east + me.radius); e >= Math.max(0, me.reference.east - me.radius); e--) {
           for(var s = Math.max(0, me.reference.south - me.radius); s <= Math.min(me.map.south - 1, me.reference.south + me.radius); s++) {
-            var index = e * me.map.south + s;
             var tileId = me.map.tiles[s][e];
-            if(tileId != -1) me.drawElement(s, e, tileId, index, 0);
             var objectId = me.map.objects[s][e];
-            if(objectId != -1) me.drawElement(s, e, objectId, index + me.total, 1);
+            prepareManifest(tileId);
+            prepareManifest(objectId);
+            prepareTile(s, e, tileId);
+            prepareObject(s, e, objectId);
           }
         }
+
+        var render = function() {
+          $.each(tiles, function(index, tile) {
+
+          });
+
+          $.each(objects, function(index, object) {
+
+          });
+        };
+
+        if(manifest.length) {
+          var queue = new createjs.LoadQueue(false);
+          queue.addEventListener('fileload', function (payload) {
+            var id = payload.item.id.split('_');
+            var imageId = parseInt(id[1]);
+            var image = me.cache[imageId];
+            if(!image) {
+              image = {};
+              me.cache[imageId] = image;
+            }
+            image[id[0]] = payload.result;
+          });
+          queue.addEventListener('complete', function () {
+            render();
+          });
+          queue.loadManifest(manifest, true);
+        } else render();
       },
 
       unload: function (dropMap) {
